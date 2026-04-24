@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="account.open_account_journal_dashboard_kanban" model="ir.actions.act_window">
+            <field name="domain">[('user_ids', 'in', uid),'|',
+                                    ('is_custody', '=', False),
+                                    ('custody_status', '=', 'active')]</field>
+        </record>
+    </data>
+</odoo>

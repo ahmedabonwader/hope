@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Followup Template Form View -->
+    <record id="view_followup_template_form" model="ir.ui.view">
+        <field name="name">project.followup.template.form</field>
+        <field name="model">project.followup.template</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1><field name="name" placeholder="Template Name"/></h1>
+                    </div>
+                    <group>
+                        <field name="active" widget="boolean_toggle"/>
+                    </group>
+                    <notebook>
+                        <page string="Template Content" name="content">
+                            <field name="template_content" widget="html"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Followup Template Tree View -->
+    <record id="view_followup_template_tree" model="ir.ui.view">
+        <field name="name">project.followup.template.tree</field>
+        <field name="model">project.followup.template</field>
+        <field name="arch" type="xml">
+            <list string="Followup Templates" sample="1">
+                <field name="name"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Followup Template Action -->
+    <record id="action_followup_template" model="ir.actions.act_window">
+        <field name="name">Followup Templates</field>
+        <field name="res_model">project.followup.template</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Menu Item -->
+    <menuitem id="menu_followup_template"
+              name="Followup Templates"
+              parent="project.menu_project_config"
+              action="action_followup_template"
+              sequence="50"/>
+</odoo> 

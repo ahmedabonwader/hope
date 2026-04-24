@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates id="template" xml:space="preserve">
+    <t t-name="CMSFinancedashboard">
+        <div class="accounts-dashboard-wrap">
+            <div class="row" style="margin:0px">
+                <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                    <div class="">
+                        <div class="row account-details" style="margin:0px">
+                            <br/>
+                        </div>
+                        <div class="row account-details" style="margin:0px">
+                            <div class="col-md-4">
+                                <div class="tile wide invoice box-1">
+                                    <div class="headers">
+                                        <div class="main-title">Today income</div>
+                                        <div id="monthly_invoice" style=" height: 220px; margin-top:-10px; border-right:5px solid yellow; font-size:10pt; font-family:FreeSerif;">
+                                            <div class="left">
+                                                <div class="card-body p-0" style=" height: 100px; ">
+                                                    <ul id="today_income"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="tile wide invoice box-1">
+                                    <div class="headers">
+                                        <div class="main-title">Today Expense</div>
+                                        <div id="monthly_invoice" style=" height: 220px; margin-top:-10px; border-right:5px solid red;font-size:10pt; font-family:FreeSerif">
+                                            <div class="left">
+                                                <div class="card-body p-0" >
+                                                    <ul id="today_expense"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="tile wide invoice box-3">
+                                    <div class="headers">
+                                        <div class="main-title">Net</div>
+                                        <div id="monthly_invoice" style=" height: 220px; margin-top:-10px; border-right:5px solid green;">
+                                            <div class="left">
+                                                <div class="card-body p-0">
+                                                    <ul id="net_income_today"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row account-details" style="margin:0px">
+
+                            <div class="col-md-4">
+                                <div class="tile wide invoice box-2">
+                                    <div class="headers">
+                                        <div class="main-title">Cash Today</div>
+                                        <div id="monthly_invoice">
+                                            <div class="left">
+                                                <div class="card-body p-0" style=" height: 100px; ">
+                                                    <ul id="today_cash"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="tile wide invoice box-2">
+                                    <div class="headers">
+                                        <div class="main-title">Bank Today</div>
+                                        <div id="monthly_invoice" >
+                                            <div class="left">
+                                                <div class="card-body p-0" >
+                                                    <ul id="today_bank"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="tile wide invoice box-4">
+                                    <div class="header">
+                                        <div class="main-title">Total (Cash / Bank) Today</div>
+                                        <div id="monthly_income" style=" height: 130px; ">
+                                            <div class="left">
+                                                 <div class="card-body p-0" >
+                                                    <ul id="today_cash_bank"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row account-details" style="margin:0px">
+
+                            <div class="col-md-4">
+                                <div class="tile wide invoice box-2">
+                                    <div class="headers">
+                                        <div class="main-title">Cash</div>
+                                        <div id="monthly_invoice">
+                                            <div class="left">
+                                                <div class="card-body p-0" style=" height: 100px; ">
+                                                    <ul id="total_cash"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="tile wide invoice box-2">
+                                    <div class="headers">
+                                        <div class="main-title">Bank</div>
+                                        <div id="monthly_invoice" style=" height: 130px; ">
+                                            <div class="left">
+                                                <div class="card-body p-0" >
+                                                    <ul id="total_bank"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="tile wide invoice box-4">
+                                    <div class="header">
+                                        <div class="main-title">Total (Cash / Bank)</div>
+                                        <div id="monthly_income">
+                                            <div class="left">
+                                                <div class="card-body p-0" style=" height: 100px; ">
+                                                    <span id="total_cash_bank"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </t>
+</templates>

@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_oms_bid_tender_list" model="ir.ui.view">
+        <field name="name">oms.bid.tender.list</field>
+        <field name="model">oms.bid.tender</field>
+        <field name="arch" type="xml">
+            <list
+                    decoration-success="state == 'done'"
+                    decoration-danger="state == 'cancel'"
+                    decoration-info="state == 'draft'"
+                    decoration-warning="state == 'confirm'">
+                <field name="ref"/>
+                <field name="name"/>
+                <field name="date"/>
+                <field name="operation_type"/>
+                <field name="user_id"/>
+                <field name="branch_id"/>
+                <field name="state"
+                       decoration-success="state == 'done'"
+                       decoration-danger="state == 'cancel'"
+                       decoration-info="state == 'draft'"
+                       decoration-warning="state == 'confirm'"
+                       widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_oms_bid_tender_form" model="ir.ui.view">
+        <field name="name">oms.bid.tender.form</field>
+        <field name="model">oms.bid.tender</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_confirm" string="Confirm" type="object" data-hotkey="k"
+                            class="oe_highlight" invisible="state != 'draft'"
+                            groups="bid_tender.group_oms_administrator,bid_tender.group_bid_tender_procurement"/>
+                    <button name="action_approve" string="Approve" type="object" data-hotkey="l"
+                            class="oe_highlight" invisible="state != 'review'"
+                            groups="bid_tender.group_oms_administrator,bid_tender.group_bid_tender_approve"/>
+                    <button name="action_review" string="Review" type="object" data-hotkey="l"
+                            class="oe_highlight" invisible="state != 'confirm'"
+                            groups="bid_tender.group_oms_administrator,bid_tender.group_bid_tender_review"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                            groups="bid_tender.group_oms_administrator,bid_tender.group_bid_tender_user,bid_tender.group_bid_tender_review,bid_tender.group_bid_tender_approve"
+                            invisible="state in ('cancel', 'approve', 'done')"/>
+                    <button name="action_done" string="Done" type="object"  class="btn-warning"
+                            groups="bid_tender.group_oms_administrator"
+                            invisible="state != 'approve'"/>
+                    <button name="action_back" string="Reset To Draft" type="object" data-hotkey="k"
+                            groups="bid_tender.group_oms_administrator,bid_tender.group_bid_tender_user,bid_tender.group_bid_tender_review,bid_tender.group_bid_tender_approve"
+                            invisible="state in ('draft', 'cancel', 'done')"/>
+                    <button name="print_bid_tender" string="Print Bid/Tender" type="object" data-hotkey="k"
+                            invisible="state not in ('approve', 'done')" class="oe_highlight"/>
+                    <field name="state" widget="statusbar" nolabel="1" options="{'clickable': '1'}" readonly="1"/>
+                    <!-- <field name="state" widget="statusbar" nolabel="1" options="{'clickable': '1'}"/> -->
+                </header>
+                <sheet>
+                    <div class="oe_titel">
+                        <h4>
+                            <field name="tender_ref" readonly="1" invisible="operation_type == 'bid_analysis'"/>
+                            <field name="ref" readonly="1" invisible="operation_type != 'bid_analysis'"/>
+                        </h4>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="name" readonly="state == 'approve'"/>
+                            <field name="date" readonly="state == 'approve'"/>
+                            <field name="opening_date" readonly="state == 'approve'" invisible="operation_type == 'bid_analysis'" required="operation_type != 'bid_analysis'"/>
+                            <field name="chosen_id" readonly="state == 'approve'" domain="[('id', 'in', suppliers)]"
+                                   options="{'no_quick_create': True, 'no_create_edit' : True}"/>
+                            <field name="currency_id" readonly="state == 'approve'"/>
+                            <field name="branch_id" readonly="state == 'approve'"
+                                   groups="bid_tender.group_oms_administrator,bid_tender.group_bid_tender_user,bid_tender.group_bid_tender_review,bid_tender.group_bid_tender_approve"
+                                   options="{'no_quick_create': True, 'no_create_edit' : True}"/>
+                            <field name="project_id" readonly="state == 'approve'" required="1"
+                                   options="{'no_quick_create': True, 'no_create_edit' : True}"/>
+                            <field name="prs" readonly="state == 'approve'" required="1"
+                                   domain="[('project_id', '=', project_id), ('request_type', '=', 'purchase_request'), ('state', '=', 'done')]"/>
+                            <div style="background-color: #d4edda; padding: 5px;">
+                                <field name="purchase_order" readonly="1"/>
+                            </div>
+                        </group>
+                        <group>
+                            <field name="operation_type" widget="radio" options="{'horizontal':true}"
+                                   readonly="state == 'approve'"/>
+                            <field name="reason" readonly="state == 'approve'" required="0"/>
+                            <field name="closing_date" readonly="state == 'approve'" invisible="operation_type == 'bid_analysis'" required="operation_type != 'bid_analysis'"/>
+                            <!--                            <field name="location_id" readonly="state == 'approve'" options="{'no_quick_create': True, 'no_create_edit' : True}"/>-->
+                            <field name="where_announced" readonly="state == 'approve'" invisible="operation_type == 'bid_analysis'" required="operation_type != 'bid_analysis'"
+                                   placeholder="Enter Where was The Open Tender Announced?"/>
+                            <field name="user_id"/>
+                            <field name="total_amount" force_save="1" invisible="0" widget="monetary"
+                                   options="{'currency_field': 'currency_id'}"/>
+                            <field name="rate" invisible="0"/>
+                            <field name="amount_in_currency" invisible="0"/>
+                            <field name="bid_tender_currency_id" invisible="0"/>
+                            <field name="prepared_job_title" invisible="1"/>
+                            <field name="reviewed_job_title" invisible="1"/>
+                            <field name="approved_job_title" invisible="1"/>
+                            <field name="approval_currency_id" invisible="1"/>
+                            <field name="suppliers" widget="many2many_tags" force_save="1" invisible="1"/>
+                            <field name="date_approve" invisible="1"/>
+                            <field name="date_review" invisible="1"/>
+                            <field name="company_id" invisible="1"/>
+                            <button name="action_suppler" string="Bid/Tender Suppler Line" type="object" data-hotkey="k"
+                                    invisible="state != 'draft'" class="oe_highlight"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Information">
+                            <field name="bid_tender_line_ids" readonly="state in ('approve', 'done')">
+                                <list editable="bottom">
+                                    <field name="supplier_id"/>
+                                    <field name="product_id"/>
+                                    <field name="description"/>
+                                    <field name="unut_id"/>
+                                    <field name="qty"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                    <!--                                    <field name="chosen" widget="boolean_toggle" readonly="state != 'draft'" invisible="1"/>-->
+                                    <!--                                    <field name="check_c" invisible="1"/>-->
+                                    <field name="unit_price" force_save="1" widget="monetary"
+                                           options="{'currency_field': 'currency_id'}"/>
+                                    <field name="total_price" widget="monetary"
+                                           options="{'currency_field': 'currency_id'}"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Offer And Scores" invisible="operation_type == 'bid_analysis'">
+                            <field name="offer_line_ids" readonly="state in ('approve', 'done')">
+                                <list editable="bottom" create="0">
+                                    <field name="supplier_id" readonly="1"/>
+                                    <field name="offer" widget="monetary" options="{'currency_field': 'currency_id'}" readonly="1"/>
+                                    <field name="price_percentage" string="Price (%)" placeholder="e.g. 20%"/>
+                                    <field name="relevant_experience" string="Experience (%)"/>
+                                    <field name="certificates" string="Certificates (%)"/>
+                                    <field name="other_point" string="Other (%)" force_save="1"/>
+                                    <field name="total_score" string="Total Score (%)"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Explanatory Remarks" invisible="operation_type == 'bid_analysis'">
+                            <group>
+                                <field name="number_of_competing_bidders"/>
+                                <field name="number_of_excluded_bidders"/>
+                                <field name="number_of_nominated_companies"/>
+                            </group>
+                        </page>
+                        <page string="Restrictions and Regulations">
+                            <!--                        <page string="Restrictions and Regulations" invisible="state == 'draft'">-->
+                            <field name="bid_tender_line_restrictions_ids" readonly="state in ('approve', 'done')">
+                                <list>
+                                    <field name="supplier_id"/>
+                                    <!--                                    <field name="bid_line_id"/>-->
+                                </list>
+                                <form>
+                                    <group>
+                                        <group>
+                                            <field name="supplier_id"/>
+                                            <field name="currency_id"/>
+                                            <field name="delivery_time"/>
+                                            <field name="reason_off_selection"/>
+                                        </group>
+                                        <group>
+                                            <field name="payment_means"/>
+                                            <field name="payment_terms"/>
+                                            <field name="guarantee_duration"/>
+                                            <field name="validity_of_offer"/>
+                                        </group>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="Committee Information">
+                            <field name="committee_line_ids" readonly="state in ('approve', 'done')">
+                                <list editable="bottom">
+                                    <field name="emp_id"/>
+                                    <field name="department"/>
+                                    <field name="phone"/>
+                                    <field name="note" placeholder="add an internal note"/>
+                                    <field name="signature"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Authorizations">
+                            <field name="user_id" string="Prepared by" readonly="1"/>
+                            <field name="signature_reviewed" readonly="1"/>
+                            <field name="signature_approved" readonly="1"/>
+                        </page>
+                        <page string="Notes">
+                            <group>
+                                <field name="note"/>
+                            </group>
+                        </page>
+                    </notebook>
+
+                </sheet>
+                <chatter reload_on_attachment="True"/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_oms_bid_tender_search" model="ir.ui.view">
+        <field name="name">oms.bid.tender.search</field>
+        <field name="model">oms.bid.tender</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="ref"/>
+                <field name="chosen_id" string="Chosen Supplier"/>
+                <field name="project_id"/>
+                <filter string="New Bid/Tender" name="group_draft" domain="[('state','=','draft')]"/>
+                <filter string="To Review" name="group_confirm" domain="[('state','=','confirm')]"/>
+                <filter string="To Approve" name="group_review" domain="[('state','=','review')]"/>
+                <group expand="0" string="Group By..." colspan="11" col="11">
+                    <filter string="Project" name="group_project_id" domain="[]" context="{'group_by':'project_id'}"/>
+                    <filter string="Chosen Supplier" name="group_chosen_id" domain="[]"
+                            context="{'group_by':'chosen_id'}"/>
+                    <filter string="Prepared by" name="group_chosen_id" domain="[]" context="{'group_by':'user_id'}"/>
+                    <filter string="Reviewed by" name="group_signature_reviewed" domain="[]"
+                            context="{'group_by':'signature_reviewed'}"/>
+                    <filter string="Approved by" name="group_signature_approved" domain="[]"
+                            context="{'group_by':'signature_approved'}"/>
+                    <filter string="Request Date" name="date" context="{'group_by': 'date'}"/>
+                </group>
+                <searchpanel>
+                    <field name="operation_type" icon="fa-users" string="Operation Type" enable_counters="1"/>
+                    <field name="state" icon="fa-users" string="State" enable_counters="1"/>
+                    <field name="branch_id" icon="fa-users" string="Branches" enable_counters="1"/>
+                </searchpanel>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_oms_bid_tender" model="ir.actions.act_window">
+        <field name="name">Bid Analysis Tender</field>
+        <field name="res_model">oms.bid.tender</field>
+        <field name="view_mode">list,form,search</field>
+        <field name="context">{'search_default_group_draft': 1, 'group_by': 'project_id'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first Bid Analysis and Tender !
+            </p>
+        </field>
+    </record>
+
+</odoo>

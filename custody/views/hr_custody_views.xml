@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inherit Employee Form View -->
+    <record id="view_employee_form_custody_inherit" model="ir.ui.view">
+        <field name="name">hr.employee.form.custody.inherit</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button name="%(custody.action_custody)d" 
+                        type="action" 
+                        class="oe_stat_button" 
+                        icon="fa-money"
+                        context="{'search_default_custody_employee_id': id}">
+                    <div class="o_stat_info">
+                        <span class="o_stat_text">Finance Custody</span>
+                        <span class="o_stat_value">
+                            <field name="finance_custody_count"/>
+                        </span>
+                    </div>
+                </button>
+            </div>
+            <notebook position="inside">
+                <page string="Custody items" name="custody_items" >
+                    <field name="custody_ids" readonly="1">
+                        <list decoration-info="state=='draft'" 
+                            decoration-success="state=='assigned'" 
+                            decoration-bf="state=='returned'"
+                            decoration-danger="state=='lost'" editable="bottom">
+                            <field name="name"/>
+                            <field name="custody_item_id"/>
+                            <field name="date"/>
+                            <field name="state" widget="badge"
+                                decoration-success="state=='assigned'"
+                            />
+                        </list>
+                    </field>
+                </page>
+            </notebook>
+        </field>
+    </record>
+    <!-- HR Custody Tree View -->
+    <record id="view_hr_custody_tree" model="ir.ui.view">
+        <field name="name">hr.custody.tree</field>
+        <field name="model">hr.custody</field>
+        <field name="arch" type="xml">
+            <list string="HR Custody" decoration-info="state=='draft'" 
+                  decoration-success="state=='assigned'" 
+                  decoration-bf="state=='returned'"
+                  decoration-danger="state=='lost'">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <field name="date"/>
+                <field name="custody_item_id"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- HR Custody Form View -->
+    <record id="view_hr_custody_form" model="ir.ui.view">
+        <field name="name">hr.custody.form</field>
+        <field name="model">hr.custody</field>
+        <field name="arch" type="xml">
+            <form string="HR Custody">
+                <header>
+                    <button name="action_assign" type="object" 
+                            string="Assign" class="oe_highlight"
+                            invisible="state != 'draft'"/>
+                    <button name="action_return" type="object" 
+                            string="Return" class="oe_highlight"
+                            invisible="state != 'assigned'"/>
+                    <button name="action_lost" type="object" 
+                            string="Mark as Lost" class="btn-danger"
+                            invisible="state != 'assigned'"/>
+                    <field name="state" widget="statusbar" 
+                           statusbar_visible="draft,assigned,returned"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="employee_id" options="{'no_create': True}" readonly="state != 'draft'"/>
+                            <field name="department_id" readonly="state != 'draft'"/>
+                            <field name="date" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="custody_item_id" options="{'no_create_edit': True}" readonly="state != 'draft'"/>
+                            <field name="notes" readonly="state != 'draft'"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter reload_on_attachment="True"/>
+            </form>
+        </field>
+    </record>
+
+    <!-- HR Custody Search View -->
+    <record id="view_hr_custody_search" model="ir.ui.view">
+        <field name="name">hr.custody.search</field>
+        <field name="model">hr.custody</field>
+        <field name="arch" type="xml">
+            <search string="Search HR Custody">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <field name="custody_item_id"/>
+                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Assigned" name="assigned" domain="[('state', '=', 'assigned')]"/>
+                <filter string="Returned" name="returned" domain="[('state', '=', 'returned')]"/>
+                <filter string="Lost" name="lost" domain="[('state', '=', 'lost')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Employee" name="employee" context="{'group_by': 'employee_id'}"/>
+                    <filter string="Department" name="department" context="{'group_by': 'department_id'}"/>
+                    <filter string="Status" name="state" context="{'group_by': 'state'}"/>
+                    <filter string="Custody Item" name="custody_item" context="{'group_by': 'custody_item_id'}"/>
+                    <filter string="Month" name="month" context="{'group_by': 'date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- HR Custody Action -->
+    <record id="action_hr_custody" model="ir.actions.act_window">
+        <field name="name">HR Custody</field>
+        <field name="res_model">hr.custody</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_hr_custody_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first HR custody record!
+            </p>
+            <p>
+                Manage custody of company assets assigned to employees.
+            </p>
+        </field>
+    </record>
+</odoo> 

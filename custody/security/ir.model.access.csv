@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_custody_item_user,custody.item user,model_custody_item,base.group_user,1,0,0,0
+access_custody_item_manager,custody.item manager,model_custody_item,hr.group_hr_manager,1,1,1,1
+access_hr_custody_user,hr.custody user,model_hr_custody,base.group_user,1,0,0,0
+access_hr_custody_manager,hr.custody manager,model_hr_custody,hr.group_hr_manager,1,1,1,1
+access_hr_custody_officer,hr.custody officer,model_hr_custody,hr.group_hr_user,1,1,1,0
+
+access_hr_employee_history_user,hr.employee.history user,model_hr_employee_history,,1,1,1,0

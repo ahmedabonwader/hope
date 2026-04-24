@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="contract_inherit_view_list" model="ir.ui.view">
+            <field name="name">hr.contract</field>
+            <field name="model">hr.contract</field>
+            <field name="inherit_id" ref="hr_contract.hr_contract_view_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='employee_id']" position="before">
+                    <field name="sequence"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="ir_cron_update_project_status" model="ir.cron">
+            <field name="name">Project: Update Status to Done Automatically</field>
+            <field name="model_id" ref="model_contract_line"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_update_project_status()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="nextcall" eval="(DateTime.now().replace(hour=0, minute=5) + timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S')" />
+        </record>
+
+        <record id="contract_salary_rule_view_form" model="ir.ui.view">
+            <field name="name">contract.salary</field>
+            <field name="model">hr.contract</field>
+            <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@class='oe_title pe-0 w-100 mw-100']" position="before">
+                    <div class="oe_title pe-0 w-100 mw-100">
+                        <h1 class="d-flex flex-row justify-content-between">
+                            <field name="sequence" class="text-truncate" placeholder="Contract Code" readonly="1"/>
+                        </h1>
+                    </div>
+                </xpath>
+
+                <xpath expr="//header" position="inside">
+                    <button name="action_print_contract_wizard" 
+                            string="Print Contract" 
+                            type="object"
+                            class="oe_highlight" 
+                            />
+                </xpath>
+
+                <xpath expr="//field[@name='date_start']" position="attributes">
+                    <attribute name="string">Current Contract Start Date</attribute>
+                </xpath>
+                <xpath expr="//field[@name='date_end']" position="attributes">
+                    <attribute name="string">Current Contract End Date</attribute>
+                </xpath>
+                <xpath expr="//field[@name='employee_id']" position="after">
+                    <field name="first_contract_date"/>
+                </xpath>
+                <xpath expr="//field[@name='contract_type_id']" position="after">
+                    <field name="contract_type"/>
+                </xpath>
+
+                <xpath expr="//field[@name='date_end']" position="after">
+                    <field name="actual_salary" invisible="0" widget="monetary" options="{'currency_field': 'curr_id'}"/>
+                </xpath>
+
+                <xpath expr="//field[@name='contract_type_id']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+
+                <xpath expr="//page[@name='information']" position="attributes">
+                    <attribute name="invisible">contract_type in ['project']</attribute>
+                </xpath>
+
+                <xpath expr="//page[@name='information']" position="after">
+                    <page string="Project Contracts" name="oauth" invisible="contract_type == 'contract'">
+                        <field name="active_project_line_ids" nolabel="1">
+                            <list string="" editable="bottom" create="true" edit="true" delete="true">
+                                <field name="sequence" widget="handle"/>
+                                <field name="project_id"/>
+                                <field name="start_date"/>
+                                <field name="end_date"/>
+                                <field name="number_of_months"/>
+                                <button name="button_start" type="object" string="Run" class="btn btn-primary"
+                                        icon="fa-play" invisible="1"
+                                />
+                                <button name="button_pending" type="object" string="Pause" class="btn-warning"
+                                        icon="fa-pause" invisible="1"
+                                />
+                                <button name="button_block" type="object" string="Cancel" icon="fa-times"
+                                        class="btn btn-danger" confirm="Warning ! : The Task Will be cancelled" invisible="1"
+                                />
+                                <button name="button_finish" type="object" string="Done" class="btn-success"
+                                        icon="fa-check-square-o" invisible="1"/>
+                                <field name="state"/>
+                                <field name="project_salary" widget="monetary" options="{'currency_field': 'curr_id'}"/>
+                                <field name="curr_id"/>
+                                <field name="project_basic_salary" options="{'currency_field': 'curr_id'}" optional="hide"/>
+                                <field name="project_cola" options="{'currency_field': 'curr_id'}" optional="hide"/>
+                                <field name="project_transportation" options="{'currency_field': 'curr_id'}" optional="hide"/>
+                                <field name="project_housing" options="{'currency_field': 'curr_id'}" optional="hide"/>
+                                <field name="project_hazard" options="{'currency_field': 'curr_id'}" optional="hide"/>
+                                <field name="insurance_include" options="{'currency_field': 'curr_id'}"/>
+                                <field name="loan_subtract" readonly="1"/>
+                                <field name="advance_subtract" readonly="1"/>
+                                <field name="project_insurance" options="{'currency_field': 'curr_id'}"/>
+                                <field name="taxes_include" options="{'currency_field': 'curr_id'}"/>
+                                <field name="project_taxes" options="{'currency_field': 'curr_id'}"/>
+                                <field name="p_total_salary" sum="Total" options="{'currency_field': 'curr_id'}"/>
+                            </list>
+                            <form string="Project Contract Lines">
+                                <group>
+                                    <field name="sequence"/>
+                                    <field name="project_id"/>
+                                    <field name="project_salary"/>
+                                    <field name="project_basic_salary"/>
+                                    <field name="project_cola"/>
+                                    <field name="project_transportation"/>
+                                    <field name="project_housing"/>
+                                    <field name="project_hazard"/>
+                                    <field name="p_total_salary"/>
+                                </group>
+                            </form>
+                        </field>
+                    </page>
+                </xpath>
+                <xpath expr="//page[@name='oauth']" position="after">
+                    <page string="Projects History" name="projects_history" invisible="contract_type == 'contract'">
+                        <field name="history_project_line_ids" nolabel="1" readonly="1">
+                            <list string="History Lines" create="false" delete="false" edit="false">
+                                <field name="project_id"/>
+                                <field name="state" widget="badge" decoration-success="state == 'done'"/>
+                                <field name="project_salary" options="{'currency_field': 'curr_id'}"/>
+                                <field name="curr_id"/>
+                                <field name="project_basic_salary" options="{'currency_field': 'curr_id'}"/>
+                                <field name="project_cola" options="{'currency_field': 'curr_id'}"/>
+                                <field name="project_transportation" options="{'currency_field': 'curr_id'}"/>
+                                <field name="project_housing" options="{'currency_field': 'curr_id'}"/>
+                                <field name="project_hazard" options="{'currency_field': 'curr_id'}"/>
+                                <field name="insurance_include" options="{'currency_field': 'curr_id'}"/>
+                                <field name="loan_subtract" readonly="1"/>
+                                <field name="advance_subtract" readonly="1"/>
+                                <field name="project_insurance" options="{'currency_field': 'curr_id'}"/>
+                                <field name="taxes_include" options="{'currency_field': 'curr_id'}"/>
+                                <field name="project_taxes" options="{'currency_field': 'curr_id'}"/>
+                                <field name="p_total_salary" sum="Total" options="{'currency_field': 'curr_id'}"/>
+                            </list>
+                        </field>
+                    </page>
+                </xpath>
+
+                <xpath expr="//field[@name='wage']" position="attributes">
+                    <attribute name="string">Gross Salary</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='contract_type_id']" position="after">
+                    <field name="insurance"/>
+                </xpath>
+                <xpath expr="//field[@name='date_end']" position="after">
+                    <field name="taxes"/>
+                </xpath>
+                <xpath expr="//group[@name='salary']" position="after">
+                    <group string="Monthly Advantages in Cash" name='allowances'>
+
+                        <label for="basic_monthly_salary"/>
+                        <div class="o_row">
+                            <field name="basic_monthly_salary" nolabel="1"/>
+                            <span>/ month</span>
+                        </div>
+                        <label for="cola"/>
+                        <div class="o_row">
+                            <field name="cola" nolabel="1"/>
+                            <span>/ month</span>
+                        </div>
+                        <label for="transportation_allowance"/>
+                        <div class="o_row">
+                            <field name="transportation_allowance" nolabel="1"/>
+                            <span>/ month</span>
+                        </div>
+
+                        <label for="housing_allowance"/>
+                        <div class="o_row">
+                            <field name="housing_allowance" nolabel="1"/>
+                            <span>/ month</span>
+                        </div>
+
+
+                        <label for="hazard"/>
+                        <div class="o_row">
+                            <field name="hazard" nolabel="1"/>
+                            <span>/ month</span>
+                        </div>
+                        <label for="total_gross_salary"/>
+                        <div class="o_row"
+                             style="font-weight: bold;background-color: #fff5d9; border-color: #ffdb8b; border: 1px solid #ccc;padding: 5px;">
+                            <field name="total_gross_salary" nolabel="1"/>
+                            <span>/ month</span>
+                        </div>
+
+                        <label for="social_insurance"/>
+                        <div class="o_row">
+                            <field name="social_insurance" nolabel="1"/>
+                            <span>/ month</span>
+                        </div>
+                        <label for="staff_income_taxes"/>
+                        <div class="o_row">
+                            <field name="staff_income_taxes" nolabel="1"/>
+                            <span>/ month</span>
+                        </div>
+                        <label for="deduction"/>
+                        <div class="o_row"
+                             style="font-weight: bold;   background-color: #f0f0f0; border: 1px solid #ccc;padding: 5px;">
+
+                            <field name="deduction" nolabel="1"/>
+                            <span>/ month</span>
+                        </div>
+                    </group>
+                    <group>
+                        <field name="total_salary"
+                               style="font-weight: bold;   background-color: #fffde7; border-color: #ffecb3;  border: 1px solid #ccc;padding: 5px;"/>
+
+                    </group>
+                </xpath>
+
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="social_insurance_tax_wizard_form" model="ir.ui.view">
+        <field name="name">social.insurance.tax.wizard.form</field>
+        <field name="model">social.insurance.tax.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="operation_type" widget="radio" options="{'horizontal':true}" required="1"/>
+                            <field name="payslip_id" invisible="1"/>
+                        </group>
+                        <notebook>
+                            <page string="authorizations">
+                                <group>
+                                    <field name="signature_prepared" required="1"/>
+                                    <field name="signature_reviewed" required="1"/>
+                                    <field name="signature_approved" required="1"/>
+                                </group>
+                            </page>
+                        </notebook>
+                        <group>
+                            <footer>
+                                <button name="action_validate" string="Print" type="object" class="btn-primary"
+                                        data-hotkey="q"/>
+                                <button special="cancel" data-hotkey="z" string="Discard" class="btn-secondary"/>
+                            </footer>
+                        </group>
+                    </group>
+                </sheet>
+
+            </form>
+        </field>
+    </record>
+    <record id="social_insurance_and_tax_wizard_action" model="ir.actions.act_window">
+        <field name="name">Social Insurance and Tax Wizard</field>
+        <field name="res_model">social.insurance.tax.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

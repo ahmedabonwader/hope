@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inherit Form View -->
+    <record id="project_inherit_budget_view_form_inherit" model="ir.ui.view">
+        <field name="name">project.project.form.inherit.budget</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button string="Confirm" name="action_project_confirm" type="object"
+                invisible="state != 'draft'"
+                class="oe_highlight"/>
+                <button string="Approve" name="action_project_validate" type="object"
+                invisible="state != 'confirm'"
+                class="oe_highlight"/>
+                <button string="Draft"  type="object" name="action_project_draft"
+                invisible="state not in ('confirm')" />
+                <button string="Cancel " name="action_project_cancel"
+                invisible="state in ('validate','running', 'done')" type="object"/>
+                <field name="state" widget="statusbar"/>
+            </xpath>
+                <xpath expr="//field[@name='account_id']" position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+
+              <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="required">1</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

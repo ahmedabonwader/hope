@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="purchase_order_inherit_form" model="ir.ui.view">
+        <field name="name">purchase.order</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+
+            <div class="oe_button_box" name="button_box" position="inside">
+                <button name="action_certificate_completion_count" type="object" class="oe_stat_button" icon="fa-certificate">
+                    <div class="o_stat_info">
+                        <field name="certificate_completion_count" class="o_stat_value"/>
+                        <span class="o_stat_text">Certificate Completion</span>
+                    </div>
+                </button>
+            </div>
+
+            <field name="state" position="replace">
+                <field name="state" widget="statusbar" statusbar_visible="draft,review,approve,sent,purchase"
+                       readonly="1"
+                       class="oe_highlight"/>
+            </field>
+            <xpath expr="//field[@name='partner_ref']" position="after">
+                <field name="bid_tender_id" readonly="1" invisible="purchase_type == 'purchase_order'"
+                       domain="[('operation_type', '=', purchase_type)]"/>
+                <field name="purchase_type" readonly="1" force_save="1"/>
+                <field name="requester_id" invisible="0" readonly="1"/>
+                <field name="amount_in_currency" invisible="1"/>
+                <field name="approval_currency_id" invisible="1"/>
+                <!--                <field name="project_id"/>-->
+                <field name="task_id" placeholder="Select your Activity carefully" widget="many2many_tags"
+                       domain="[('project_id', '=', project_id)]"/>
+                <!--                <field name="location_id"/>-->
+                <field name="sign_reviewed" readonly="1" invisible="1"/>
+                <field name="sign_approved" readonly="1" invisible="1"/>
+                <field name="prepared_job_title" invisible="1"/>
+                <field name="reviewed_job_title" invisible="1"/>
+                <field name="approved_job_title" invisible="1"/>
+                <field name="date_pur" readonly="1" invisible="1"/>
+                <field name="purchase_check" invisible="1"/>
+                <field name="check_project" invisible="1"/>
+                <field name="check_3" invisible="1" readonly="1"/>
+                <field name="check" readonly="1" force_save="1" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='date_order']" position="after">
+                <field name="reason" readonly="0" invisible="purchase_type == 'purchase_order'"/>
+                <field name="users_id" readonly="1" invisible="purchase_type == 'purchase_order'"/>
+                <field name="total_amount" readonly="1" invisible="purchase_type in ('bid_analysis', 'tender')"/>
+            </xpath>
+            <xpath expr="//field[@name='project_id']" position="after">
+                <field name="prs" invisible="0" required="check_project == 1" force_save="1"
+                       options="{'no_quick_create': True, 'no_create_edit' : True}"
+                       domain="[('project_id', '=', project_id), ('request_type', '=', 'purchase_request'), ('state', '=', 'done')]"
+                       readonly="state != 'draft'"/>
+                <field name="is_service" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='branch_id']" position="attributes">
+                <attribute name="options">{'no_quick_create': True, 'no_create_edit': True}</attribute>
+            </xpath>
+
+
+            <!--            <button name="button_confirm" position="after">-->
+            <!--                <button string="Confirm Order" name="action_done" type="object" class="oe_highlight"-->
+            <!--                        invisible="check == True or purchase_type == 'purchase_order' or state != 'approve'"/>-->
+            <!--            </button>-->
+            <button name="print_quotation" position="after">
+                <button string="Review" name="action_review" type="object" class="oe_highlight"
+                        invisible="state != 'draft'"
+                        groups="bid_tender.group_oms_purchase_administrator,bid_tender.group_oms_purchase_review"/>
+                <button string="Approve" name="action_approved" type="object" class="oe_highlight"
+                        invisible="state != 'review'"
+                        groups="bid_tender.group_oms_purchase_administrator,bid_tender.group_oms_purchase_approve"/>
+                <button string="Reset To Draft" name="action_reset_to_draft" type="object"
+                        invisible="state not in ('review', 'approve')"/>
+                <button string="Print Purchase Order" name="action_print_report" type="object" class="oe_highlight"
+                        invisible="state != 'purchase'"/>
+            </button>
+            <xpath expr="//sheet//div[@class='oe_title']" position="before">
+                <field name="purchase_status" invisible="1"/>
+                <widget name="web_ribbon" title="Reviewed"
+                        invisible="state != 'review'"
+                        bg_color="bg-success"/>
+                <widget name="web_ribbon" title="Approved"
+                        invisible="state != 'approve'"
+                        bg_color="bg-success"/>
+            </xpath>
+            <xpath expr="//button[@name='button_confirm'][2]" position="attributes">
+                <attribute name="groups">bid_tender.group_oms_purchase_administrator,bid_tender.group_oms_purchase_procurement</attribute>
+                
+                <attribute name="invisible">state != 'approve'</attribute>
+            </xpath>
+
+            <xpath expr="//button[@name='print_quotation']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+
+            <xpath expr="//button[@name='action_rfq_send']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+
+            <!-- <xpath expr="//button[@name='action_rfq_send' and @string='Send PO by Email']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath> -->
+
+            <xpath expr="//button[@name='confirm_reminder_mail']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+
+            <xpath expr="//button[@name='button_done']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+
+            <!-- <xpath expr="//button[@name='action_rfq_send'][1]" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath> -->
+
+            <xpath expr="//field[@name='order_line']/list//field[@name='product_qty']" position="before">
+                <field name="project_id" column_invisible="1"/>
+                <field name="budged_line_code" domain="[('project_id', '=', project_id)]"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="purchase.menu_purchase_root" model="ir.ui.menu">
+        <field name="groups_id" eval="[(4, ref('group_oms_purchase_doner'))]"/>
+    </record>
+
+    <record id="purchase.menu_purchase_form_action" model="ir.ui.menu">
+        <field name="groups_id" eval="[(4, ref('group_oms_purchase_doner'))]"/>
+    </record>
+
+    
+    <record id="view_purchase_order_filter_inherit_project" model="ir.ui.view">
+        <field name="name">purchase.order.filter.inherit.project</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.view_purchase_order_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <filter string="Project" name="group_project_id" domain="[]" context="{'group_by': 'project_id'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="purchase.purchase_rfq" model="ir.actions.act_window">
+        <field name="context">{'group_by': 'project_id'}</field>
+    </record>
+
+    <!-- <record id="view_inherit_stock_picking_form" model="ir.ui.view">
+        <field name="name">stock.picking</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='510']" position="after">
+                <button name="action_print_grn" string="GRN Report" type="object" class="btn-warning"
+                        invisible="state != 'done'"/>
+            </xpath>
+
+            <xpath expr="//button[@name='510']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+        </field>
+    </record> -->
+</odoo>

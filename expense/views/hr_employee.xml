@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_inherit_hr_employee_form" model="ir.ui.view">
+            <field name="name">hr.employee.form</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='job_id']" position="attributes">
+                    <attribute name="string">Job Title</attribute>
+                </xpath>
+                <xpath expr="//field[@name='department_id']" position="attributes">
+                    <attribute name="string">Department / Categories</attribute>
+                </xpath>
+                <xpath expr="//field[@name='parent_id']" position="attributes">
+                    <attribute name="string">Dirct Supervisor</attribute>
+                </xpath>
+                <xpath expr="//field[@name='coach_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='job_title']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='job_id']" position="after">
+                     <field name="work_location_id"/>
+                </xpath>
+                <xpath expr="//field[@name='work_location_id']" position="attributes">
+                    <attribute name="string">State</attribute>
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <notebook position="inside">
+                    <page string="Salary Payment">
+                        <field name="salary_line_ids">
+                            <list delete="0" create="false">
+                                <field name="operation_type"/>
+                                <field name="date"/>
+                                <field name="month"/>
+                                <field name="payment_method"/>
+                                <field name="currency_id" column_invisible="1"/>
+                                <field name="amount" sum="Total" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            </list>
+                        </field>
+                    </page>
+                    <page string="Loan Payment" readonly="1">
+                        <field name="loan_line_ids">
+                            <list delete="0" create="false">
+                                <field name="operation_type"/>
+                                <field name="contract_type"/>
+                                <field name="project_id"/>
+                                <field name="loan_duration"/>
+                                <field name="date"/>
+                                <field name="payment_method"/>
+                                <field name="currency_id" column_invisible="1"/>
+                                <field name="check_loan"/>
+                                <field name="loan_count"/>
+                                <!-- <field name="rate"/> -->
+                                <field name="deduct"/>
+                                <field name="amount" sum="Total" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            </list>
+                        </field>
+                    </page>
+                    <page string="Advance Payment" readonly="1">
+                        <field name="advance_line_ids">
+                            <list delete="0" create="false">
+                                <field name="operation_type"/>
+                                <field name="contract_type"/>
+                                <field name="project_id"/>
+                                <field name="advance_duration"/>
+                                <field name="date"/>
+                                <field name="payment_method"/>
+                                <field name="check_advance"/>
+                                <!-- <field name="rate"/> -->
+                                <field name="currency_id" column_invisible="1"/>
+                                <field name="advance_count"/>
+                                <field name="amount" widget="monetary" options="{'currency_field': 'currency_id'}" sum="Total"/>
+                            </list>
+                        </field>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+
+        <record id="view_inherit_hr_contract_form" model="ir.ui.view">
+            <field name="name">hr.contract.form.inherit.currency</field>
+            <field name="model">hr.contract</field>
+            <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='salary']" position="inside">
+                    <field name="curr_id"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

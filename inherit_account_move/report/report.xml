@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="create_report_view">
+            <t t-call="web.basic_layout">
+                <t t-foreach="data" t-as="o">
+                    <div class="page">
+                        <table border="0" width="100%" height="100%" align="center">
+                            <tr align="center">
+                                <td style="padding:5px 0px 10px 0px;" height="20" width="15%">
+                                    <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)"
+                                         height="120" style="border-radius: 5px; padding-top:5px " width="120"/>
+                                </td>
+                                <td style="padding:10px" height="20" width="60%">
+                                    <h4 style="text-align:center; font-family: Amiri;font-weight: bold;">
+                                        <span t-field="o.company_id.name"/>
+                                    </h4>
+                                    <h4 style="text-align:center; font-family: Amiri;font-weight: bold;">
+                                        <span t-field="o.company_id.name"/>
+                                    </h4>
+                                    <h4 style="text-align:center; font-family: Amiri;font-weight: bold;">Khartoum Bank -
+                                        Acc No 1914129 - 0
+                                    </h4>
+                                    <h4 style="text-align:center; font-family: Amiri;font-weight: bold;">Transation List
+                                        Sep - Nov 2024
+                                    </h4>
+                                </td>
+                                <td style="padding:5px 0px 10px 0px;" height="20" width="15%">
+                                    <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)"
+                                         height="120" style="border-radius: 5px; padding:5px 0px 10px 0px; "
+                                         width="120"/>
+                                </td>
+                            </tr>
+                        </table>
+                        <div>
+                            <span style="padding-left:100px">Exchange Rate</span>
+                            <span style="padding-left:100px">1 USD</span>
+                            <span style="padding-left:100px">=</span>
+                            <span style="padding-left:100px">1226.95</span>
+                        </div>
+                        <br/>
+                        <div>
+                            <table style="border: 1px solid black;
+                                border-collapse: collapse;
+                                margin-left: auto;
+                                margin-right: auto;
+                                width:100%;">
+                                <thead>
+                                    <tr style="font-size: 12px; border: 1px solid black;border-collapse: collapse; padding:5px; background-color:#dfdfdf">
+                                        <th style="border: 1px solid black; border-collapse: collapse; padding:5px; size:12px; width:3%">
+                                            Transaction No
+                                        </th>
+                                        <th style="border: 1px solid black; border-collapse: collapse; padding:5px;">Date
+                                        </th>
+                                        <th style="border: 1px solid black; border-collapse: collapse; padding:5px;">No /
+                                            Voucher No /
+                                        </th>
+                                        <th style="border: 1px solid black; border-collapse: collapse; padding:5px;">Name
+                                        </th>
+                                        <th style="border: 1px solid black; border-collapse: collapse; padding:5px;">
+                                            Transaction Datalle
+                                        </th>
+                                        <th style="border: 1px solid black; border-collapse: collapse; padding:5px;">Amount
+                                            in SDG (Credit +)
+                                        </th>
+                                        <th style="border: 1px solid black; border-collapse: collapse; padding:5px;">Amount
+                                            in SDG (Debit +)
+                                        </th>
+                                        <th style="border: 1px solid black; border-collapse: collapse; padding:5px;">Balance
+                                            in SDG
+                                        </th>
+                                        <th style="border: 1px solid black; border-collapse: collapse; padding:5px;">Amount
+                                            in USD
+                                        </th>
+                                        <th style="border: 1px solid black; border-collapse: collapse; padding:5px;">Budget
+                                            line Code
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody style="border: 1px solid black; border-radius:10px;">
+                                    <t t-foreach="o.order_line" t-as="line">
+                                        <tr style="border: 1px solid black;border-collapse: collapse; padding:5px; width:3%">
+                                            <td class="description"
+                                                style="border: 1px solid black;border-collapse: collapse; padding:5px;">
+    <!--                                            <t t-esc="line.partner_id.id"/>-->
+                                            </td>
+                                            <td class="description"
+                                                style="border: 1px solid black;border-collapse: collapse; padding:5px;">
+    <!--                                            <t t-esc="line.date_order"/>-->
+                                            </td>
+                                            <td class="description"
+                                                style="border: 1px solid black;border-collapse: collapse; padding:5px;">
+    <!--                                            <t t-esc="line.partner_id.name"/>-->
+                                            </td>
+                                            <td class="description"
+                                                style="border: 1px solid black;border-collapse: collapse; padding:5px;">
+    <!--                                            <t t-esc="line.partner_id.name"/>-->
+                                            </td>
+                                            <td class="description"
+                                                style="border: 1px solid black;border-collapse: collapse; padding:5px;">
+    <!--                                            <t t-esc="line.partner_id.name"/>-->
+                                            </td>
+                                            <td class="description"
+                                                style="border: 1px solid black;border-collapse: collapse; padding:5px;">
+    <!--                                            <t t-esc="line.partner_id.name"/>-->
+                                            </td>
+                                            <td class="description"
+                                                style="border: 1px solid black;border-collapse: collapse; padding:5px;">
+    <!--                                            <t t-esc="line.partner_id.name"/>-->
+                                            </td>
+                                            <td class="description"
+                                                style="border: 1px solid black;border-collapse: collapse; padding:5px;">
+    <!--                                            <t t-esc="line.partner_id.name"/>-->
+                                            </td>
+
+                                            <td class="description"
+                                                style="border: 1px solid black;border-collapse: collapse; padding:5px;">
+    <!--                                            <t t-esc="line.product_qty"/>-->
+                                            </td>
+                                            <td class="price"
+                                                style="border: 1px solid black;border-collapse: collapse; padding:5px;">
+    <!--                                            <t t-esc="line.price_subtotal"/>-->
+                                            </td>
+                                        </tr>
+                                        <!-- <t t-set="total" t-value="total+line.price_subtotal"/> -->
+
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </template>
+
+        <record id="create_report_paper_format" model="report.paperformat">
+            <field name='name'>Custom A4</field>
+            <field name="default" eval="False"/>
+            <field name="disable_shrinking" eval="True"/>
+            <field name='format'>custom</field>
+            <field name='orientation'>Landscape</field>
+            <field name='page_height'>0</field>
+            <field name='page_width'>0</field>
+            <field name='margin_top'>3</field>
+            <field name='margin_bottom'>1</field>
+            <field name='margin_left'>0</field>
+            <field name='margin_right'>0</field>
+            <field name='header_spacing'>35</field>
+            <field name='dpi'>90</field>
+        </record>
+
+        <record id="action_report_views" model="ir.actions.report">
+            <field name="name">Budget Report</field>
+            <field name="model">crossovered.budget</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="paperformat_id" ref="accounting_report.create_report_paper_format"/>
+            <field name="report_name">accounting_report.create_report_view</field>
+            <field name="report_file">accounting_report.create_report_view</field>
+        </record>
+
+<!--         <record id="action_report_views" model="ir.actions.report">-->
+<!--            <field name="paperformat_id" ref="accounting_report.create_report_paper_format"/>-->
+<!--        </record>-->
+
+        <!--        <report-->
+        <!--                string="Create Report"-->
+        <!--                id="action_report_views"-->
+        <!--                model="crossovered.budget"-->
+        <!--                report_type="qweb-pdf"-->
+        <!--                name="accounting_report.create_report_view"-->
+        <!--                file="accounting_report.create_report_view"-->
+        <!--        />-->
+
+
+    </data>
+</odoo>

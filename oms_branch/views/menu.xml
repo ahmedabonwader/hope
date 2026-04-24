@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem
+            id="menu_oms_branch_root"
+            name="Branch"
+            groups="group_oms_branches_administrator"
+            sequence="6"
+    />
+    <menuitem
+            id="menu_oms_branch_sub"
+            name="Branches"
+            parent="menu_oms_branch_root"
+            action="action_oms_branch"
+            groups="group_oms_branches_administrator"
+            sequence="10"/>
+</odoo>

@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="action_bank_letters_report_print_info">
+        <t t-call="web.html_container">
+            <t t-call="web.basic_layout">
+                <style>
+                    .bank_report_page {
+                        font-family: 'KacstOne', 'Arial', sans-serif !important;
+                        direction: rtl;
+                        padding: 5px; /* تقليل الحشو العام */
+                    }
+                    .main_table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        margin-top: 10px; /* تقليل المسافة فوق الجداول */
+                    }
+                    .main_table th, .main_table td {
+                        border: 1px solid black !important;
+                        padding: 5px; /* تقليل الحشو داخل الخلايا لتقليل ارتفاع الصفوف */
+                        text-align: center;
+                        vertical-align: middle;
+                        font-size: 10pt; /* تصغير الخط في الجداول */
+                    }
+                    .main_table th {
+                        background-color: #f2f2f2;
+                        font-weight: bold !important;
+                    }
+                    .total_row {
+                        background-color: #f2f2f2;
+                        font-weight: bold;
+                    }
+                    .bidi_fix {
+                        direction: ltr !important;
+                        display: inline-block;
+                        unicode-bidi: embed;
+                    }
+                    /* منع كسر الصفحة داخل العناصر */
+                    p, div, table {
+                        page-break-inside: avoid;
+                    }
+                </style>
+
+                <t t-foreach="docs" t-as="doc">
+                    <div class="page bank_report_page">
+                        <img t-att-src="'/inherit_account_move/static/src/img/watermark.png'"
+                             style="position: fixed; bottom: 50px; right: 50px; width: 200px; opacity: 0.15; z-index: -1;"/>
+
+                        <div style="width:100%; min-height: 150px; border: 1px solid black; border-radius: 20px; position: relative; margin-bottom: 20px;">
+                            <div style="position: absolute; right: 20px; top: 30px; text-align: right;">
+                                <h3 style="color: #003366; text-decoration: underline; margin:0;">منظمة الأمل والصداقة للتنمية (هوب)</h3>
+                                <p style="color: #003366; font-size: 10pt; margin: 5px 0 0 0;">السودان - الخرطوم</p>
+                            </div>
+                            <div style="position: absolute; left: 20px; top: 30px; text-align: left;">
+                                <h3 style="color: #003366; text-decoration: underline; margin:0;">Hope Organization</h3>
+                                <p style="color: #003366; font-size: 10pt; margin: 5px 0 0 0;">Sudan - Khartoum</p>
+                            </div>
+                            <div style="text-align: center; padding-top: 20px;">
+                                <img t-att-src="image_data_uri(doc.company_id.logo)" style="max-height: 90px; width: auto;"/>
+                            </div>
+                        </div>
+
+                        <table style="width: 100%; border: none; margin-bottom: 8px;">
+                            <tr>
+                                <td style="text-align: right; font-size: 10pt; width: 50%;">
+                                    <span>التاريخ : </span> <span class="bidi_fix" t-field="doc.date"/>
+                                </td>
+                                <td style="text-align: left; font-size: 10pt; width: 50%; direction: ltr;">
+                                    <span>Date : </span> <span t-field="doc.date"/>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <div style="margin-top: 15px; font-size: 13pt; text-align: right; line-height: 1.5;">
+                            السيد / مدير <strong t-field="doc.bank_name_letter"/> - 
+                            <span class="bidi_fix"><t t-esc="doc.bank_branch"/></span>
+                            <span>المحترم</span>
+                        </div>
+
+                        <div style="text-align: center; margin-top: 8px; font-size: 12pt;">السلام عليكم ورحمة الله وبركاته</div>
+                        
+                        <div style="text-align: center; margin-top: 2px;">
+                            <h4 style="text-decoration: underline; color: #003366; margin: 5px 0;">
+                                <t t-if="doc.bank == 'bok'">الموضوع: طلب تحويل داخلي</t>
+                                <t t-else="">الموضوع: طلب تحويل سراج</t>
+                            </h4>
+                        </div>
+
+                        <t t-if="doc.bank_letters_type == 'salary_letters'">
+                            <div style="margin-top: 15px; font-size: 14pt; line-height: 1.6; text-align: justify; text-indent: 50px;">
+                                بالإشارة للموضوع أعلاه نرجو التكرم بتحويل مرتبات 
+                                <strong><t t-esc="doc.get_month_name_ar(doc.month_date)"/></strong> للموظفين أدناه.
+                                وجملة المبلغ <strong><t t-esc="doc.amount" t-options='{"widget": "float", "precision": 2}'/></strong>
+                                (<t t-esc="doc.amount_in_words"/>) فقط لا غير.
+                            </div>
+                            <br/>
+                            <table class="main_table">
+                                <thead>
+                                    <tr>
+                                        <th>اسم الموظف</th>
+                                        <th>البنك</th>
+                                        <th>الفرع</th>
+                                        <th>رقم الحساب (IBAN)</th>
+                                        <th>المبلغ</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="doc.bank_letters_line_ids" t-as="line">
+                                        <tr>
+                                            <td style="text-align: right;"><span t-field="line.employee"/></td>
+                                            <td><span t-field="line.bank_name"/></td>
+                                            <td><span class="bidi_fix" t-field="line.branch"/></td>
+                                            <td><span class="bidi_fix" t-field="line.account_number"/></td>
+                                            <td><span t-field="line.amount" t-options='{"widget": "float", "precision": 2}'/></td>
+                                        </tr>
+                                    </t>
+                                    <tr class="total_row">
+                                        <td colspan="4" style="text-align: right; padding-right: 15px;">المجموع</td>
+                                        <td><t t-esc="doc.line_total_amount" t-options='{"widget": "float", "precision": 2}'/></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div style="margin-top: 20px; font-size: 15pt;">
+                                وذللك خصماً من حسابنا بالمعلومات التالية :<br/>
+                                إسم الحساب : <strong><t t-esc="doc.bank_id_account_from.name"/></strong><br/>
+                                رقم الحساب : <strong class="bidi_fix"><t t-esc="doc.number_from"/></strong><br/>
+                                الفرع : <span class="bidi_fix"><t t-esc="doc.branch_from"/></span>
+                            </div>
+                        </t>
+
+                        <t t-if="doc.bank_letters_type == 'internal_transfer'">
+                            <div style="margin-top: 15px; font-size: 15pt; line-height: 1.8; text-align: justify;">
+                                <span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</span>
+                                بالإشارة للموضوع أعلاه نرجو من سيادتكم التكرم بتحويل مبلغ 
+                                <strong><t t-esc="doc.amount" t-options='{"widget": "float", "precision": 2}'/></strong>
+                                <strong>(<t t-esc="doc.amount_in_words"/>)</strong> 
+                                من حساب <strong><t t-esc="doc.bank_id_account_from.name"/></strong> 
+                                رقم <strong class="bidi_fix"><t t-esc="doc.number_from"/></strong> 
+                                ببنك <strong><t t-esc="doc.bank_name_from"/></strong> فرع <span class="bidi_fix"><strong><t t-esc="doc.branch_from"/></strong></span>
+                                <br/>
+                                لصالح المستفيد : <strong><t t-esc="doc.bank_id_account_to.name"/></strong>
+                                <br/>
+                                رقم حساب المستفيد : <strong class="bidi_fix"><t t-esc="doc.number_to"/></strong>
+                                <br/>
+                                البنك : <strong><t t-esc="doc.bank_name_to"/></strong> فرع <span class="bidi_fix"><strong><t t-esc="doc.branch_to"/></strong></span>
+                            </div>
+                        </t>
+
+                        <t t-if="doc.bank_letters_type == 'normal_letters'">
+                            <div style="margin-top: 15px; font-size: 15pt; line-height: 1.8; text-align: justify;">
+                                <span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</span>
+                                بالإشارة للموضوع أعلاه نرجو من سيادتكم التكرم بتحويل مبلغ 
+                                <strong><t t-esc="doc.amount" t-options='{"widget": "float", "precision": 2}'/></strong>
+                                <strong>(<t t-esc="doc.amount_in_words"/>)</strong> 
+                                من حساب <strong><t t-esc="doc.bank_id_account_from.name"/></strong> 
+                                رقم <strong class="bidi_fix"><t t-esc="doc.number_from"/></strong> 
+                                ببنك <strong><t t-esc="doc.bank_name_from"/></strong> فرع <span class="bidi_fix"><strong><t t-esc="doc.branch_from"/></strong></span>
+                                <br/>
+                                لصالح المستفيد : <strong><t t-esc="doc.received_name_in_arabic"/></strong>
+                                <br/>
+                                رقم حساب المستفيد : <strong class="bidi_fix"><t t-esc="doc.number_to"/></strong>
+                                <br/>
+                                البنك : <strong><t t-esc="doc.bank_name_to"/></strong> فرع <span class="bidi_fix"><strong><t t-esc="doc.branch_to"/></strong></span>
+                            </div>
+                        </t>
+
+                        <div style="text-align: center; margin-top: 15px; font-size: 12pt;">مع وافر الشكر والتقدير</div>
+
+                        <div style="margin-top: 10px; text-align: left; padding-left: 40px; font-size: 11pt;">
+                            <strong>عثمان احمد بلال الخضر</strong><br/> المدير العام
+                        </div>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <div style="margin-top: 15px;">
+                            <p style="font-size: 9pt; font-weight: bold; margin-bottom: 2px;">: لإستخدام المنظمة الداخلي</p>
+                            <table class="main_table" style="margin-top: 0;">
+                                <thead>
+                                    <tr>
+                                        <th style="font-size: 8pt; width: 50%;">Project Code</th>
+                                        <th style="font-size: 8pt; width: 25%;">Budget Line</th>
+                                        <th style="font-size: 8pt; width: 25%;">Payment Number</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="font-size: 8pt;"><span t-field="doc.project_id.name"/></td>
+                                        <td style="font-size: 8pt;"><span t-field="doc.budget_line_code.line_code"/></td>
+                                        <td style="font-size: 8pt;"><span class="bidi_fix" t-field="doc.payment_number"/></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="footer" style="border-top: 2px solid black; font-size: 12pt; text-align: center; margin-top: 20px; width: 100%;">
+                            <p style="margin: 5px 0;">مبنى رقم (154)، مربع (5)، حي المطار، بورسودان، ولاية البحر الأحمر – السودان</p>
+                            <p style="margin: 2px 0; direction: ltr;">Building # (154), Block # (5), Matar Area, Port-Sudan, Red Sea State - Sudan</p>
+                            <p style="margin: 2px 0; direction: ltr;">Website: www.hopesudan.org | Tel: +249120023500 | Email: hopesudan2015@gmail.com</p>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="custom_bank_letters_format" model="report.paperformat">
+        <field name="name">Bank Letters Custom Final</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="margin_top">8</field>
+        <field name="margin_bottom">20</field>
+        <field name="margin_left">5</field>
+        <field name="margin_right">5</field>
+        <field name="dpi">96</field>
+    </record>
+
+    <record id="action_bank_letters_report_print" model="ir.actions.report">
+        <field name="name">Bank Letters Report</field>
+        <field name="model">bank.letters</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">inherit_account_move.action_bank_letters_report_print_info</field>
+        <field name="report_file">inherit_account_move.action_bank_letters_report_print_info</field>
+        <field name="paperformat_id" ref="inherit_account_move.custom_bank_letters_format"/>
+    </record>
+</odoo>

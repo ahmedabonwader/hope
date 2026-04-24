@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="account_budge_iteme" model="ir.ui.view">
+            <field name="name">crossovered.budget.view.form</field>
+            <field name="model">crossovered.budget</field>
+            <field name="inherit_id" ref="om_account_budget.crossovered_budget_view_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//form/sheet" position="inside">
+
+                    <div class="oe_button_box" name="button_box">
+
+                        <button name="action_quarter_count"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-calendar">
+
+                            <div class="o_stat_info">
+                                <field name="quarter_count" class="o_stat_value"/>
+                                <span class="o_stat_text">Quarter</span>
+                            </div>
+
+                        </button>
+
+                    </div>
+
+                </xpath>
+                
+                <xpath expr="//div[hasclass('oe_title')]" position="replace">
+                    <group>
+                        <group>
+                            <field name="name" readonly="state != 'draft'" placeholder="Budget Name"/>
+                        </group>
+                        <group>
+                            <field name="project_id" readonly="state != 'draft'"/>
+                        </group>
+                    </group>
+                </xpath>
+
+                <xpath expr="//button[@name='action_budget_done']" position="attributes">
+                    <attribute name="groups">inherit_account_move.group_account_administrator,inherit_account_move.group_account_approve</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_budget_validate']" position="attributes">
+                    <attribute name="groups">inherit_account_move.group_account_administrator,inherit_account_move.group_account_approve</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_budget_draft']" position="attributes">
+                    <attribute name="groups">inherit_account_move.group_account_administrator,inherit_account_move.group_account_approve</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_budget_cancel']" position="attributes">
+                    <attribute name="groups">inherit_account_move.group_account_administrator,inherit_account_move.group_account_approve</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_budget_confirm']" position="attributes">
+                    <attribute name="groups">inherit_account_move.group_account_administrator,inherit_account_move.group_account_approve</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='company_id']" position="after">
+                    <field name="budget_total_amount" widget="monetary" options="{'currency_field': 'curr_id'}"/>
+                    <field name="curr_id" invisible="1"/>
+                    <field name="more_details"/>
+                    <field name="approve_by" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='user_id']" position="after">
+                    <field name="allowed_increase" readonly="is_increase == True" force_save="1"
+                    />
+                    <field name="is_increase" force_save="1"/>
+                </xpath>
+                <xpath expr="//field[@name='crossovered_budget_line']/list//field[@name='planned_amount']"
+                       position="after">
+                    <button name="action_update_quarter" type="object" icon="fa-list" width="0.1" title="Details"
+                            invisible="0"/>
+                    <field name="rate"/>
+                    <field name="quarter_type"/>
+
+                    <button  type="object" name="action_open_budget_quarter" string="Quarter Line..." icon="fa-gears"  class="oe_highlight"/>
+
+                    <field name="budget_line_theoritical_amount"/>
+                    <field name="remaining_amount"/>
+                </xpath>
+
+                <xpath expr="//field[@name='crossovered_budget_line']/list/field[@name='currency_id']"
+                       position="attributes">
+                    <attribute name="invisible">0</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='analytic_account_id']" position="attributes">
+                    <attribute name="domain">[('state', '=', 'draft')]</attribute>
+                </xpath>
+                <xpath expr="//field[@name='general_budget_id']" position="before">
+                    <field name="quarter" readonly="1"/>
+                </xpath>
+                <xpath expr="//notebook" position="inside">
+                    <!-- Add a new page after the first page -->
+                    <page string="Project Budget lines">
+                        <field name="budget_iteme_lines" nolabel="1" readonly="state in ('done', 'validate')">
+                        <!-- <field name="budget_iteme_lines" nolabel="1" readonly="state != 'draft'"> -->
+                            <list string="Budget Item Lines" editable="bottom" delete="1">
+                                <field name="seq" widget="handle"/>
+                                <field name="line_code"/>
+                                <field name="budget_state" column_invisible="parent.more_details == False"/>
+                                <field name="budget_account" column_invisible="parent.more_details == False"/>
+                                <field name="more_details" column_invisible="1"/>
+                                <field name="description"/>
+                                <field name="account_id"/>
+                                <field name="project_id" column_invisible="1"/>
+                                <field name="currency_id" invisible="0"/>
+                                <field name="budget_line_planned_amount" sum="budget_line_planned_amount"/>
+                                <button name="action_update_planned_amount" type="object" icon="fa-list" width="0.1"
+                                    title="Details" column_invisible="parent.state != 'validate'" invisible="0"
+                                />
+                                <field name="budget_line_theoritical_amount" sum="budget_line_theoritical_amount" readonly="1"/>
+                                <field name="remaining_amount" sum="remaining_amount" readonly="1"/>
+                                <field name="allowed_increase" readonly="1"/>
+                                <field name="burn_rate" widget="progress" readonly="1"/>
+                                <!-- <button name="unlink" type="object" string="Delete" icon="fa-trash"
+                                        invisible="check == True"/> -->
+                            </list>
+                            <form string="Project Budget lines">
+                                <group>
+                                    <field name="line_code"/>
+                                    <field name="account_id"/>
+                                    <field name="currency_id" invisible="0"/>
+                                    <field name="budget_line_planned_amount"/>
+                                    <field name="budget_line_theoritical_amount"/>
+                                    <field name="remaining_amount"/>
+                                </group>
+                            </form>
+                        </field>
+                        <group name="note_group" col="6" class="mt-2 mt-md-0">
+                            <group colspan="4" class="order-1 order-lg-0">
+                                <field colspan="2" name="note" nolabel="1" placeholder="Terms and conditions..."/>
+                            </group>
+                            <group class="oe_subtotal_footer d-flex order-0 order-lg-1 flex-column gap-0 gap-sm-3"
+                                   name="sale_total">
+                                <field name="amount_total" invisible="1"/>
+                            </group>
+                        </group>
+                    </page>
+                    <page name="authorizations" string="Authorizations">
+                        <group>
+                            <group>
+                                <field name="create_by" string="Prepared By"/>
+                                <field name="signature_reviewed" string="Reviewed By"/>
+                                <field name="signature_approved" string="Approved By"/>
+                            </group>
+                            <group invisible="1">
+                                <field name="prepared_job_title" force_save="1"/>
+                                <field name="reviewed_job_title" force_save="1"/>
+                                <field name="approved_job_title" force_save="1"/>
+                            </group>
+                        </group>
+                        
+                    </page>
+                </xpath>
+
+            </field>
+        </record>
+
+        <record id="inherit_account_budge_iteme_search" model="ir.ui.view">
+            <field name="name">crossovered.budget.view.search</field>
+            <field name="model">crossovered.budget</field>
+            <field name="inherit_id" ref="om_account_budget.view_crossovered_budget_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//search" position="inside">
+                    <searchpanel>
+                        <field name="state" icon="fa-users" string="State" enable_counters="1"/>
+                        <!-- <field name="user_id" icon="fa-users" string="Responsible" enable_counters="1"/> -->
+                    </searchpanel>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="inherit_account_budge_iteme_list" model="ir.ui.view">
+            <field name="name">crossovered.budget.view.list</field>
+            <field name="model">crossovered.budget</field>
+            <field name="inherit_id" ref="om_account_budget.crossovered_budget_view_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='user_id']" position="after">
+                    <field name="budget_total_amount" widget="monetary" options="{'currency_field': 'curr_id'}"/>
+                    <field name="curr_id" invisible="1"/>
+                </xpath>
+                <xpath expr="//list" position="attributes">
+                    <attribute name="decoration-success">state == 'validate'</attribute>
+                    <attribute name="decoration-danger">state == 'cancel'</attribute>
+                    <attribute name="decoration-info">state == 'draft'</attribute>
+                    <attribute name="decoration-warning">state == 'confirm'</attribute>
+                </xpath>
+                <xpath expr="//field[@name='state']" position="attributes">
+                    <attribute name="widget">badge</attribute>
+                    <attribute name="decoration-success">state == 'validate'</attribute>
+                    <attribute name="decoration-danger">state == 'cancel'</attribute>
+                    <attribute name="decoration-info">state == 'draft'</attribute>
+                    <attribute name="decoration-warning">state == 'confirm'</attribute>
+                </xpath>
+
+            </field>
+        </record>
+
+        <menuitem id="menu_finance_budgets" name="Budgets" sequence="4" parent="account.menu_finance"
+                  groups="account.group_account_readonly,account.group_account_invoice"/>
+        <menuitem id="menu_inherit_id_budget_view"
+                  parent="menu_finance_budgets"
+                  name="Budgets Plans"
+                  action="om_account_budget.act_crossovered_budget_view"
+                  sequence="3"
+                  groups="account.group_account_manager"/>
+
+        <menuitem id="menu_inherit_id_analytic_accounts_view"
+                  parent="menu_finance_budgets"
+                  name="Analytic Accounts"
+                  action="analytic.action_account_analytic_account_form"
+                  sequence="2"
+                  groups="analytic.group_analytic_accounting"/>
+
+    </data>
+</odoo>

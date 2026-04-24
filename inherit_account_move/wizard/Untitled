@@ -1,0 +1,356 @@
+from odoo import api, fields, models, _
+import io
+import base64
+import xlsxwriter
+
+class CustodyReport(models.TransientModel):
+    _name = 'bank.statement.wizard'
+    _description = "Bank Statement Wizard"
+
+    account_id = fields.Many2one('account.account', string="Account", required=True)
+    journal_ids = fields.Many2many('account.journal', string="Journal")
+    project_id = fields.Many2one('project.project', string="Project")
+    date_from = fields.Date(string="Date From")
+    date_to = fields.Date(string="Date To")
+    company_id = fields.Many2one(
+        'res.company',
+        string="Company",
+        default=lambda self: self.env.company.id
+    )
+
+    file_name = fields.Char(string="File Name", readonly=True)
+    file_data = fields.Binary(string="File", readonly=True)
+    
+    # def get_project_id_in_journal_entry(self):
+    #     vendor_bills = self.env['account.move'].search([
+    #         ('move_type', '=', 'in_invoice'),
+    #         ('payment_state', '=', 'paid'),
+    #         ('project_id', '!=', False)
+    #     ])
+    #
+    #     for bill in vendor_bills:
+    #         payments = bill._get_reconciled_payments()
+    #         for payment in payments:
+    #             if payment.move_id and not payment.move_id.project_id:
+    #                 payment.move_id.project_id = bill.project_id.id
+
+    def action_print_excel_report(self):
+        for rec in self:
+            # --------------------------------------------------
+            # 1) Calculate Opening Balance (before date_from)
+            # --------------------------------------------------
+            opening_balance = 0
+
+            if rec.date_from:
+                opening_sql = """
+                    SELECT
+                        COALESCE(SUM(aml.debit), 0) AS debit,
+                        COALESCE(SUM(aml.credit), 0) AS credit
+                    FROM account_move_line aml
+                    JOIN account_move m ON aml.move_id = m.id
+                    WHERE aml.account_id = %s
+                      AND m.move_type = 'entry'
+                      AND m.state = 'posted'
+                      AND aml.date < %s
+                """
+                opening_params = [rec.account_id.id, rec.date_from]
+
+                if rec.project_id:
+                    opening_sql += " AND aml.project_id = %s"
+                    opening_params.append(rec.project_id.id)
+
+                if rec.journal_ids and len(rec.journal_ids) > 0:
+                    opening_sql += " AND aml.journal_id IN %s"
+                    opening_params.append(tuple(rec.journal_ids.ids))
+
+                self.env.cr.execute(opening_sql, opening_params)
+                result = self.env.cr.fetchone()
+                if result:
+                    opening_balance = (result[0] or 0) - (result[1] or 0)
+
+            running_balance = opening_balance
+
+            # --------------------------------------------------
+            # 2) Main SQL for report lines
+            # --------------------------------------------------
+            sql = """
+                SELECT aml.date,
+                       c.name AS company_name,
+                       p.name AS partner,
+                       pr.name AS project,
+                       COALESCE(aml.ref, aml.name) AS reference,
+                       aml.debit,
+                       aml.credit,
+                       j.name AS journal,
+                       aml.name AS label,
+                       cur.symbol AS currency_symbol,
+                       cur.name   AS currency_name,
+                       cur.id     AS currency_id,
+                       m.move_type AS move_type
+                FROM account_move_line aml
+                JOIN account_move m ON aml.move_id = m.id
+                LEFT JOIN res_partner p ON aml.partner_id = p.id
+                LEFT JOIN account_journal j ON aml.journal_id = j.id
+                JOIN res_company c ON aml.company_id = c.id
+                LEFT JOIN project_project pr ON aml.project_id = pr.id
+                LEFT JOIN res_currency cur ON aml.currency_id = cur.id
+                WHERE aml.account_id = %s
+                  AND m.move_type = 'entry'
+                  AND m.state = 'posted'
+            """
+
+            params = [rec.account_id.id]
+
+            if rec.date_from:
+                sql += " AND aml.date >= %s"
+                params.append(rec.date_from)
+
+            if rec.date_to:
+                sql += " AND aml.date <= %s"
+                params.append(rec.date_to)
+
+            if rec.project_id:
+                sql += " AND aml.project_id = %s"
+                params.append(rec.project_id.id)
+
+            if rec.journal_ids and len(rec.journal_ids) > 0:
+                sql += " AND aml.journal_id IN %s"
+                params.append(tuple(rec.journal_ids.ids))
+
+            sql += " ORDER BY aml.date ASC"
+
+            self.env.cr.execute(sql, params)
+            rows = self.env.cr.dictfetchall()
+
+            # --------------------------------------------------
+            # 3) Prepare XLSX Workbook & Formatting
+            # --------------------------------------------------
+            output = io.BytesIO()
+            workbook = xlsxwriter.Workbook(output, {'in_memory': True})
+            sheet = workbook.add_worksheet('Bank Statement')
+
+            # Column widths
+            col_widths = [5, 20, 15, 25, 25, 30, 15, 15, 15]
+            for i, w in enumerate(col_widths):
+                sheet.set_column(i, i, w)
+
+            # Formats
+            merge_bold_font = workbook.add_format({'bold': True, 'border': 1, 'align': 'center', 'valign': 'vcenter', 'bg_color': '#D3D3D3'})
+            bold_font = workbook.add_format({'bold': True, 'align': 'left'})
+            border = workbook.add_format({'border': 1, 'align': 'center'})
+            border_left = workbook.add_format({'border': 1, 'align': 'left'})
+            border_num = workbook.add_format({'border': 1, 'align': 'right', 'num_format': '#,##0.00'})
+            border_date = workbook.add_format({'border': 1, 'align': 'center', 'num_format': 'yyyy-mm-dd'})
+            total_format = workbook.add_format({'bold': True, 'border': 1, 'align': 'right', 'num_format': '#,##0.00', 'bg_color': '#D3D3D3'})
+
+            # --------------------------------------------------
+            # 4) Header Section
+            # --------------------------------------------------
+            sheet.write('A1', 'Account Name:', bold_font)
+            sheet.write('B1', rec.account_id.name, bold_font)
+            
+            sheet.write('A2', 'Report:', bold_font)
+            sheet.write('B2', 'Bank Statement Report', bold_font)
+            
+            period_str = f"From {rec.date_from or 'Start'} To {rec.date_to or 'End'}"
+            sheet.write('A3', 'Period:', bold_font)
+            sheet.write('B3', period_str, bold_font)
+
+            # Table Headers
+            headers = [
+                'NO', 'Journal', 'Date', 'Project', 'Partner', 
+                'Reference/Label', 'Debit', 'Credit', 'Balance'
+            ]
+            current_row = 4
+            sheet.write_row(current_row, 0, headers, merge_bold_font)
+            current_row += 1
+
+            # --------------------------------------------------
+            # 5) Write Opening Balance Row
+            # --------------------------------------------------
+            sheet.write(current_row, 0, 1, border)
+            sheet.write(current_row, 1, '', border)
+            sheet.write(current_row, 2, str(rec.date_from) if rec.date_from else '', border_date)
+            sheet.write(current_row, 3, '', border)
+            sheet.write(current_row, 4, '', border)
+            sheet.write(current_row, 5, 'Opening balance', border_left)
+            
+            # Opening balance debit/credit separation
+            ob_debit = opening_balance if opening_balance > 0 else 0
+            ob_credit = abs(opening_balance) if opening_balance < 0 else 0
+            
+            sheet.write(current_row, 6, ob_debit, border_num)
+            sheet.write(current_row, 7, ob_credit, border_num)
+            sheet.write(current_row, 8, running_balance, border_num)
+            current_row += 1
+
+            # --------------------------------------------------
+            # 6) Iterate and Write Data Lines
+            # --------------------------------------------------
+            line_no = 2
+            total_debit = ob_debit
+            total_credit = ob_credit
+
+            for item in rows:
+                running_balance += item['debit']
+                running_balance -= item['credit']
+                total_debit += item['debit']
+                total_credit += item['credit']
+
+                # Clean up translatable dictionaries (Journal and Project names)
+                journal_name = item['journal']
+                if isinstance(journal_name, dict):
+                    journal_name = journal_name.get(self.env.lang) or journal_name.get('en_US') or next(iter(journal_name.values()), '')
+
+                project_name = item['project']
+                if isinstance(project_name, dict):
+                    project_name = project_name.get(self.env.lang) or project_name.get('en_US') or next(iter(project_name.values()), '')
+
+                # Determine reference string
+                ref_str = item['reference'] if item['reference'] else item['label']
+
+                # Write line
+                sheet.write(current_row, 0, line_no, border)
+                sheet.write(current_row, 1, journal_name or '', border)
+                sheet.write(current_row, 2, item['date'], border_date)
+                sheet.write(current_row, 3, project_name or '', border_left)
+                sheet.write(current_row, 4, item['partner'] or '', border_left)
+                sheet.write(current_row, 5, ref_str or '', border_left)
+                sheet.write(current_row, 6, item['debit'] or 0, border_num)
+                sheet.write(current_row, 7, item['credit'] or 0, border_num)
+                sheet.write(current_row, 8, running_balance, border_num)
+
+                line_no += 1
+                current_row += 1
+
+            # --------------------------------------------------
+            # 7) Footer / Totals
+            # --------------------------------------------------
+            sheet.merge_range(f'A{current_row+1}:F{current_row+1}', 'Total', merge_bold_font)
+            sheet.write(current_row, 6, total_debit, total_format)
+            sheet.write(current_row, 7, total_credit, total_format)
+            sheet.write(current_row, 8, running_balance, total_format)
+
+            # --------------------------------------------------
+            # 8) Save and Return Action
+            # --------------------------------------------------
+            workbook.close()
+            output.seek(0)
+            
+            # Save to fields
+            rec.file_name = 'Bank_Statement_Report.xlsx'
+            rec.file_data = base64.b64encode(output.read())
+            output.close()
+
+            # Return the wizard to allow the user to download the file
+            return {
+                'type': 'ir.actions.act_window',
+                'res_model': self._name,
+                'view_mode': 'form',
+                'res_id': rec.id,
+                'target': 'new',
+            }
+    def action_print_report(self):
+        for rec in self:
+            report_data = []
+            running_balance = 0
+
+            sql = """
+                SELECT aml.date,
+                       c.name AS company_name,
+                       p.name AS partner,
+                       pr.name AS project,
+                       COALESCE(aml.ref, aml.name) AS reference,
+                       aml.debit,
+                       aml.credit,
+                       j.name AS journal,
+                       aml.name AS label,
+                       cur.symbol AS currency_symbol,
+                       cur.name   AS currency_name,
+                       cur.id     AS currency_id,
+                       m.move_type AS move_type
+                FROM account_move_line aml
+                JOIN account_move m ON aml.move_id = m.id
+                LEFT JOIN res_partner p ON aml.partner_id = p.id
+                LEFT JOIN account_journal j ON aml.journal_id = j.id
+                JOIN res_company c ON aml.company_id = c.id
+                LEFT JOIN project_project pr ON aml.project_id = pr.id
+                LEFT JOIN res_currency cur ON aml.currency_id = cur.id
+                WHERE aml.account_id = %s
+                  AND m.move_type = 'entry'
+                  AND m.state = 'posted'
+            """
+
+            params = [rec.account_id.id]
+
+            # Date conditions
+            if rec.date_from:
+                sql += " AND aml.date >= %s"
+                params.append(rec.date_from)
+            if rec.date_to:
+                sql += " AND aml.date <= %s"
+                params.append(rec.date_to)
+
+            # Project condition
+            if rec.project_id:
+                sql += " AND aml.project_id = %s"
+                params.append(rec.project_id.id)
+
+            # Journal condition
+            if rec.journal_ids and len(rec.journal_ids) > 0:
+                sql += " AND aml.journal_id IN %s"
+                params.append(tuple(rec.journal_ids.ids))
+
+            sql += " ORDER BY aml.date ASC"
+
+            self.env.cr.execute(sql, params)
+            rows = self.env.cr.dictfetchall()
+
+            for item in rows:
+                running_balance += item['debit']
+                running_balance -= item['credit']
+
+                project_name = item['project']
+                if isinstance(project_name, dict):
+                    project_name = project_name.get('en_US') or next(iter(project_name.values()), '')
+
+                journal_name = item['journal']
+                if isinstance(journal_name, dict):
+                    journal_name = journal_name.get('en_US') or next(iter(journal_name.values()), '')
+
+                line = {
+                    'date': item['date'],
+                    'company_name': item['company_name'],
+                    'partner': item['partner'],
+                    'reference': item['reference'],
+                    'debit': item['debit'],
+                    'credit': item['credit'],
+                    'balance': running_balance,
+                    'journal': journal_name,
+                    'label': item['label'],
+                    'project': project_name,
+                    'currency_symbol': item['currency_symbol'] or '',
+                    'currency_name': item['currency_name'] or '',
+                    'currency_id': item['currency_id'],
+                    'move_type': item['move_type'],
+                }
+
+                report_data.append(line)
+
+            total_debit = sum(item['debit'] for item in rows)
+            total_credit = sum(item['credit'] for item in rows)
+
+            finance_data = {
+                'form_data': rec.read()[0],
+                'lines': report_data,
+                'account_name': rec.account_id.name,
+                'total_balance': running_balance,
+                'total_debit': total_debit,
+                'total_credit': total_credit,
+                'report_logo': rec.company_id.logo.decode('utf-8') if rec.company_id.logo else False,
+            }
+
+            # print('finance_data', finance_data)
+            return self.env.ref('inherit_account_move.print_bank_statement_reports').report_action(
+                self, data=finance_data
+            )

@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hms_expense_request,hms.expense.request,model_hms_expense_request,,1,1,1,1
+access_hms_expense_request_loan_line,hms.expense.request.loan.line,model_hms_expense_request_loan_line,,1,1,1,1
+access_hms_expense_request_salary_line,hms.expense.request.salary.line,model_hms_expense_request_salary_line,,1,1,1,1
+access_daily_expense_report,daily.expense.report,model_daily_expense_report,,1,1,1,1
+access_expense_line,expense.line,model_expense_line,,1,1,1,1
+access_oms_advance_loan_conf,oms.advance.loan.conf,model_oms_advance_loan_conf,,1,1,1,1
+access_expense_product,expense.product,model_expense_product,,1,1,1,1
+access_expense_custody_report,expense.custody.report,model_expense_custody_report,,1,1,1,1
+access_oms_operation_person,oms.operation.person,model_oms_operation_person,,1,1,1,1
+access_select_contract_wizard,select.contract.wizard,model_select_contract_wizard,,1,1,1,1
+access_hms_expense_request_advance_line,hms.expense.request.advance.line,model_hms_expense_request_advance_line,,1,1,1,1

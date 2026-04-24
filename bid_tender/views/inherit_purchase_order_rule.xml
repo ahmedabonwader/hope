@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="view_purchase_order_form_donor_readonly" model="ir.ui.view">
+            <field name="name">purchase.order.form.donor.readonly</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="priority">9999</field> 
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="inside">
+                    <field name="is_donor" invisible="1"/>
+                </xpath>
+
+                <xpath expr="//field[@name='partner_id']" position="attributes">
+                    <attribute name="readonly">is_donor</attribute>
+                    <attribute name="force_save">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='partner_ref']" position="attributes">
+                    <attribute name="readonly">is_donor</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='task_id']" position="attributes">
+                    <attribute name="readonly">is_donor</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='branch_id']" position="attributes">
+                    <attribute name="invisible">is_donor</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='currency_id']" position="attributes">
+                    <attribute name="readonly">is_donor</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='date_order']" position="attributes">
+                    <attribute name="readonly">is_donor</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='date_planned']" position="attributes">
+                    <attribute name="readonly">is_donor</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='project_id']" position="attributes">
+                    <attribute name="readonly">is_donor</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='prs']" position="attributes">
+                    <attribute name="readonly">is_donor</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='user_id']" position="attributes">
+                    <attribute name="readonly">is_donor</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='origin']" position="attributes">
+                    <attribute name="readonly">is_donor</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='incoterm_id']" position="attributes">
+                    <attribute name="readonly">is_donor</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='incoterm_location']" position="attributes">
+                    <attribute name="readonly">is_donor</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='payment_term_id']" position="attributes">
+                    <attribute name="readonly">is_donor</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='fiscal_position_id']" position="attributes">
+                    <attribute name="readonly">is_donor</attribute>
+                </xpath>
+
+                <xpath expr="//page[@name='products']" position="attributes">
+                    <attribute name="readonly">is_donor</attribute>
+                </xpath>
+
+                <xpath expr="//form" position="attributes">
+                    <attribute name="edit">not is_donor</attribute>
+                    <attribute name="create">not is_donor</attribute>
+                    <attribute name="delete">not is_donor</attribute>
+                </xpath>
+
+                <xpath expr="//header" position="attributes">
+                    <attribute name="invisible">is_donor</attribute>
+                </xpath>
+
+                <xpath expr="//sheet//field" position="attributes">
+                    <attribute name="readonly">is_donor</attribute>
+                </xpath>
+                
+                <xpath expr="//field[@name='order_line']" position="attributes">
+                    <attribute name="readonly">is_donor</attribute>
+                </xpath>
+            </field>
+        </record>
+
+    
+        <record id="hr.menu_hr_root" model="ir.ui.menu">
+            <field name="groups_id" eval="[(3, ref('bid_tender.group_oms_purchase_doner'))]"/>
+        </record>
+
+        <record id="contacts.menu_contacts" model="ir.ui.menu">
+            <field name="groups_id" eval="[(3, ref('bid_tender.group_oms_purchase_doner'))]"/>
+        </record>
+
+        <record id="hr_holidays.menu_hr_holidays_root" model="ir.ui.menu">
+            <field name="groups_id" eval="[(3, ref('bid_tender.group_oms_purchase_doner'))]"/>
+        </record>
+
+        <record id="calendar.mail_menu_calendar" model="ir.ui.menu">
+            <field name="groups_id" eval="[(3, ref('bid_tender.group_oms_purchase_doner'))]"/>
+        </record>
+
+        <!-- <record id="project_todo.menu_project_todo_filter" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6, 0, [ref('base.group_no_one')])]"/>
+        </record> -->
+
+        <record id="spreadsheet_dashboard.spreadsheet_dashboard_menu_root" model="ir.ui.menu">
+            <field name="groups_id" eval="[(3, ref('bid_tender.group_oms_purchase_doner'))]"/>
+        </record>
+
+    </data>
+</odoo>

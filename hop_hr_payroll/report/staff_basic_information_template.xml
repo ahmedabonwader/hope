@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="staff_basic_information_reports_info">
+        <t t-call="web.html_container">
+            <t t-call="web.basic_layout">
+                <t t-foreach="docs" t-as="doc">
+                    <div class="page" style="font-family: 'Times New Roman', serif; font-size: 16px; color: #000; line-height: 1.5;">
+                        
+                        <div class="header_section" style="border-bottom: 2px solid #333; padding-bottom: 15px;">
+                            <div class="row" style="margin-bottom: 10px; align-items: center; display: flex;">
+                                
+                                <div style="width: 20%; text-align: left;">
+                                    <t t-if="doc.company_id.logo">
+                                        <img t-att-src="image_data_uri(doc.company_id.logo)"
+                                             style="max-height: 100px; max-width: 160px;"/>
+                                    </t>
+                                </div>
+
+                                <div style="width: 60%; text-align: center;">
+                                    <h2 style="text-decoration: underline; font-weight: bold; margin: 0; font-size: 26px;">HOPE – HR Department</h2>
+                                    <h2 style="text-decoration: underline; font-weight: bold; margin: 0; font-size: 26px;">Staff Basic Information</h2>
+                                </div>
+
+                                <div style="width: 20%; text-align: right;">
+                                    <t t-if="doc.company_id.logo">
+                                        <img t-att-src="image_data_uri(doc.company_id.logo)"
+                                             style="max-height: 100px; max-width: 160px;"/>
+                                    </t>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="body_section" style="margin-top: 30px;">
+                        <table style="width: 100%; border-collapse: collapse; border: 1px solid #000; font-size: 15px;">
+                            <tr>
+                                <td style="width: 35%; border: 1px solid #000; padding: 10px; background-color: #f2f2f2; font-weight: bold;">Staff Full Name</td>
+                                <td style="width: 65%; border: 1px solid #000; padding: 10px;">
+                                    <t t-esc="doc.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #000; padding: 10px; background-color: #f2f2f2; font-weight: bold;">Gender</td>
+                                <td style="border: 1px solid #000; padding: 10px; text-transform: capitalize;">
+                                    <t t-esc="doc.gender"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #000; padding: 10px; background-color: #f2f2f2; font-weight: bold;">Date of Birth</td>
+                                <td style="border: 1px solid #000; padding: 10px;">
+                                    <t t-if="doc.birthday">
+                                        <t t-esc="doc.birthday.strftime('%d/%m/%Y')"/>
+                                    </t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #000; padding: 10px; background-color: #f2f2f2; font-weight: bold;">Place of Birth</td>
+                                <td style="border: 1px solid #000; padding: 10px;">
+                                    <t t-esc="doc.place_of_birth"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #000; padding: 10px; background-color: #f2f2f2; font-weight: bold;">Marital Status</td>
+                                <td style="border: 1px solid #000; padding: 10px; text-transform: capitalize;">
+                                    <t t-esc="doc.marital"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #000; padding: 10px; background-color: #f2f2f2; font-weight: bold;">Title/ Position</td>
+                                <td style="border: 1px solid #000; padding: 10px;">
+                                    <t t-esc="doc.job_id.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #000; padding: 10px; background-color: #f2f2f2; font-weight: bold;">Direct Supervisor</td>
+                                <td style="border: 1px solid #000; padding: 10px;">
+                                    <t t-esc="doc.parent_id.job_id.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #000; padding: 10px; background-color: #f2f2f2; font-weight: bold;">Duty Station/ Base</td>
+                                <td style="border: 1px solid #000; padding: 10px;">
+                                    <t t-esc="doc.state_id.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #000; padding: 10px; background-color: #f2f2f2; font-weight: bold;">Personal E-mail</td>
+                                <td style="border: 1px solid #000; padding: 10px;">
+                                    <t t-esc="doc.private_email"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #000; padding: 10px; background-color: #f2f2f2; font-weight: bold;">HOPE E-mail</td>
+                                <td style="border: 1px solid #000; padding: 10px;">
+                                    <t t-esc="doc.work_email"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #000; padding: 10px; background-color: #f2f2f2; font-weight: bold;">Personal Phone number</td>
+                                <td style="border: 1px solid #000; padding: 10px;">
+                                    <t t-esc="doc.private_phone"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #000; padding: 10px; background-color: #f2f2f2; font-weight: bold;">HOPE Phone number</td>
+                                <td style="border: 1px solid #000; padding: 10px;">
+                                    <t t-esc="doc.work_phone"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #000; padding: 10px; background-color: #f2f2f2; font-weight: bold;">Home Address</td>
+                                <td style="border: 1px solid #000; padding: 10px;">
+                                    <t t-esc="doc.private_street"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #000; padding: 10px; background-color: #f2f2f2; font-weight: bold;">Contract Period</td>
+                                <td style="border: 1px solid #000; padding: 10px;">
+                                    <t t-if="doc.contract_id and doc.contract_id.date_start and doc.contract_id.date_end">
+                                        <t t-set="duration" t-value="relativedelta(doc.contract_id.date_end, doc.contract_id.date_start)"/>
+                                        <t t-set="total_months" t-value="(duration.years * 12) + duration.months + (1 if duration.days > 0 else 0)"/>
+                                        
+                                        <t t-esc="total_months"/> months, starting from 
+                                        <t t-esc="doc.contract_id.date_start.strftime('%B %dth %Y')"/> to 
+                                        <t t-esc="doc.contract_id.date_end.strftime('%B %dth %Y')"/>
+                                    </t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #000; padding: 10px; background-color: #f2f2f2; font-weight: bold;">Contract Start Date</td>
+                                <td style="border: 1px solid #000; padding: 10px;">
+                                    <t t-esc="doc.contract_id.date_start.strftime('%B %dth %Y')"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #000; padding: 10px; background-color: #f2f2f2; font-weight: bold;">Contract End Date</td>
+                                <td style="border: 1px solid #000; padding: 10px;">
+                                    <t t-esc="doc.contract_id.date_end.strftime('%B %dth %Y')"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #000; padding: 10px; background-color: #f2f2f2; font-weight: bold; vertical-align: middle;">
+                                    Bank Account for the salary
+                                </td>
+                                <td style="border: 1px solid #000; padding: 0;">
+                                    <table style="width: 100%; border-collapse: collapse; border: none;">
+                                        <tr>
+                                            <td style="border-bottom: 1px solid #000; padding: 10px; font-weight: bold; width: 40%;">Bank Name:</td>
+                                            <td style="border-bottom: 1px solid #000; padding: 10px;">
+                                                <t t-esc="doc.bank_account_id.bank_id.name"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="border-bottom: 1px solid #000; padding: 10px; font-weight: bold;">Bank Branch:</td>
+                                            <td style="border-bottom: 1px solid #000; padding: 10px;">
+                                                <t t-esc="doc.bank_account_id.bank_branch"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 10px; font-weight: bold;">Bank Account:</td>
+                                            <td style="padding: 10px;">
+                                                <t t-esc="doc.bank_account_id.acc_number"/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <p style="page-break-after:always;"/>
+                    <div style="page-break-after: always;"></div>
+                    <div class="footer text-center">
+                        <table width="100%"
+                               style="font-family: KacstOne; font-weight: none; border-top:4px solid black">
+                            <tr>
+                                <td width="100%">
+
+                                    <div style="text-align:left; direction: ltr; line-height: 1.5;">
+                                        <p style="font-family: Arial, sans-serif; font-size:14pt; text-align:justify; margin:0 0 0 65px;">
+                                            <br/>
+                                            Website: www.hopesudan.org, Tel.: +249120023500, E-mail:
+                                            hopesudan2015@gmail.com
+                                        </p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="custom_staff_information_paper_format" model="report.paperformat">
+        <field name="name">Staff Information Custom</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">25</field>
+        <field name="margin_left">3</field>
+        <field name="margin_right">3</field>
+        <field name="dpi">96</field>
+    </record>
+
+    <record id="staff_basic_information_reports" model="ir.actions.report">
+        <field name="name">Staff Basic Information Report</field>
+        <field name="model">hr.employee</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hop_hr_payroll.staff_basic_information_reports_info</field>
+        <field name="report_file">hop_hr_payroll.staff_basic_information_reports_info</field>
+        <field name="paperformat_id" ref="hop_hr_payroll.custom_staff_information_paper_format"/>
+    </record>
+</odoo>

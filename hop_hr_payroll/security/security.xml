@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record model="ir.module.category" id="module_category_payroll_management">
+            <field name="name">Payroll Management System</field>
+            <field name="description">Category for Payroll Management Access Rights</field>
+            <field name="sequence">10</field>
+        </record>
+
+        <record id="group_hr_payroll_admin" model="res.groups">
+            <field name="name">Administrator</field>
+            <field name="category_id" ref="module_category_payroll_management"/>
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        </record>
+
+        <record id="group_hr_payroll_manager" model="res.groups">
+            <field name="name">Manager</field>
+            <field name="category_id" ref="module_category_payroll_management"/>
+        </record>
+
+        <record id="group_hr_payroll_account" model="res.groups">
+            <field name="name">Accountant</field>
+            <field name="category_id" ref="module_category_payroll_management"/>
+        </record>
+
+        <record id="group_hr_payroll_user" model="res.groups">
+            <field name="name">User</field>
+            <field name="category_id" ref="module_category_payroll_management"/>
+        </record>
+
+        <record id="group_hr_payroll_donor" model="res.groups">
+            <field name="name">Donor</field>
+            <field name="category_id" ref="module_category_payroll_management"/>
+        </record>
+    </data>
+</odoo>

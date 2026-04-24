@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="seq_payslip_project_request" model="ir.sequence">
+            <field name="name">Payslip</field>
+            <field name="code">payslip.project</field>
+            <field name="prefix">SLIP/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+    <data noupdate="0">
+        <record id="seq_social_insurance_payment" model="ir.sequence">
+            <field name="name">Social Insurance Payment</field>
+            <field name="code">social.insurance.payment</field>
+            <field name="prefix">SIP/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+    <data noupdate="0">
+        <record id="seq_payslip_project_request" model="ir.sequence">
+            <field name="name">Payslip</field>
+            <field name="code">payslip.batche</field>
+            <field name="prefix">SLIP/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+    <data noupdate="0">
+        <record id="seq_employee_salary_request" model="ir.sequence">
+            <field name="name">Employee Salary</field>
+            <field name="code">employee.payslip</field>
+            <field name="prefix">EMPS/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+    <data noupdate="0">
+        <record id="seq_salary_configuration_request" model="ir.sequence">
+            <field name="name">salary Configuration</field>
+            <field name="code">salary.configuration</field>
+            <field name="prefix">PSC/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+    <data noupdate="1">
+        <record id="seq_hr_contract" model="ir.sequence">
+            <field name="name">HR Contract</field>
+            <field name="code">hr.contract</field>
+            <field name="prefix">SEQ</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="tor_advance_print_reports_info">
+        <t t-call="web.html_container">
+            <t t-call="web.basic_layout">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-set="company" t-value="doc.company_id"/>
+                    <div style="text-align: center; font-family: KacstOne; color: #003366;">
+                        <t t-if="company.logo">
+                            <img t-att-src="image_data_uri(company.logo)"
+                                 style="position: absolute; top: 20px; left: 0; max-height: 80px; max-width: 120px;"
+                                 alt="Company Logo"/>
+                        </t>
+                        <div style="text-decoration: underline; display: inline-block; margin-right: 10px;">
+                            HOPE in Partnership
+                            <t t-if="doc.project_id.partner_id">- With:
+                                <t t-esc="doc.project_id.partner_id.name"/>
+                            </t>
+                        </div>
+                        <t t-if="doc.project_id">
+                            <div>Project:
+                                <t t-esc="doc.project_id.name"/>
+                            </div>
+                        </t>
+                        <t t-if="doc.activity_issue == 'yes'">
+                            <div>Activity:
+                                <t t-esc="doc.avtivity_char"/>
+                            </div>
+                        </t>
+                        <t t-if="doc.activity_issue == 'no'">
+                            <div>Activity:
+                                <t t-esc="doc.task_ids.name"/>
+                            </div>
+                        </t>
+
+                        <t t-if="doc.request_type">
+                            <div>Request Type:
+                                <t t-esc="doc.request_type"/>
+                            </div>
+                        </t>
+                        <t t-if="doc.location">
+                            <div>Location:
+                                <t t-esc="doc.location"/>
+                            </div>
+                        </t>
+                        <t t-if="doc.ref">
+                            <div>Reference:
+                                <t t-esc="doc.ref"/>
+                            </div>
+                        </t>
+                        <t t-if="company.logo">
+                            <img t-att-src="image_data_uri(company.logo)"
+                                 style="position: absolute; top: 20px; right: 0; max-height: 80px; max-width: 120px;"
+                                 alt="Company Logo"/>
+                        </t>
+                    </div>
+                    <br/>
+                    <br/>
+                    <div class="row my-1"
+                        style="font-size:13px; width:100%; text-align:center; margin-bottom:10px; margin-top:10px; clear:both;">
+                        <div class="col-3">
+                            <h6 class="text-center" style="color: #FFBF00;">
+                                <strong>Description</strong>
+                            </h6>
+                            <div>
+                                <span t-field="doc.name"/>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <h6 class="text-center" style="color: #FFBF00;">
+                                <strong>Date From</strong>
+                            </h6>
+                            <div>
+                                <span t-field="doc.date_from"/>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <h6 class="text-center" style="color: #FFBF00;">
+                                <strong>Date To</strong>
+                            </h6>
+                            <div>
+                                <span t-field="doc.date_to"/>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <h6 class="text-center" style="color: #FFBF00;">
+                                <strong>Request By</strong>
+                            </h6>
+                            <div>
+                                <span t-esc="doc.requester_id.name or ''"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br/>
+                    <div class="row my-2" style="font-size:13px; width:100%; text-align:left; margin-bottom:10px;">
+                        <div class="col-12">
+                            <h6 style="font-weight: bold; font-size: 14px;">Specific Objectives:</h6>
+                            <div class="row">
+                                <div class="col-12">
+                                    <p t-field="doc.specific_objectives" style="text-align:justify;"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row my-2"
+                         style="font-size:13px; width:100%; text-align:left; margin-bottom:10px; margin-top:10px;">
+                        <div class="col-12">
+                            <h6 style="font-weight: bold; font-size: 14px;">General Objective:</h6>
+                            <div class="row">
+                                <div class="col-12">
+                                    <p t-field="doc.general_objective" style="text-align:justify;"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row my-2" style="font-size:13px; width:100%; text-align:left; margin-bottom:10px;">
+                        <div class="col-12">
+                            <h6 style="font-weight: bold; font-size: 14px;">Number OF Beneficiaries:</h6>
+                            <div class="row">
+                                <div class="col-12">
+                                    <p t-field="doc.number_of_beneficiaries" style="text-align:justify;"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+                    <div style="margin-top: 5px;">
+                        <table class="table table-sm" dir="rtl" style="width: 100%; table-layout: fixed;">
+                            <thead>
+                                <tr style="border-bottom: 2px solid black;">
+                                    <th>Total Amount</th>
+                                    <th>Budget Code</th>
+                                    <th>Frequency</th>
+                                    <th>Unit Price</th>
+                                    <th>Quantity</th>
+                                    <th>Unit</th>
+                                    <th style="text-align:left;">Description</th> <!-- محاذاة وصف العمود لليسار -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="doc.service_line_ids" t-as="line">
+                                    <tr>
+                                        <td style="text-align:left;">
+                                            <span t-field="line.total_price"/>
+                                        </td>
+                                        <td style="text-align:left;">
+                                            <span t-field="line.budget_line_code.line_code"/>
+                                        </td>
+                                        <td style="text-align:left;">
+                                            <span t-field="line.frequency"/>
+                                        </td>
+                                        <td style="text-align:left;">
+                                            <span t-field="line.unit_price"/>
+                                        </td>
+                                        <td style="text-align:left;">
+                                            <span t-field="line.quantity"/>
+                                        </td>
+                                        <td style="text-align:left;">
+                                            <span t-field="line.unit_uom.name"/>
+                                        </td>
+                                        <td style="text-align:left;"> <!-- محاذاة الوصف لليسار -->
+                                            <span t-field="line.description_of_activities"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <tr>
+                                    <td colspan="7">
+                                        <hr style="border: 1px solid #000; margin: 5px 0;"/>
+                                    </td>
+                                </tr>
+                                <!-- Total Amount with Dark Blue Color -->
+                                <tr style="text-align:center; font-weight:bold;">
+                                    <td colspan="7" style="text-align:right; color: #003366;">
+                                        <span t-field="doc.sum_line_total_price"/>
+                                        <span style="color: #003366;">:Total
+                                            <t t-esc="total_amount"/>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <table class="o_has_total_table table o_main_table table-borderless mt-4">
+                            <thead>
+                                <tr style="border-bottom: 2px solid black;">
+                                    <th class="text-start">
+                                        <strong>Position</strong>
+                                    </th>
+                                    <th class="text-start">
+                                        <strong>Name</strong>
+                                    </th>
+                                    <th class="text-start">
+                                        <strong>Job Title</strong>
+                                    </th>
+                                    <th class="text-start">
+                                        <strong>Signature</strong>
+                                    </th>
+                                    <th class="text-start">
+                                        <strong>Date</strong>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Prepared by</td>
+                                    <td>
+                                        <span t-field="doc.sign_prepared"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="doc.prepared_job_title"/>
+                                    </td>
+                                    <td>
+                                        <img t-if="doc.requester_id and (doc.requester_id.check_image and doc.requester_id.signature_image or doc.requester_id.digital_signature)"
+                                             t-att-src="image_data_uri(doc.requester_id.check_image and doc.requester_id.signature_image or doc.requester_id.digital_signature)"
+                                             style="max-height: 50px;"
+                                             alt="signature"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="doc.date_prepared"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Reviewed by</td>
+                                    <td>
+                                        <span t-field="doc.sign_reviewed"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="doc.reviewed_job_title"/>
+                                    </td>
+                                    <td>
+                                        <img t-if="doc.signature_reviewed and (doc.signature_reviewed.check_image and doc.signature_reviewed.signature_image or doc.signature_reviewed.digital_signature)"
+                                             t-att-src="image_data_uri(doc.signature_reviewed.check_image and doc.signature_reviewed.signature_image or doc.signature_reviewed.digital_signature)"
+                                             style="max-height: 50px;"
+                                             alt="signature"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="doc.date_review"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Approved by</td>
+                                    <td>
+                                        <span t-field="doc.sign_approved"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="doc.approved_job_title"/>
+                                    </td>
+                                    <td>
+                                        <img t-if="doc.signature_approved and (doc.signature_approved.check_image and doc.signature_approved.signature_image or doc.signature_approved.digital_signature)"
+                                             t-att-src="image_data_uri(doc.signature_approved.check_image and doc.signature_approved.signature_image or doc.signature_approved.digital_signature)"
+                                             style="max-height: 50px;"
+                                             alt="signature"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="doc.date_approve"/>
+                                    </td>
+                                </tr>
+                                <!--                                <tr>-->
+                                <!--                                    <td>Supplier Acceptance</td>-->
+                                <!--                                    <td>________________</td>-->
+                                <!--                                    <td>________________</td>-->
+                                <!--                                    <td>________________</td>-->
+                                <!--                                </tr>-->
+
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="custom_tor_advance_paper_format" model="report.paperformat">
+        <field name="name">Advance Custom</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">25</field>
+        <field name="margin_left">3</field>
+        <field name="margin_right">3</field>
+        <field name="dpi">96</field>
+    </record>
+
+    <record id="tor_advance_print_reports" model="ir.actions.report">
+        <field name="name">Tor / Advance Report</field>
+        <field name="model">project.purchase.request</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">project_purchase_request.tor_advance_print_reports_info</field>
+        <field name="report_file">project_purchase_request.tor_advance_print_reports_info</field>
+        <field name="paperformat_id" ref="project_purchase_request.custom_tor_advance_paper_format"/>
+    </record>
+</odoo>

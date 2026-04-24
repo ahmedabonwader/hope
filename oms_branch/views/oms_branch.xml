@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_oms_branch_list" model="ir.ui.view">
+        <field name="name">oms.branch.list</field>
+        <field name="model">oms.branch</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="seq" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_oms_branch_form" model="ir.ui.view">
+        <field name="name">oms.branch.form</field>
+        <field name="model">oms.branch</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                            <field name="date"/>
+                        </group>
+                        <group>
+                            <field name="code"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Approval Information">
+                            <field name="branch_line_ids">
+                                <list editable="bottom">
+                                    <field name="emp_id"/>
+                                    <field name="is_admin" widget="boolean_toggle"/>
+                                    <field name="department"/>
+                                    <field name="currency_id" column_invisible="0"/>
+                                    <field name="amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Branch Projects" invisible="1">
+                            <field name="project_in_branch_ids">
+                                <list editable="bottom">
+                                    <field name="branch_id" column_invisible="1"/>
+                                    <field name="project_id"/>
+                                    <field name="state"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <!--                Chatter-->
+                <chatter reload_on_attachment="True"/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_oms_branch_search" model="ir.ui.view">
+        <field name="name">oms.branch.search</field>
+        <field name="model">oms.branch</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_oms_branch" model="ir.actions.act_window">
+        <field name="name">Branches</field>
+        <field name="res_model">oms.branch</field>
+        <field name="view_mode">list,form,search</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first Branch Record !
+            </p>
+        </field>
+    </record>
+
+    <record id="res_users_inherit_form" model="ir.ui.view">
+        <field name="name">res.users</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='login']" position="after">
+<!--                <label for="job_title" string="Job Title"/>-->
+<!--                <field name="job_title"/>-->
+                <label for="project_ids" string="Project"/>
+                <field name="project_ids" widget="many2many_tags" options="{'no_quick_create': True, 'no_create_edit' : True}"/>
+
+                <label for="branch_ids" string="Branch"/>
+                <field name="branch_ids" widget="many2many_tags" options="{'no_quick_create': True, 'no_create_edit' : True}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_purchase_order_inherit_form" model="ir.ui.view">
+        <field name="name">purchase.order</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_ref']" position="after">
+                <field name="branch_id"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

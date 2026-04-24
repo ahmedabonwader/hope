@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.module.category" id="module_category_om_account_budget_iteme">
+            <field name="name">Budget</field>
+            <field name="description">Category For Accounting Budget</field>
+        </record>
+
+        <record id="group_account_administrator" model="res.groups">
+            <field name="name">Budget Administrator</field>
+            <field name="category_id" ref="om_account_budget_iteme.module_category_om_account_budget_iteme"/>
+        </record>
+        
+        <record id="group_accounting_doner" model="res.groups">
+            <field name="name">Budget Doner</field>
+            <field name="category_id" ref="om_account_budget_iteme.module_category_om_account_budget_iteme"/>
+        </record>
+    </data>
+</odoo>

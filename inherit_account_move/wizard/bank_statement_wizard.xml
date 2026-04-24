@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="view_bank_statement_wizard_report_form" model="ir.ui.view">
+            <field name="name">bank.statement.wizard</field>
+            <field name="model">bank.statement.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Daily Report">
+                    <group>
+                        <group>
+                            <field name="account_id" options="{'no_quick_create': True, 'no_create_edit' : True}"/>
+                            <field name="date_from"/>
+                            <field name="date_to"></field>
+                        </group>
+                        <group>
+                            <field name="journal_ids" widget="many2many_tags" domain="[('default_account_id', '=', account_id)]" options="{'no_quick_create': True, 'no_create_edit' : True}"/>
+                            <field name="project_id"></field>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="file_name" invisible="1"/>
+                        <field name="file_data" filename="file_name" readonly="1"/>
+                    </group>
+                    <footer>
+                        <button name="action_print_report" string="Print" type="object" class="oe_highlight"/>
+                        <button string="Generate xlsx" name="action_print_excel_report" type="object"
+                                class="btn-primary"/>
+<!--                        <button name="get_project_id_in_journal_entry" string="Validate" type="object" class="oe_highlight" invisible="1"/>-->
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_bank_statement_wizard_report_action" model="ir.actions.act_window">
+            <field name="name">Bank Statement Report</field>
+            <field name="res_model">bank.statement.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

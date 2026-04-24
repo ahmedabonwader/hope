@@ -1,0 +1,26 @@
+{
+    'name': 'Custody Management',
+    'version': '18.0.1.0.0',
+    'category': 'Accounting',
+    'summary': 'Manage Custody integrated with HR and Accounting',
+    'description': """ Manage all employee custody items including laptops, phones, and other equipment
+    """,
+    'author': 'Ahmed Yahya',
+    'website': 'https://www.softclasssd.com', 
+    'depends': ['account', 'inherit_account_move', 'mail', 'hr', 'hr_contract' ],
+    'data': [
+        'security/ir.model.access.csv',
+        'data/hr_custody_data.xml',
+        'views/custody_views.xml',
+        'views/custody_item_views.xml',
+        'views/hr_custody_views.xml',
+        'views/res_config_settings_views.xml',
+        'views/custody_menu.xml',
+        'views/journal_dashboard.xml',
+        'wizard/account_payment_register.xml',
+    ],
+    'installable': True,
+    'application': True,
+    'auto_install': False,
+    'license': 'LGPL-3',
+} 

@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="action_report_bid_tender_print_info">
+        <t t-call="web.html_container">
+            <t t-call="web.basic_layout">
+                <t t-set="o" t-value="doc"/>
+                <t t-foreach="docs" t-as="doc">
+                    <t t-set="company" t-value="doc.company_id"/>
+                    <!-- <div class="header" style="position: relative; height: 100px;">
+                        <t t-if="company.logo">
+                            <img t-att-src="image_data_uri(company.logo)"
+                                 style="position: absolute; top: 20px; left: 0; max-height: 80px; max-width: 120px;"
+                                 alt="Company Logo"/>
+                        </t>
+                    </div> -->
+                    <div style="text-align: center; font-family: KacstOne; color: #003366;">
+                        <t t-if="company.logo">
+                            <img t-att-src="image_data_uri(company.logo)"
+                                 style="position: absolute; top: 20px; left: 0; max-height: 80px; max-width: 120px;"
+                                 alt="Company Logo"/>
+                        </t>
+                        <h3 style="text-decoration: underline;">
+                            <span t-field="doc.company_id.name"/>
+                        </h3>
+                        <h3 style="text-decoration: underline;">Supply Chain Management</h3>
+                        <h3 style="text-decoration: underline;">Bid Analysis And Tender Report</h3>
+                        <t t-if="company.logo">
+                            <img t-att-src="image_data_uri(company.logo)"
+                                 style="position: absolute; top: 20px; right: 0; max-height: 80px; max-width: 120px;"
+                                 alt="Company Logo"/>
+                        </t>
+                    </div>
+
+                    <br/><br/><br/>
+                    <div style="border: 1px solid #000; padding: 5px; background-color: #f0f0f0; margin-bottom: 10px;">
+                        <div style="text-align: left; font-weight: bold; margin-bottom: 5px;">
+                            Project Name :
+                        </div>
+                        <h3 t-esc="doc.project_id.name" style="margin: 0; text-align: center; color: #000;"/>
+                    </div>
+
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px;" dir="ltr">
+                        <tr>
+                            <td style="width: 50%; padding: 3px; border: 1px solid #000; text-align:left; background-color: #f2f2f2;">
+                                <strong>Operation Type :</strong>
+                                <t t-esc="doc.operation_type"/>
+                            </td>
+                            <td style="width: 50%; padding: 3px; border: 1px solid #000; text-align:left; background-color: #f2f2f2;">
+                                <strong>Description :</strong>
+                                <t t-esc="doc.name"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50%; padding: 3px; border: 1px solid #000; text-align:left; background-color: #f2f2f2;">
+                                <strong>Created Date :</strong>
+                                <t t-esc="doc.date"/>
+                            </td>
+                            <td style="width: 50%; padding: 3px; border: 1px solid #000; text-align:left; background-color: #f2f2f2;">
+                                <strong> PRS :</strong>
+                                <t t-esc="doc.prs.name"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 50%; padding: 3px; border: 1px solid #000; text-align:left; background-color: #f2f2f2;">
+                                <strong>Created By :</strong>
+                                <t t-esc="doc.user_id.name"/>
+                            </td>
+                            <td style="width: 50%; padding: 3px; border: 1px solid #000; text-align:left; background-color: #f2f2f2;">
+                                <t t-if="doc.operation_type != 'tender'">
+                                    <strong>Reference :</strong>
+                                    <t t-esc="doc.ref"/>
+                                </t>
+                                
+                                <t t-else="">
+                                    <strong>Tender Reference :</strong>
+                                    <t t-esc="doc.tender_ref"/>
+                                </t>
+                            </td>
+                        </tr>
+                        <tr t-if="doc.operation_type == 'tender'">
+                            <td style="width: 50%; padding: 3px; border: 1px solid #000; text-align:left; background-color: #f2f2f2;">
+                                <strong>Opening Date :</strong>
+                                <t t-esc="doc.opening_date"/>
+                            </td>
+                            <td style="width: 50%; padding: 3px; border: 1px solid #000; text-align:left; background-color: #f2f2f2;">
+                                <strong>Closing Date :</strong>
+                                <t t-esc="doc.closing_date"/>
+                            </td>
+                        </tr>
+                        <tr t-if="doc.operation_type == 'tender'">
+                            <td style="width: 50%; padding: 3px; border: 1px solid #000; text-align:left; background-color: #f2f2f2;">
+                                <strong>Where Announced? :</strong>
+                                <t t-esc="doc.where_announced"/>
+                            </td>
+                            <td style="width: 50%; padding: 3px; border: 1px solid #000; text-align:left; background-color: #f2f2f2;">
+                                <strong>Branch :</strong>
+                                <t t-esc="doc.branch_id.name"/>
+                            </td>
+                        </tr>
+                        <tr t-if="doc.operation_type == 'tender'">
+                            <td style="width: 50%; padding: 3px; border: 1px solid #000; text-align:left; background-color: #f2f2f2;">
+                                <strong>Number of Competing Bidders :</strong>
+                                <t t-esc="doc.number_of_competing_bidders"/>
+                            </td>
+                            <td style="width: 50%; padding: 3px; border: 1px solid #000; text-align:left; background-color: #f2f2f2;">
+                                <strong>Number of Excluded bidders :</strong>
+                                <t t-esc="doc.number_of_excluded_bidders"/>
+                            </td>
+                        </tr>
+                        <tr t-if="doc.operation_type == 'tender'">
+                            <td style="width: 50%; padding: 3px; border: 1px solid #000; text-align:left; background-color: #f2f2f2;">
+                                <strong>Number of Nominated Companies :</strong>
+                                <t t-esc="doc.number_of_nominated_companies"/>
+                            </td>
+                            <td style="width: 50%; padding: 3px; border: 1px solid #000; text-align:left; background-color: #f2f2f2;">
+                                <strong>Status :</strong>
+                                <t t-esc="doc.state"/>
+                            </td>
+                        </tr>
+                        
+                    </table>
+
+                    <!-- <div class="row my-1"
+                         style="font-size:11px; width:100%; text-align:center; margin-bottom:10px; margin-top:10px;">
+                        <div class="col-4" style="display: flex; justify-content: center; align-items: center;">
+                            <h6 style="color: #FFBF00; margin: 0 5px 0 0;"><strong>Ref:</strong></h6>
+                            <span t-field="doc.tender_ref" style="font-size: 11px; color: #003366;"/>
+                        </div>
+                        <div class="col-4" style="display: flex; justify-content: center; align-items: center;">
+                            <h6 style="color: #FFBF00; margin: 0 5px 0 0;"><strong>Name:</strong></h6>
+                            <span t-field="doc.name" style="font-size: 11px; color: #003366;"/>
+                        </div>
+                        <div class="col-4" style="display: flex; justify-content: center; align-items: center;">
+                            <h6 style="color: #FFBF00; margin: 0 5px 0 0;"><strong>Date:</strong></h6>
+                            <span t-field="doc.date" style="font-size: 11px; color: #003366;"/>
+                        </div>
+                    </div>
+
+                    <br/>
+
+                    <div class="row my-1"
+                         style="font-size:11px; width:100%; text-align:center; margin-bottom:10px; margin-top:10px;">
+                        <div class="col-4" style="display: flex; justify-content: center; align-items: center;">
+                            <h6 style="color: #FFBF00; margin: 0 5px 0 0;"><strong>Supplier Chosen:</strong></h6>
+                            <span t-field="doc.chosen_id.name" style="font-size: 11px; color: #003366;"/>
+                        </div>
+                        <div class="col-4" style="display: flex; justify-content: center; align-items: center;">
+                            <h6 style="color: #FFBF00; margin: 0 5px 0 0;"><strong>Reason:</strong></h6>
+                            <span t-field="doc.reason" style="font-size: 11px; color: #003366;"/>
+                        </div>
+                        <div class="col-4" style="display: flex; justify-content: center; align-items: center;">
+                            <h6 style="color: #FFBF00; margin: 0 5px 0 0;"><strong>Requester By:</strong></h6>
+                            <span t-field="doc.user_id.name" style="font-size: 11px; color: #003366;"/>
+                        </div>
+                    </div> -->
+
+                    <br/><br/>
+
+                    <!-- جمع الموردين الفريدين -->
+                    <t t-set="suppliers" t-value="[]"/>
+                    <t t-foreach="doc.bid_tender_line_ids" t-as="line">
+                        <t t-if="line.supplier_id.id not in suppliers">
+                            <t t-set="suppliers" t-value="suppliers + [line.supplier_id.id]"/>
+                        </t>
+                    </t>
+
+                    <!-- تكرار الموردين -->
+                    <t t-foreach="suppliers" t-as="supplier_id">
+                        <t t-set="supplier_total" t-value="0"/>
+                        <h4 style="color:#003366; margin-top: 20px;">
+                            Supplier: <t t-esc="env['res.partner'].browse(supplier_id).name"/>
+                        </h4>
+                        <table class="table table-sm" style="font-size:11px; width: 100%;">
+                            <thead>
+                                <tr style="border-bottom: 2px solid #003366;">
+                                    <th>Product</th>
+                                    <th>Description</th>
+                                    <th>Unit</th>
+                                    <th>Qty</th>
+                                    <th>Unit Price</th>
+                                    <th>Total Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="doc.bid_tender_line_ids" t-as="line">
+                                    <t t-if="line.supplier_id.id == supplier_id">
+                                        <t t-set="supplier_total" t-value="supplier_total + (line.unit_price * line.qty)"/>
+                                        <tr>
+                                            <td><span t-field="line.product_id"/></td>
+                                            <td><span t-field="line.description"/></td>
+                                            <td><span t-field="line.unut_id.name"/></td>
+                                            <td><span t-field="line.qty"/></td>
+                                            <td>
+                                                <span t-field="line.unit_price"
+                                                    t-options='{"widget": "monetary", "currency_field": "line.currency_id"}'/>
+                                            </td>
+                                            <td>
+                                                <span t-field="line.total_price"
+                                                    t-options='{"widget": "monetary", "currency_field": "line.currency_id"}'/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </t>
+                            </tbody>
+                            <tfoot>
+                                <tr style="border-top: 2px solid #003366;">
+                                    <t t-set="format_thousands" t-value="lambda x: '{:,.2f}'.format(x)"/>
+                                    <td colspan="5" style="text-align:right; font-weight:bold; padding-top:10px;">
+                                        Total for <t t-esc="env['res.partner'].browse(supplier_id).name"/>:
+                                    </td>
+                                    <td style="font-weight:bold; border-top: 1px solid #003366; padding-top:10px;">
+                                        <t t-esc="format_thousands(supplier_total)"/>
+                                        <t t-esc="doc.currency_id.symbol or ''"/>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </t>
+
+                    <h4 style="color:#003366; margin-top: 20px; font-weight: bold; text-decoration: underline;">
+                        Supplier Chosen
+                    </h4>
+                    <table class="table table-sm" style="font-size:12px; width: 100%; border: 1px solid #003366;">
+                        <tbody>
+                            <tr>
+                                <td style="background-color: #f2f2f2; width: 30%; font-weight: bold; border-right: 1px solid #003366;">Selected Supplier:</td>
+                                <td style="text-align: center; font-weight: bold; font-size: 14px;">
+                                    <t t-esc="doc.chosen_id.name"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h4 style="color:#003366; margin-top: 15px; font-weight: bold; text-decoration: underline;">
+                        Reason of Selection
+                    </h4>
+                    <table class="table table-sm" style="font-size:11px; width: 100%; border: 1px solid #003366;">
+                        <tbody>
+                            <tr>
+                                <td style="padding: 10px; text-align: justify; line-height: 1.5;">
+                                    <t t-esc="doc.reason"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <br/>
+                    <t t-if="doc.operation_type == 'tender'">
+                        <h4 style="font-size: 14px; color: #003366; font-weight: bold; text-align: left; text-decoration: underline; margin-top: 30px;">
+                            List of The Venders, Offers And Scores:
+                        </h4>
+                        <table class="table table-sm" style="font-size:11px; width: 100%;">
+                            <thead>
+                                <tr style="border-bottom: 2px solid #003366;">
+                                    <th>Supplier</th>
+                                    <th>Offer</th>
+                                    <th>Price Percentager %</th>
+                                    <th>Relevant Experience</th>
+                                    <th>Certificates</th>
+                                    <th>Other Point</th>
+                                    <th>Total Score</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="doc.offer_line_ids" t-as="line">
+                                    <tr>
+                                        <td><span t-field="line.supplier_id.name"/></td>
+                                        <td><span t-field="line.offer" t-options='{"widget": "monetary", "currency_field": "line.currency_id"}'/></td>
+                                        <td><span t-field="line.price_percentage"/> %</td>
+                                        <td><span t-field="line.relevant_experience"/> %</td>
+                                        <td><span t-field="line.certificates"/> %</td>
+                                        <td><span t-field="line.other_point"/> %</td>
+                                        <td style="font-weight: bold;"><span t-field="line.total_score"/> %</td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </t>
+                    
+
+                    <!-- جدول أعضاء اللجنة -->
+                    <h4 style="font-size: 14px; color: #003366; font-weight: bold; text-align: left; text-decoration: underline; margin-top: 30px;">
+                        Committee Members
+                    </h4>
+                    <table class="table table-sm" dir="rtl" style="width: 100%; table-layout: fixed; font-size: 11px;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid #003366;">
+                                <th style="text-align:left;">Signature</th>
+                                <th style="text-align:left;">Department</th>
+                                <th style="text-align:left;">Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="doc.committee_line_ids" t-as="line">
+                                <tr style="border-bottom: 2px solid #003366; height: auto;">
+                                    <td style="vertical-align: top; padding: 4px; text-align: center;">
+
+                                        <div style="display: flex; justify-content: center; align-items: center; height: 60px;">
+                                            <img t-if="line.signature.digital_signature"
+                                                t-att-src="image_data_uri(line.signature.digital_signature)"
+                                                style="max-height: 50px; max-width: 100%;"/>
+                                        </div>
+
+                                    </td>
+
+                                    <td style="text-align:left; padding: 2px 5px;"><span t-field="line.department.name"/></td>
+                                    <td style="text-align:left; padding: 2px 5px;"><span t-field="line.emp_id.name"/></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+
+                    <br/>
+                    <h4 style="color:#003366; margin-top: 20px;">
+                        Notes: <span t-field="doc.note" style="font-size: 13px; color: #003366;"/>
+                    </h4>
+
+                    <!-- جدول التواقيع -->
+                    <table class="o_has_total_table table o_main_table table-borderless mt-4"
+                           style="font-size: 11px; width: 100%;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid #003366;">
+                                <th style="text-align: left; width: 20%; vertical-align: middle;"><strong>Position</strong></th>
+                                <th style="text-align: left; width: 25%; vertical-align: middle;"><strong>Name</strong></th>
+                                <th style="text-align: left; width: 25%; vertical-align: middle;"><strong>Job Title</strong></th>
+                                <th style="text-align: left; width: 30%; vertical-align: middle;"><strong>Signature</strong></th>
+                                <th style="text-align: left; width: 25%; vertical-align: middle;"><strong>Date</strong></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="vertical-align: top; padding: 4px;">Prepared by</td>
+                                <td style="vertical-align: top; padding: 4px;"><span t-field="doc.user_id.name"/></td>
+                                <td style="vertical-align: top; padding: 4px;"><span t-field="doc.prepared_job_title"/></td>
+                                <td style="vertical-align: top; padding: 4px; text-align: left;">
+                                    <img t-if="doc.user_id.digital_signature"
+                                         t-att-src="image_data_uri(doc.user_id.digital_signature)"
+                                         style="max-height: 50px; max-width: 100%; display: block; margin-left: 0;"/>
+                                </td>
+                                <td style="vertical-align: top; padding: 4px;"><span t-field="doc.date"/></td>
+                            </tr>
+                            <tr>
+                                <td style="vertical-align: top; padding: 4px;">Reviewed by</td>
+                                <td style="vertical-align: top; padding: 4px;"><span t-field="doc.sign_reviewed"/></td>
+                                <td style="vertical-align: top; padding: 4px;"><span t-field="doc.reviewed_job_title"/></td>
+                                <td style="vertical-align: top; padding: 4px; text-align: left;">
+                                    <img t-if="doc.signature_reviewed.digital_signature"
+                                         t-att-src="image_data_uri(doc.signature_reviewed.digital_signature)"
+                                         style="max-height: 50px; max-width: 100%; display: block; margin-left: 0;"/>
+                                </td>
+                                <td style="vertical-align: top; padding: 4px;"><span t-field="doc.date_review"/></td>
+                            </tr>
+                            <tr>
+                                <td style="vertical-align: top; padding: 4px;">Approved by</td>
+                                <td style="vertical-align: top; padding: 4px;"><span t-field="doc.sign_approved"/></td>
+                                <td style="vertical-align: top; padding: 4px;"><span t-field="doc.approved_job_title"/></td>
+                                <td style="vertical-align: top; padding: 4px; text-align: left;">
+                                    <img t-if="doc.signature_approved.digital_signature"
+                                         t-att-src="image_data_uri(doc.signature_approved.digital_signature)"
+                                         style="max-height: 50px; max-width: 100%; display: block; margin-left: 0;"/>
+                                </td>
+                                <td style="vertical-align: top; padding: 4px;"><span t-field="doc.date_approve"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="footer" style="margin-top: 50px; text-align: center; font-size: 10px; color: #888888;">
+                        <hr style="border: 0; border-top: 1px solid #003366; width: 100%;"/>
+                        <p t-if="company.email" style="margin-top: 5px;">
+                            Email: <t t-esc="company.email"/>
+                        </p>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="custom_bid_tender_paper__format" model="report.paperformat">
+        <field name="name">Bid Tender Custom</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">25</field>
+        <field name="margin_left">3</field>
+        <field name="margin_right">3</field>
+        <field name="dpi">96</field>
+    </record>
+
+    <record id="action_report_bid_tender_print" model="ir.actions.report">
+        <field name="name">Bid Analysis And Tender Report</field>
+        <field name="model">oms.bid.tender</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">bid_tender.action_report_bid_tender_print_info</field>
+        <field name="report_file">bid_tender.action_report_bid_tender_print_info</field>
+        <field name="paperformat_id" ref="bid_tender.custom_bid_tender_paper__format"/>
+    </record>
+</odoo>

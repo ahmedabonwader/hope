@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem
+            id="menu_oms_bid_tender_root"
+            name="Bid Analysis And Tender"
+            groups="group_oms_administrator,group_bid_tender_user,group_bid_tender_doner,group_bid_tender_review,group_bid_tender_approve"
+            sequence="5"
+    />
+    <menuitem
+            id="menu_bid_tender_sub"
+            name="Bid / Tender"
+            parent="menu_oms_bid_tender_root"
+            action="action_oms_bid_tender"
+            groups="group_oms_administrator,group_bid_tender_user,group_bid_tender_doner,group_bid_tender_approve,group_bid_tender_review"
+            sequence="10"/>
+
+    <menuitem
+            id="menu_configuration"
+            name="Configuration"
+            parent="menu_oms_bid_tender_root"
+            groups="group_oms_administrator"
+            sequence="15"/>
+    <menuitem
+            id="menu_bid_tender_conf_sub"
+            name="Bid/Tender Configurations"
+            parent="menu_configuration"
+            action="action_oms_bid_tender_conf"
+            groups="group_oms_administrator"
+            sequence="10"/>
+
+    <menuitem
+            id="menu_bid_tender_views"
+            name="Bid/Tender"
+            parent="purchase.menu_purchase_root"
+            action="action_oms_bid_tender"
+            sequence="98"/>
+
+    <menuitem
+            id="menu_certificate_completion"
+            name="Certificate Completion"
+            parent="purchase.menu_purchase_root"
+            action="action_certificate_completion"
+            sequence="99"/>
+</odoo>

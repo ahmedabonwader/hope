@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+         <record model="ir.module.category" id="module_category_organization_management_system_branches">
+            <field name="name">Organization Management System Branches</field>
+            <field name="description">Category For Organization Management System Branches</field>
+        </record>
+
+        <record id="group_oms_branches_administrator" model="res.groups">
+            <field name="name">Administrator</field>
+            <field name="users" eval="[(4, ref('base.user_root')),(4, ref('base.user_admin'))]"/>
+            <field name="category_id" ref="module_category_organization_management_system_branches"/>
+        </record>
+
+         <record id="group_branches_user" model="res.groups">
+            <field name="name">User</field>
+            <field name="category_id" ref="module_category_organization_management_system_branches"/>
+        </record>
+    </data>
+</odoo>

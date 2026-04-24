@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_qrn_report_wizard_form" model="ir.ui.view">
+        <field name="name">qrn.report.wizard.form</field>
+        <field name="model">qrn.report.wizard</field>
+        <field name="arch" type="xml">
+            <form >
+                <group>
+                    <group>
+                        <field name="stock_picking_id" readonly="1"/>
+                        <field name="project_id" readonly="1"/>
+                    </group>
+                    <group>
+                        <field name="date" required="1"/>
+                        <field name="prs_id" readonly="1"/>
+                        <field name="purchase_id" readonly="1"/>
+                    </group>
+                    <group>
+                        <footer>
+                            <button name="action_validate" string="Print" type="object" class="btn-primary"
+                                    data-hotkey="q"/>
+                            <button special="cancel" data-hotkey="z" string="Discard" class="btn-secondary"/>
+                        </footer>
+                    </group>
+                </group>
+                <notebook>
+                    <page string="Details">
+                        <group name="Recieve Information">
+                            <group>
+                                <field name="received_by" required="1"/>
+                                <field name="received_title" readonly="1"/>
+                                <field name="received_location" required="1"/>
+                                <field name="received_signature" readonly="1"/>
+                            </group>
+                        </group>
+                    </page>
+                </notebook>
+            </form>
+        </field>
+    </record>
+    <record id="qrn_report_wizard_action" model="ir.actions.act_window">
+        <field name="name">QRN Report Wizard</field>
+        <field name="res_model">qrn.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

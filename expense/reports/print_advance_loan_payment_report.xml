@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="action_report_advance_loan_payment_info">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <t t-foreach="docs" t-as="doc">
+                    <div style="text-align: center; font-family: KacstOne; color: #003366;">
+                        <h3 style="text-decoration: underline;">
+                            <span t-field="doc.company_id.name"/>
+                        </h3>
+                        <h3 style="text-decoration: underline;">HR And Admin Department</h3>
+                        <t t-if="doc.expense_type == 'advance'">
+                            <h3 style="text-decoration: underline;">Advance on Salary Form</h3>
+                        </t>
+                        <t t-elif="doc.expense_type == 'loan'">
+                            <h3 style="text-decoration: underline;">Loan on Salary Form</h3>
+                        </t>
+                    </div>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <div style="text-align: center; font-size: 18px; color: #003366; font-family: KacstOne; margin-top: 20px;">
+                        <span t-field="doc.description"/>
+                    </div>
+                    <br/>
+                    <div class="row my-1"
+                        style="font-size:13px; width:100%; text-align:center; margin-bottom:10px; margin-top:10px;">
+                        <div class="col-4">
+                            <h6 class="text-center" style="color: #FFBF00;">
+                                <strong>Date</strong>
+                            </h6>
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <span t-field="doc.time" style="font-size: 16px; color: #003366;"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <h6 class="text-center" style="color: #FFBF00;">
+                                <strong>Employee Name:</strong>
+                            </h6>
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <span t-field="doc.employee_id.name" style="font-size: 16px; color: #003366;"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <h6 class="text-center" style="color: #FFBF00;">
+                                <strong>The Requested Amount</strong>
+                            </h6>
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <span t-field="doc.amount" style="font-size: 16px; color: #003366;"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row my-1"
+                        style="font-size:13px; width:100%; text-align:center; margin-bottom:10px; margin-top:10px;">
+                        <div class="col-4">
+                            <h6 class="text-center" style="color: #FFBF00;">
+                                <strong>Department</strong>
+                            </h6>
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <span t-field="doc.employee_id.department_id.name" style="font-size: 16px; color: #003366;"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <h6 class="text-center" style="color: #FFBF00;">
+                                <strong>Job Title:</strong>
+                            </h6>
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <span t-field="doc.employee_id.job_id.name" style="font-size: 16px; color: #003366;"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <h6 class="text-center" style="color: #FFBF00;">
+                                <strong>Requester By</strong>
+                            </h6>
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <span t-field="doc.user_id.name" style="font-size: 16px; color: #003366;"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+                    <br/>
+                    <div style="margin-top: 5px;">
+                        <table class="o_has_total_table table o_main_table table-borderless mt-4">
+                            <thead>
+                                <tr>
+                                    <th class="text-start">
+                                        <strong>Position</strong>
+                                    </th>
+                                    <th class="text-start">
+                                        <strong>Name</strong>
+                                    </th>
+                                    <th class="text-start">
+                                        <strong>Signature</strong>
+                                    </th>
+                                    <th class="text-start">
+                                        <strong>Date</strong>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Prepared by</td>
+                                    <td>
+                                        <span t-field="doc.user_id.name"/>
+                                    </td>
+                                    <td><img t-if="doc.user_id.digital_signature" t-att-src="image_data_uri(doc.user_id.digital_signature)" style="max-height: 50px;" alt="signature"/></td>
+                                    <td>
+                                        <span t-field="doc.time"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Approval of the HR And Admin department</td>
+                                    <td>
+                                        <span t-field="doc.sign_hr_reviewed"/>
+                                    </td>
+                                    
+                                    <td>
+                                        <img t-if="doc.signature_hr_approved.digital_signature"
+                                            t-att-src="image_data_uri(doc.signature_hr_approved.digital_signature)"
+                                            style="max-height: 50px;"
+                                            alt="signature"/>
+                                    </td>
+
+                                    <td>
+                                        <span t-field="doc.date_review"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Finance Department Approval</td>
+                                    <td>
+                                        <span t-field="doc.sign_approved"/>
+                                    </td>
+                                    <td>
+                                        <img t-if="doc.signature_approved.digital_signature"
+                                            t-att-src="image_data_uri(doc.signature_approved.digital_signature)"
+                                            style="max-height: 50px;"
+                                            alt="signature"/>
+                                    </td>
+
+                                    <td>
+                                        <span t-field="doc.date_approve"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_report_advance_loan_payment" model="ir.actions.report">
+        <field name="name">Advance/Loan Payment Report</field>
+        <field name="model">hms.expense.request</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">expense.action_report_advance_loan_payment_info</field>
+        <field name="report_file">expense.action_report_advance_loan_payment_info</field>
+    </record>
+</odoo>

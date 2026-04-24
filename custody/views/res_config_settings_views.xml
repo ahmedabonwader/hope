@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_inherit_custody" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.custody</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="account.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <!-- Find default accounts section in accounting settings -->
+            <xpath expr="//block[@id='default_accounts']" position="inside">
+                <setting id="custody_default_account_id" string="Custody Default Account:">
+                    <div class="content-group">
+                        <div class="row mt8">
+                            <label for="custody_default_account_id" class="col-lg-5 o_light_label"/>
+                            <field name="custody_default_account_id"/>
+                        </div>
+                    </div>
+                </setting>
+            </xpath>
+        </field>
+    </record>
+</odoo> 

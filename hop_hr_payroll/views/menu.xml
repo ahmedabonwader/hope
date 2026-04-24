@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <menuitem id="menu_hr_payslip_project_root" name="Payroll"
+                  groups="group_hr_payroll_user,group_hr_payroll_manager,group_hr_payroll_account,group_hr_payroll_admin,group_hr_payroll_donor"
+                  sequence="10"/>
+        <menuitem id="menu_hr_employee_root" name="Employee " parent="menu_hr_payslip_project_root"
+                  groups="group_hr_payroll_user,group_hr_payroll_manager,group_hr_payroll_admin"
+                  sequence="20"/>
+        <menuitem id="menu_hr_configuration_root" parent="menu_hr_payslip_project_root" name="Configuration"
+                  groups="group_hr_payroll_user,group_hr_payroll_manager,group_hr_payroll_admin"
+                  sequence="30"/>
+
+        <menuitem id="menu_hr_project_salary_configuration" name="Salary Project Configuration" parent="menu_hr_payslip_project_root"
+                  groups="group_hr_payroll_user,group_hr_payroll_manager,group_hr_payroll_admin"
+                  sequence="30"/>
+
+        <menuitem id="menu_hr_employee" name="Employee " parent="menu_hr_employee_root"
+                  groups="group_hr_payroll_user,group_hr_payroll_manager,group_hr_payroll_admin"
+                  action="hr.open_view_employee_list_my"/>
+        <menuitem id="menu_hr_employee_contract"
+                  name="Contracts"
+                  action="hr_contract.action_hr_contract"
+                  parent="menu_hr_employee_root"
+                  groups="group_hr_payroll_user,group_hr_payroll_manager,group_hr_payroll_admin"
+                  sequence="20"
+        />
+
+        <menuitem 
+                id="social_insurance_payment_menu"
+                name="Social Insurance And Taxes Payment"
+                parent="menu_hr_payslip_project_root"
+                action="action_social_insurance_payment"
+                groups="group_hr_payroll_user,group_hr_payroll_manager,group_hr_payroll_admin,group_hr_payroll_account"
+                sequence="40"/>
+
+    </data>
+</odoo>

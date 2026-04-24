@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <menuitem id="budget_report_root"
+              name="Budget Report"
+              parent="account.menu_finance_reports"
+              sequence="-100"/>
+
+    <menuitem id="budget_sup"
+              name="Budget Report"
+              parent="budget_report_root"
+              action="view_budget_wizard_report_action"
+              sequence="10"/>
+
+    <menuitem id="finance_report_root"
+              name="Finance Report"
+              parent="account.menu_finance_reports"
+              sequence="-101"/>
+
+    <menuitem id="finance_sup"
+              name="Finance Report"
+              parent="finance_report_root"
+              action="view_finance_report_wizard_action"
+              sequence="10"/>
+</odoo>

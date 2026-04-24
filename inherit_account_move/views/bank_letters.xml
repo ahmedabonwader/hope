@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_bank_letters_list" model="ir.ui.view">
+        <field name="name">bank.letters.list</field>
+        <field name="model">bank.letters</field>
+        <field name="arch" type="xml">
+            <list
+                    decoration-success="state == 'post'"
+                    decoration-danger="state == 'cancel'"
+                    decoration-info="state == 'draft'">
+                <field name="ref"/>
+                <field name="description"/>
+                <field name="bank_letters_type"/>
+                <field name="user_id"/>
+                <field name="date"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                <field name="state"
+                       decoration-success="state == 'post'"
+                       decoration-danger="state == 'cancel'"
+                       decoration-info="state == 'draft'"
+                       widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_bank_letters_form" model="ir.ui.view">
+        <field name="name">bank.letters.form</field>
+        <field name="model">bank.letters</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_post" string="Approve" type="object" data-hotkey="k"
+                            class="oe_highlight" invisible="state != 'confirm'"/>
+                    <button name="action_confirm" string="Confirm" type="object" data-hotkey="k"
+                            class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_print" string="Print" type="object" data-hotkey="k"
+                            class="oe_highlight" invisible="state != 'post'"/>
+                    <button name="action_reset_to_draft" string="Reset To Draft" type="object" data-hotkey="k"
+                            invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar" nolabel="1"/>
+                </header>
+                <sheet>
+                    <div class="oe_titel">
+                        <h4>
+                            <field name="ref" readonly="1"/>
+                        </h4>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="description" readonly="state == 'post'"/>
+                            <field name="bank_name_letter" readonly="state == 'post'"
+                                   placeholder="Enter The Bank Name"/>
+                            <field name="bank_letters_type" widget="radio" options="{'horizontal':true}"
+                                   readonly="state == 'post'"/>
+                            <field name="received_by" widget="radio" options="{'horizontal':true}"
+                                   invisible="bank_letters_type != 'normal_letters'" required="bank_letters_type == 'normal_letters'"
+                                />
+                            <field name="partner_id" invisible="received_by != 'vendor'" required="received_by == 'vendor'"/>
+                            <field name="employee_id" invisible="received_by != 'employee'" required="received_by == 'employee'"/>
+                            <field name="salary_id" invisible="bank_letters_type != 'salary_letters'"/>
+
+                            <field name="bank_id_account_from" domain="[('state', '=', 'active')]" 
+                                   readonly="state == 'post'"/>
+                            <field name="bank_name_from"/>
+                            <field name="number_from"/>
+                            <field name="project_id" readonly="state =='post'"/>
+                            <div invisible="bank_letters_type != 'normal_letters'" style="background-color: #d4edda; padding: 5px;">
+                                <strong style="color: #155724;">Bill:</strong>
+                                <field name="bill_id"
+                                       domain="[('project_id', '=', project_id), ('state', '=', 'posted'), ('move_type', '=', 'in_invoice')]"
+                                       readonly="state =='post'" invisible="bank_letters_type != 'normal_letters'"/>
+                            </div>
+                            <field name="currency_id" readonly="state == 'post'"/>
+                            <field name="amount_in_words" readonly="state == 'post'"/>
+                            <field name="amount" widget="monetary" options="{'currency_field': 'currency_id'}"
+                                   readonly="state == 'post'"/>
+
+                        </group>
+                        <group>
+                            <field name="bank" widget="radio" options="{'horizontal':true}" readonly="state == 'post'"/>
+                            <field name="month_type" invisible="bank_letters_type != 'salary_letters'" widget="radio"
+                                   options="{'horizontal':true}" readonly="state == 'post'"/>
+                            <field name="month_date" invisible="month_type != 'one_month'"
+                                   required="month_type == 'one_month'"/>
+                            <field name="bank_branch" readonly="state == 'post'" placeholder="Enter Branch Name" required="1"/>
+                            <field name="date" readonly="state == 'post'"/>
+                            <field name="date_from"
+                                   invisible="bank_letters_type != 'salary_letters' or month_type == 'one_month'"
+                                   readonly="state == 'post'"/>
+                            <field name="date_to"
+                                   invisible="bank_letters_type != 'salary_letters' or month_type == 'one_month'"
+                                   readonly="state == 'post'"/>
+                            <field name="user_id"/>
+                            <field name="line_total_amount" invisible="bank_letters_type != 'salary_letters'"/>
+                            <field name="bank_id_account_to" invisible="bank_letters_type != 'internal_transfer'"/>
+                            <field name="bank_account_id" invisible="bank_letters_type != 'normal_letters'"/>
+                            <field name="bank_name_to" invisible="bank_letters_type == 'salary_letters'"/>
+                            <field name="branch_to" invisible="bank_letters_type == 'salary_letters'" />
+                            <field name="number_to" invisible="bank_letters_type == 'salary_letters'"/>
+                            <field name="received_name_in_arabic" invisible="bank_letters_type != 'normal_letters'"/>
+                            <field name="company_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Salary Information" invisible="bank_letters_type != 'salary_letters'">
+                            <field name="bank_letters_line_ids" readonly="state == 'post'">
+                                <list editable="bottom" delete="1" create="1">
+                                    <field name="employee" required="parent.bank_letters_type == 'salary_letters'"/>
+                                    <field name="bank_name" required="parent.bank_letters_type == 'salary_letters'"/>
+                                    <field name="branch" required="parent.bank_letters_type == 'salary_letters'"/>
+                                    <field name="account_number"
+                                           required="parent.bank_letters_type == 'salary_letters'"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                    <field name="amount" force_save="1" widget="float" options="{'digits': [16, 2]}"
+                                           sum="Total"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Project Information">
+                            <group>
+                                <group>
+                                    <field name="budget_line_code" domain="[('project_id', '=', project_id)]"/>
+                                </group>
+                                <group>
+                                    <field name="payment_number"/>
+                                </group>
+                            </group>
+
+                        </page>
+                        <page string="Delegation" invisible="bank != 'bnmb'">
+                            <group>
+                                <group>
+                                    <field name="the_authorized_person"/>
+                                </group>
+                                <group>
+                                    <field name="id_number"/>
+                                    <field name="phone_numer"/>
+                                </group>
+                            </group>
+
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter reload_on_attachment="True"/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_bank_letters_search" model="ir.ui.view">
+        <field name="name">bank.letters.search</field>
+        <field name="model">bank.letters</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="description"/>
+                <field name="ref"/>
+                <filter name="filter_project_id" string="Project" domain="[]" context="{'group_by': 'project_id'}"/>
+                <searchpanel>
+                    <field name="bank_letters_type" icon="fa-users" string="Bank Letters Type" enable_counters="1"/>
+                    <field name="state" icon="fa-users" string="State" enable_counters="1"/>
+                </searchpanel>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_bank_letters" model="ir.actions.act_window">
+        <field name="name">Bank Letters</field>
+        <field name="res_model">bank.letters</field>
+        <field name="view_mode">list,form,search</field>
+        <field name="context">{'search_default_filter_project_id': 1,}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first Bank Letters !!!
+            </p>
+        </field>
+    </record>
+
+
+</odoo>

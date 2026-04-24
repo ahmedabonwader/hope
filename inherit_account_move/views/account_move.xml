@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="oms_account_move_inherit_form" model="ir.ui.view">
+        <field name="name">account.move</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <div class="oe_button_box" name="button_box" position="inside">
+                <button name="action_bank_letter_count" type="object" class="oe_stat_button" icon="fa-university">
+                    <div class="o_stat_info">
+                        <field name="bank_letter_count" class="o_stat_value"/>
+                        <span class="o_stat_text">Bank Letter</span>
+                    </div>
+                </button>
+            </div>
+
+            <xpath expr="//span[@invisible='name or name_placeholder or quick_edit_mode']" position="replace">
+                <span invisible="name or quick_edit_mode"/>
+            </xpath>
+
+            <xpath expr="//button[@name='action_print_pdf']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_invoice_sent']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='invoice_vendor_bill_id']" position="after">
+                <field name="branch_id" invisible="move_type != 'in_invoice'"
+                       options="{'no_quick_create': True, 'no_create_edit' : True}"/>
+                <field name="tor_bill" invisible="0" readonly="state != 'draft'" widget="boolean_toggle"/>
+                <field name="bill_type" invisible="0" readonly="1"/>
+                <field name="salary_check" invisible="1" readonly="1"/>
+                <field name="salary_payslips_id" invisible="bill_type != 'salary'" readonly="1"/>
+                <div style="background-color: #d4edda; padding: 5px;" invisible="bill_type != 'tor'">
+                    <strong style="color: #155724;">TOR/Advance:</strong>
+                    <field name="tor_advance_id" readonly="state != 'draft'"
+                           options="{'no_quick_create': True, 'no_create_edit' : True}"
+                           domain="[('project_id', '=', project_id), ('request_type', '!=', 'purchase_request'), ('state', '=', 'done')]"/>
+                </div>
+                <field name="tor_check" invisible="1" readonly="1" widget="boolean_toggle"/>
+                <field name="employee_id" invisible="1"/>
+                <div style="background-color: #d4edda; padding: 5px;" invisible="bill_type != 'purchase'">
+                    <strong style="color: #155724;">Purchase Order:</strong>
+                    <field name="purchase_order" readonly="1"/>
+                </div>
+                <field name="total_amount" invisible="1"/>
+                <field name="amount_in_currency" invisible="1"/>
+                <field name="approval_currency_id" invisible="1"/>
+                <field name="old_approve" invisible="1"/>
+                <field name="expense_id" invisible="1"/>
+                <!--                <field name="comment_check" invisible="state != 'review'"/>-->
+            </xpath>
+            <xpath expr="//field[@name='ref']" position="after">
+                <field name="project_type" invisible="move_type != 'in_invoice' or required_rate != 1" widget="radio"
+                       options="{'horizontal':true}" required="required_rate == 1" readonly="state != 'draft'"/>
+                <field name="loan_advance_project" invisible="1" readonly="1"/>
+            </xpath>
+            <xpath expr="//field[@name='partner_bank_id']" position="after">
+                <div style="background-color: #d4edda; padding: 5px;" invisible="bill_type != 'purchase'">
+                    <strong style="color: #155724;">PRS:</strong>
+                    <field name="prs" readonly="0"/>
+                </div>
+                <field name="task_id" invisible="move_type != 'in_invoice' or required_rate != 1"
+                       placeholder="Select your Activity carefully"
+                       widget="many2many_tags" domain="[('project_id', '=', project_id)]"/>
+                <field name="comment" invisible="move_type != 'in_invoice'"/>
+                <field name="bank_transfer_ref" readonly="0" placeholder="Add Your Bank Transfer Reference"/>
+                <field name="users_id_" invisible="1"/>
+                <field name="insurance_payment_id" invisible="1"/>
+                <field name="prepared_job_title" invisible="1"/>
+                <field name="reviewed_job_title" invisible="1"/>
+                <field name="approved_job_title" invisible="1"/>
+                <field name="signature_reviewed" invisible="1"/>
+                <field name="signs_prepared" invisible="1"/>
+                <field name="sign_prepared" invisible="1"/>
+                <field name="sign_reviewed" invisible="1"/>
+                <field name="sign_approved" invisible="1"/>
+                <field name="date_approve" invisible="1"/>
+                <field name="date_review" invisible="1"/>
+                <field name="date_prepared" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='state']" position="attributes">
+                <attribute name="widget">statusbar</attribute>
+                <attribute name="statusbar_visible">draft,review,approve,posted,cancel</attribute>
+                <attribute name="invisible">move_type == 'out_invoice'</attribute>
+                <attribute name="class">oe_highlight</attribute>
+            </xpath>
+            <xpath expr="//header" position="inside">
+                <button name="action_review" string="Review" type="object" class="oe_highlight"
+                        invisible="state != 'draft' or move_type not in ('in_invoice', 'in_refund')"
+                        groups="inherit_account_move.group_account_administrator,inherit_account_move.group_account_review"/>
+                <button name="actions_button_cancel" string="Cancel" type="object" class="oe_highlight"
+                        invisible="1"
+                        groups="inherit_account_move.group_account_administrator"/>
+                <!--                <button name="actions_button_cancel" string="Cancel" type="object" class="oe_highlight"-->
+                <!--                        invisible="state != 'posted' or move_type not in ('in_invoice', 'in_refund')"-->
+                <!--                        groups="inherit_account_move.group_account_administrator"/>-->
+                <button name="action_approve" string="Approve" type="object" class="oe_highlight"
+                        invisible="state != 'review' or move_type not in ('in_invoice', 'in_refund')"
+                        groups="inherit_account_move.group_account_approve,inherit_account_move.group_account_administrator"/>
+                <button name="action_back" confirm="Are you sure to perform this operation?" string="Back" type="object"
+                        invisible="state not in ('review', 'approve') or move_type not in ('in_invoice', 'in_refund')"
+                        groups="inherit_account_move.group_account_administrator,inherit_account_move.group_account_review,inherit_account_move.group_account_approve"/>
+                <button name="action_print" string="Print" type="object"
+                        invisible="state != 'posted' or move_type == 'entry'" class="oe_highlight"
+                />
+            </xpath>
+            <xpath expr="//button[@name='action_post'][2]" position="attributes">
+                <attribute name="invisible">state != 'approve'</attribute>
+                <attribute name="string">Post</attribute>
+<!--                <attribute name="groups">-->
+<!--                    inherit_account_move.group_account_administrator,inherit_account_move.group_accounting_payment-->
+<!--                </attribute>-->
+            </xpath>
+            <xpath expr="//button[@name='action_reverse']" position="attributes">
+                <attribute name="invisible">state != 'post'</attribute>
+            </xpath>
+            <xpath expr="//button[@name='button_draft']" position="attributes">
+                <attribute name="invisible">state != 'posted' or status_in_payment in ('paid', 'partial', 'in_payment')</attribute>
+            </xpath>
+            <xpath expr="//button[@name='button_set_checked']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@name='button_cancel'][2]" position="attributes">
+                <attribute name="groups">
+                    inherit_account_move.group_account_administrator,inherit_account_move.group_account_approve
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='invoice_line_ids']/list//field[@name='quantity']" position="attributes">
+                <attribute name="column_invisible">parent.bill_type == 'tor'</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='invoice_line_ids']/list//field[@name='quantity']" position="after">
+                <field name="bill_type" column_invisible="1"/>
+                <field name="qty" column_invisible="parent.bill_type != 'tor'"/>
+                <field name="frequency" column_invisible="parent.bill_type != 'tor'"/>
+            </xpath>
+            <!--            <xpath expr="//page[@id='invoice_tab']/field[@name='invoice_line_ids']/list/field[@name='analytic_distribution']"-->
+            <!--                   position="after">-->
+            <!--                <field name="budget_code_id" optional="show"/>-->
+            <!--            </xpath>-->
+        </field>
+    </record>
+
+    <record id="inherit_view_account_move_inheriting_purchase" model="ir.ui.view">
+        <field name="name">account.move</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="purchase.view_move_form_inherit_purchase"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='purchase_vendor_bill_id']" position="after">
+                <button name="action_set_tor_data" string="Set TOR Data" type="object" class="oe_highlight"
+                        invisible="tor_bill != True or tor_check != False"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!--    <record id="inherit_view_account_move_search" model="ir.ui.view">-->
+    <!--        <field name="name">account.move</field>-->
+    <!--        <field name="model">account.move</field>-->
+    <!--        <field name="inherit_id" ref="account.view_account_bill_filter"/>-->
+    <!--        <field name="arch" type="xml">-->
+    <!--            <xpath expr="//search" position="inside">-->
+    <!--                <filter string="Project" name="group_project_id" domain="[]" context="{'group_by': 'project_id'}"/>-->
+    <!--                <searchpanel>-->
+    <!--                    <field name="state" icon="fa-users" string="State" enable_counters="1"/>-->
+    <!--                    <field name="payment_state" icon="fa-users" string="Payment status" enable_counters="1"/>-->
+    <!--                    <field name="branch_id" icon="fa-users" string="Branches" enable_counters="1"/>-->
+    <!--                </searchpanel>-->
+    <!--            </xpath>-->
+    <!--        </field>-->
+    <!--    </record>-->
+    <record id="inherit_view_account_move_search" model="ir.ui.view">
+        <field name="name">account.move</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_account_bill_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='to_check']" position="before">
+                <filter name="project_id" string="Projects" context="{'group_by':'project_id'}"/>
+                <separator/>
+                <filter name="active_projects" string="Active Projects"
+                        domain="[('project_id.state', '=', 'running')]"/>
+                <separator/>
+            </xpath>
+            <xpath expr="//search" position="inside">
+                <searchpanel>
+                    <field name="state" icon="fa-users" string="State" enable_counters="1"/>
+                    <field name="payment_state" icon="fa-users" string="Payment status" enable_counters="1"/>
+                    <field name="branch_id" icon="fa-users" string="Branches" enable_counters="1"/>
+                </searchpanel>
+            </xpath>
+        </field>
+    </record>
+
+    <!--    <record id="account.action_move_in_invoice_type" model="ir.actions.act_window">-->
+    <!--        <field name="context">{'group_by': 'project_id'}</field>-->
+    <!--    </record>-->
+    <record id="account.action_move_in_invoice" model="ir.actions.act_window">
+        <field name="context">{'search_default_in_invoice': 1,'search_default_project_id': 1,
+            'search_default_active_projects': 1, 'default_move_type': 'in_invoice', 'display_account_trust': True}
+        </field>
+    </record>
+
+    <record id="oms_account_move_line_inherit_list" model="ir.ui.view">
+        <field name="name">account.move.line</field>
+        <field name="model">account.move.line</field>
+        <field name="inherit_id" ref="account.view_move_line_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='account_id']" position="after">
+                <field name="project_id" invisible="move_type != 'entry'"/>
+                <!--                <button name="get_project_id" string="Get Project" type="object" class="oe_highlight" invisible="move_type != 'entry'"/>-->
+            </xpath>
+
+        </field>
+    </record>
+    
+    <record id="view_account_move_search_inherit_bank_ref" model="ir.ui.view">
+        <field name="name">account.move.search.inherit.bank.transfer.ref</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+        <field name="arch" type="xml">
+            <!-- إضافة الحقل داخل السيرش -->
+            <xpath expr="//search" position="inside">
+                <field name="bank_transfer_ref" string="Bank Transfer Reference"/>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

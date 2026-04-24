@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!--
+        <menuitem id="budget_report_root"
+                  name="Budget Report"
+                  parent="account.menu_finance_reports"
+                  sequence="-100"/>
+
+        <menuitem id="budget_sup"
+                  name="Budget Report"
+                  parent="budget_report_root"
+                  action="view_budget_wizard_report_action"
+                  sequence="10"/> -->
+    <menuitem
+            id="menu_action_journal_transfer"
+            name="Transfers"
+            parent="account.menu_finance"
+            sequence="10"/>
+
+
+    <menuitem id="menu_donor_finance_root"
+              name="Finance"
+              sequence="9"
+              groups="om_account_budget_iteme.group_accounting_doner"/>
+    
+    <menuitem id="menu_donor_bills_only"
+              name="Bills"
+              action="account.action_move_in_invoice_type"
+              parent="menu_donor_finance_root"
+              sequence="10"/>
+
+    <menuitem id="menu_donor_budgets_plans_only"
+              name="Budgets Plans"
+              action="om_account_budget.act_crossovered_budget_view"
+              parent="menu_donor_finance_root"
+              sequence="20"/>
+
+    <menuitem id="menu_donor_reports_sub"
+              name="Reports"
+              parent="menu_donor_finance_root"
+              sequence="30"/>
+
+    <menuitem id="menu_donor_finance_report_action"
+              name="Finance Report"
+              action="budget_report.view_finance_report_wizard_action"
+              parent="menu_donor_reports_sub"
+              sequence="10"/>
+
+    <menuitem id="menu_donor_transaction_list_action"
+              name="Transaction List"
+              action="budget_report.view_budget_wizard_report_action"
+              parent="menu_donor_reports_sub"
+              sequence="20"/>
+
+
+    <menuitem
+            id="menu_action_bank_letters"
+            name="Bank Letters"
+            action="action_bank_letters"
+            parent="menu_action_journal_transfer"
+            sequence="3"/>
+
+    <menuitem
+            id="menu_action_bank_list_payments"
+            name="Bank List"
+            action="action_bank_list"
+            parent="menu_action_journal_transfer"
+            sequence="4"/>
+
+    <menuitem id="bank_statement_report"
+              name="Bank Statement"
+              parent="budget_report.finance_report_root"
+              action="view_bank_statement_wizard_report_action"
+              sequence="20"/>
+</odoo>

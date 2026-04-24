@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="expense_daily_report_info">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h3 style="text-align:center; width:100%; font-family:KacstOne; padding:10px; background-color:#004085; color: white; border-radius: 5px;">
+                        <t t-if="form_data['report_type'] == 'expense'">Expense Daily Report</t>
+                        <t t-if="form_data['report_type'] == 'salary'">Salary Report</t>
+                        <t t-if="form_data['report_type'] == 'loan'">Loan Report</t>
+                    </h3>
+                    <br/>
+
+                    <t t-if="form_data['date_from'] or form_data['date_to']">
+                        <div style="text-align: center; font-size: 14px; font-weight: bold;">
+                            <t t-if="form_data['date_from']">
+                                From:
+                                <t t-esc="form_data['date_from']"/>
+                            </t>
+                            <t t-if="form_data['date_to']">
+                                - To:
+                                <t t-esc="form_data['date_to']"/>
+                            </t>
+                        </div>
+                        <br/>
+                    </t>
+
+                    <!-- إذا كان التقرير من نوع المصروفات -->
+                    <t t-if="form_data['report_type'] == 'expense'">
+                        <table class="table table-bordered table-striped" dir="rtl"
+                               style="width: 100%; text-align: center; border-collapse: collapse;">
+                            <thead style="background-color: #b8daff; color: #004085;font-family:KacstOne;">
+                                <tr>
+                                    <th style="padding: 10px; text-align: center;">Payment Method</th>
+                                    <th style="padding: 10px; text-align: center;">Amount</th>
+                                    <th style="padding: 10px; text-align: center;">User</th>
+                                    <th style="padding: 10px; text-align: center;">Recipient</th>
+                                    <th style="padding: 10px; text-align: center;">Date</th>
+                                    <th style="padding: 10px; text-align: center;">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="total_amount" t-value="0"/>
+                                <t t-foreach="data" t-as="expense">
+                                    <tr style="background-color: #e3f2fd; color: #004085;font-family:KacstOne;">
+                                        <td>
+                                            <t t-esc="expense['payment_method']"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="expense['amount']" t-options="{'widget': 'float', 'precision': 2}"/>
+                                            <t t-set="total_amount" t-value="total_amount + expense['amount']" t-options="{'widget': 'float', 'precision': 2}"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="expense['user']"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="expense['recipient']"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="expense['date']"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="expense['description']"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                            <tfoot>
+                                <tr style="background-color: #004085; color: white; font-weight: bold;">
+                                    <td colspan="6" style="padding: 10px; text-align: center;">
+                                        <div style="display: flex; justify-content: center; align-items: center; color: white;">
+                                            <span>Total:</span>
+                                            <t t-esc="total_amount" t-options="{'widget': 'float', 'precision': 2}"/>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </t>
+
+                    <!-- إذا كان التقرير من نوع الرواتب أو القروض -->
+                    <t t-if="form_data['report_type'] == 'salary' or form_data['report_type'] == 'loan'">
+                        <t t-foreach="data.items()" t-as="employee_data">
+                            <h4 style="text-align: center; margin-top: 20px; background-color: #FFFF99; color: #17a2b8; padding: 10px; border-radius: 5px;">
+                                <t t-esc="employee_data[0]"/>
+                            </h4>
+
+                            <table class="table table-bordered table-striped" dir="rtl"
+                                   style="width: 100%; text-align: center; border-collapse: collapse;">
+                                <thead style="background-color: #b8daff; color: #004085;">
+                                    <tr>
+                                        <th style="padding: 10px; text-align: center;">Payment Status</th>
+                                        <th style="padding: 10px; text-align: center;">Payment Method</th>
+                                        <th style="padding: 10px; text-align: center;">Amount</th>
+                                        <th style="padding: 10px; text-align: center;">User</th>
+                                        <th style="padding: 10px; text-align: center;">Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-set="total_salary" t-value="0"/>
+                                    <t t-foreach="employee_data[1]" t-as="entry">
+                                        <tr style="background-color: #e3f2fd; color: #004085;">
+                                            <td>
+                                                <t t-esc="entry['payment_status']"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="entry['payment_method']"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="entry['amount']"/>
+                                                <t t-set="total_salary" t-value="total_salary + entry['amount']"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="entry['user']"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="entry['date']"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                                <tfoot>
+                                    <tr style="background-color: #004085; color: white; font-weight: bold;">
+                                        <td colspan="5" style="padding: 10px; text-align: center;">
+                                            <div style="display: flex; justify-content: center; align-items: center; color: white;">
+                                                <span>Total:</span>
+                                                <t t-esc="total_salary"/>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </t>
+                    </t>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <record id="expense_payment_daily_reports" model="ir.actions.report">
+        <field name="name">Expense Daily Report</field>
+        <field name="model">hms.expense.request</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">expense.expense_daily_report_info</field>
+        <field name="report_file">expense.expense_daily_report_info</field>
+    </record>
+</odoo>

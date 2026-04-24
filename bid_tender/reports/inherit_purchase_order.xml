@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="purchase_report_inherit" inherit_id="purchase.report_purchaseorder_document">
+        <xpath expr="//div[@class='mt-4']" position="inside">
+            <p>
+                <strong style="color: #00aaff;">Office Base Location:</strong>
+                <!--                <span t-field="o.user_id.branch_ids.ids" style="color: #ffaa00;"/>-->
+            </p>
+        </xpath>
+
+        <xpath expr="//div[@class='page']" position="inside">
+            <div style="margin-top: 50px;"></div>
+            <div style="margin-top: 50px;"></div>
+            <div style="margin-top: 50px;"></div>
+            <div style="margin-top: 50px;"></div>
+            <div style="margin-top: 50px;"></div>
+            <div style="margin-top: 50px;"></div>
+            <table class="o_has_total_table table o_main_table table-borderless mt-4">
+                <thead>
+                    <tr>
+                        <th class="text-start">
+                            <strong>Position</strong>
+                        </th>
+                        <th class="text-start">
+                            <strong>Name</strong>
+                        </th>
+                        <th class="text-start">
+                            <strong>Job Title</strong>
+                        </th>
+                        <th class="text-start">
+                            <strong>Signature</strong>
+                        </th>
+                        <th class="text-start">
+                            <strong>Date</strong>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Prepared by</td>
+                        <td>
+                            <span t-field="o.requester_id.name"/>
+                        </td>
+                        <td>
+                            <span t-field="o.prepared_job_title"/>
+                        </td>
+                        <td>
+                            <img t-if="o.requester_id and (o.requester_id.check_image and o.requester_id.signature_image or o.requester_id.digital_signature)"
+                                 t-att-src="image_data_uri(o.requester_id.check_image and o.requester_id.signature_image or o.requester_id.digital_signature)"
+                                 style="max-height: 50px;"
+                                 alt="signature"/>
+                        </td>
+                        <td>
+                            <span t-field="o.date_pur"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Reviewed by</td>
+                        <td>
+                            <span t-field="o.sign_reviewed"/>
+                        </td>
+                        <td>
+                            <span t-field="o.reviewed_job_title"/>
+                        </td>
+                        <td>
+                            <img t-if="o.signature_reviewed and (o.signature_reviewed.check_image and o.signature_reviewed.signature_image or o.signature_reviewed.digital_signature)"
+                                 t-att-src="image_data_uri(o.signature_reviewed.check_image and o.signature_reviewed.signature_image or o.signature_reviewed.digital_signature)"
+                                 style="max-height: 50px;"
+                                 alt="signature"/>
+                        </td>
+                        <td>
+                            <span t-field="o.date_pur"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Approved by</td>
+                        <td>
+                            <span t-field="o.sign_approved"/>
+                        </td>
+                        <td>
+                            <span t-field="o.approved_job_title"/>
+                        </td>
+                        <td>
+                            <img t-if="o.signature_approved and (o.signature_approved.check_image and o.signature_approved.signature_image or o.signature_approved.digital_signature)"
+                                 t-att-src="image_data_uri(o.signature_approved.check_image and o.signature_approved.signature_image or o.signature_approved.digital_signature)"
+                                 style="max-height: 50px;"
+                                 alt="signature"/>
+                        </td>
+                        <td>
+                            <span t-field="o.date_pur"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Supplier Acceptance</td>
+                        <td>________________</td>
+                        <td>________________</td>
+                        <td>________________</td>
+                        <td>________________</td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </xpath>
+    </template>
+
+    <template id="purchase_report_request_inherit" inherit_id="purchase.report_purchasequotation_document">
+        <xpath expr="//t[@t-set='layout_document_title']" position="inside">
+            <p>
+                <strong style="color: #00aaff;">Office Base Location:</strong>
+                <span t-field="o.location_id.name" style="color: #ffaa00;"/>
+            </p>
+        </xpath>
+    </template>
+</odoo>

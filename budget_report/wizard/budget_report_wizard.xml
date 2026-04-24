@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="view_budget_wizard_report_form" model="ir.ui.view">
+            <field name="name">Budget Report Wizard</field>
+            <field name="model">budget.report.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Budget Report">
+                    <group>
+                        <group>
+                            <field name="budget_id" options="{'no_quick_create': True, 'no_create_edit' : True}" required="1"/>
+
+                            <field name="date_from"/>
+                        </group>
+                        <group>
+                            <field name="quarter_ids" widget="many2many_tags" options="{'no_quick_create': True, 'no_create_edit' : True}" required="1"/>
+                            <!--                                   domain="[('state', '=', budget_state)]"/>-->
+                            <field name="date_to"/>
+                            <field name="is_donor" invisible="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="file_name" invisible="1"/>
+                        <field name="file_data" filename="file_name" readonly="1"/>
+                    </group>
+                    <notebook>
+                        <page name="name" string="Authorized" invisible="is_donor == True">
+                            <group>
+                                <group>
+                                    <field name="signature_prepared" required="is_donor == False"/>
+                                    <field name="signature_reviewed" required="is_donor == False"/>
+                                </group>
+                                <group>
+                                    <field name="signature_approved" required="is_donor == False"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                    <footer>
+                        <button name="action_print_report" string="Print" type="object" class="oe_highlight"/>
+                        <button string="Generate xlsx" name="action_generate_xlsx_report" type="object"
+                                class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_budget_wizard_report_action" model="ir.actions.act_window">
+            <field name="name">Budget Report</field>
+            <field name="res_model">budget.report.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

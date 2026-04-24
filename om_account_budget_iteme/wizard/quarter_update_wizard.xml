@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_quarter_update_wizard_form" model="ir.ui.view">
+        <field name="name">quarter.update.wizard.form</field>
+        <field name="model">quarter.update.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Void Check">
+                <group>
+                    <group>
+                        <field name="crossovered_budget_id" readonly="1"/>
+                        <field name="analytic_account_id"/>
+                        <field name="quarter_id"/>
+                        <field name="quarter_type" invisible="1"/>
+                        <field name="amount"/>
+                    </group>
+                    <group>
+                        <field name="planned_amount"/>
+                        <field name="new_amount"/>
+                    </group>
+                    <group>
+                        <footer>
+                            <button name="action_validate" string="Applay" type="object" class="btn-primary"
+                                    data-hotkey="q" />
+
+                            <button special="cancel" data-hotkey="z" string="Discard" class="btn-secondary"/>
+                        </footer>
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <!--    menu action-->
+    <record id="view_quarter_update_wizard_action" model="ir.actions.act_window">
+        <field name="name">Quarter Update Wizard</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">quarter.update.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

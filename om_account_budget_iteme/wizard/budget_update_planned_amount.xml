@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="budget_update_amount_wizard_view" model="ir.ui.view">
+        <field name="name">update.amount.wizard.view</field>
+        <field name="model">update.amount.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Budget Line Amount">
+                <group>
+                    <group>
+                        <field name="account_id"/>
+                        <field name="new_amount"/>
+
+                    </group>
+                    <group>
+                        <field name="planned_amount"/>
+                        <field name="new_planned_amount"/>
+                        <field name="currency_id" invisible="1"/>
+                        <field name="theoritical_amount" invisible="1"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_applay" string="Applay"
+                            type="object" class="btn-danger" confirm="Are you sure you want to applay this proceed ?"/>
+                    <button string="Cancel" type="object"
+                            special="cancel" class="btn py-btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_update_planned_amount" model="ir.actions.act_window">
+        <field name="name">Planned  Amount</field>
+        <field name="res_model">update.amount.wizard</field>
+        <field name="binding_view_types">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+
+</odoo>

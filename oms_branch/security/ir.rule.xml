@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="purchase_branch_admin_rule" model="ir.rule">
+            <field name="name">Purchase Admins - See All Branches</field>
+            <field name="model_id" ref="purchase.model_purchase_order"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('purchase.group_purchase_manager'))]"/>
+        </record>
+        <record id="purchase_branch_user_rule" model="ir.rule">
+            <field name="name">Purchase Users - See Only Their Branches</field>
+            <field name="model_id" ref="purchase.model_purchase_order"/>
+            <field name="domain_force">[('branch_id', 'in', user.branch_ids.ids)]</field>
+            <field name="groups" eval="[(4, ref('purchase.group_purchase_user'))]"/>
+        </record>
+        
+    </data>
+</odoo>

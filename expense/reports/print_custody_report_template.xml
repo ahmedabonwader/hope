@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="print_expense_custody_reports_info">
+        <t t-call="web.html_container">
+            <t t-call="web.basic_layout">
+                <div class="page" style="margin: 0 30px;">
+                    <div style="text-align: center; font-family: KacstOne; color: #003366;">
+                        <t t-if="data and len(data) > 0">
+                            <h3 t-esc="data[0]['company_name']" style="text-decoration: underline;"/>
+                        </t>
+                        <h3 style="text-decoration: underline;">Finance Management</h3>
+                        <h3 style="text-decoration: underline;">Custody Report</h3>
+                    </div>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <div style="margin-top: 5px;">
+                        <table class="table table-sm" dir="rtl" style="width: 100%; table-layout: fixed;">
+                            <thead >
+                                <tr style="border-bottom: 2px solid #003366;">
+                                    <th style="padding: 10px; text-align: center;">Balance</th>
+                                    <th style="padding: 10px; text-align: center;">Credit</th>
+                                    <th style="padding: 10px; text-align: center;">Debit</th>
+                                    <th style="padding: 10px; text-align: center;">Reference</th>
+                                    <th style="padding: 10px; text-align: center;">Partner</th>
+                                    <th style="padding: 10px; text-align: center; min-width: 150px;">Date</th>
+                                    <th style="padding: 10px; text-align: center; min-width: 150px;">Journal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="data" t-as="expense">
+                                    <tr>
+                                        <td style="direction: ltr; text-align: right;">
+                                            <t t-esc="expense['balance']" t-options="{'widget': 'float', 'precision': 2}"/>
+                                        </td>
+                                        <td style="direction: ltr; text-align: right;">
+                                            <t t-esc="expense['credit']" t-options="{'widget': 'float', 'precision': 2}"/>
+                                        </td>
+                                        <td style="direction: ltr; text-align: right;">
+                                            <t t-esc="expense['debit']" t-options="{'widget': 'float', 'precision': 2}"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="expense['reference']"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="expense['partner']"/>
+                                        </td>
+                                        <td style="min-width: 150px;">
+                                            <t t-esc="expense['date']"/>
+                                        </td>
+                                        <td style="min-width: 150px;">
+                                            <t t-esc="expense['journal']"/>
+                                        </td>
+                                    </tr>
+                                </t>
+
+                                <tr style="border-top: 2px solid #004085;">
+                                    <td style="direction: ltr; text-align: left; padding-left: 20px; white-space: nowrap; font-weight: bold;">
+                                        <t t-esc="total_balance or 0.0" t-options="{'widget': 'float', 'precision': 2}"/>
+                                    </td>
+
+                                    <td colspan="6" style="text-align: left; padding-left: 30px;">
+                                        <span style="font-weight: bold;">Total Balance</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <t t-set="h" t-value="authorized[0]"/>
+                        <table class="o_has_total_table table o_main_table table-borderless mt-4"
+                            style="font-size: 11px; width: 100%; page-break-inside: avoid;">
+                            <thead>
+                                <tr style="border-bottom: 2px solid #003366;">
+                                    <th style="text-align: left; width: 20%; vertical-align: middle;"><strong>Position</strong></th>
+                                    <th style="text-align: left; width: 25%; vertical-align: middle;"><strong>Name</strong></th>
+                                    <th style="text-align: left; width: 30%; vertical-align: middle;"><strong>Signature</strong></th>
+                                    <th style="text-align: left; width: 25%; vertical-align: middle;"><strong>Date</strong></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Prepared by</td>
+                                    <td><span t-esc="h['prepared']"/></td>
+                                    <td>
+                                        <img t-if="h['signature_prepared']" t-att-src="'data:image/png;base64,%s' % h['signature_prepared']" style="max-height: 50px;" />
+                                    </td>
+                                    <td><span t-esc="h['date']"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Reviewed by</td>
+                                    <td><span t-esc="h['reviewed']"/></td>
+                                    <td>
+                                        <img t-if="h['signature_reviewed']" t-att-src="'data:image/png;base64,%s' % h['signature_reviewed']" style="max-height: 50px;" />
+                                    </td>
+                                    <td><span t-esc="h['date']"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Approved by</td>
+                                    <td><span t-esc="h['approved']"/></td>
+                                    <td>
+                                        <img t-if="h['signature_approved']" t-att-src="'data:image/png;base64,%s' % h['signature_approved']" style="max-height: 50px;" />
+                                    </td>
+                                    <td><span t-esc="h['date']"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <record id="create_custody_paper_format" model="report.paperformat">
+            <field name='name'>Custom A4</field>
+            <field name="default" eval="False"/>
+            <field name="disable_shrinking" eval="True"/>
+            <field name='format'>custom</field>
+            <field name='orientation'>Landscape</field>
+            <field name='page_height'>0</field>
+            <field name='page_width'>0</field>
+            <field name='margin_top'>3</field>
+            <field name='margin_bottom'>1</field>
+            <field name='margin_left'>0</field>
+            <field name='margin_right'>0</field>
+            <field name='header_spacing'>35</field>
+            <field name='dpi'>90</field>
+        </record>
+
+    <record id="print_expense_custody_reports" model="ir.actions.report">
+        <field name="name">Expense Custody Report</field>
+        <field name="model">hms.expense.request</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="paperformat_id" ref="expense.create_custody_paper_format"/>
+        <field name="report_name">expense.print_expense_custody_reports_info</field>
+        <field name="report_file">expense.print_expense_custody_reports_info</field>
+    </record>
+</odoo>

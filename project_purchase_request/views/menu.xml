@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem 
+            id="menu_purchase_request_root" 
+            name="Request(TOR/PRS)" sequence="10"/>
+
+    <menuitem 
+        id="menu_purchase_request"
+        name=" TOR Request" 
+        parent="menu_purchase_request_root"
+        action="action_purchase_request"
+        sequence="10"/>
+
+    <menuitem
+        id="menu_prs_project"
+        name="PRS Request"
+        parent="menu_purchase_request_root"
+        action="action_purchase_prs_request"
+        sequence="15"/>
+
+    <menuitem
+        id="menu_get_old_data"
+        name="Get Old Data"
+        parent="menu_purchase_request_root"
+        action="view_old_data_wizard_action"
+        active="0"
+        sequence="20"/>
+</odoo>

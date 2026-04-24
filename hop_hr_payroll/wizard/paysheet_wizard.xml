@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="view_paysheet_wizard_form" model="ir.ui.view">
+            <field name="name">paysheet.wizard</field>
+            <field name="model">paysheet.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Daily Report">
+                    <group>
+                        <group>
+                            <field name="print_type" widget="radio" options="{'horizontal':true}" required="1"/>
+                        </group>
+                        <group>
+                            <field name="payslip_id" readonly="1"/>
+                        </group>
+                    </group>
+                    
+                    <footer>
+                        <button name="action_print_report" string="Print" type="object" class="oe_highlight"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_paysheet_wizard_action" model="ir.actions.act_window">
+            <field name="name">Salary Payment Sheet</field> 
+            <field name="res_model">paysheet.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="print_vendors_bills_reports_info">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <t t-foreach="docs" t-as="doc">
+
+                    <!-- عنوان التقرير -->
+                    <div style="text-align: center; font-family: KacstOne; color: #003366;">
+                        <h3 style="text-decoration: underline;">Voucher Payment</h3>
+                    </div>
+                    <br/>
+                    <br/>
+                    <br/>
+
+                    <!-- معلومات عامة -->
+                    <div class="row my-1"
+                         style="font-size:13px; width:100%; text-align:center; margin-bottom:10px; margin-top:10px;">
+
+                        <div class="col-3">
+                            <h6 class="text-center" style="color: #FFBF00;">
+                                <strong>Ref</strong>
+                            </h6>
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <span t-field="doc.name"
+                                          style="font-size: 18px; color: #007bff; font-weight: bold;"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-3">
+                            <h6 class="text-center" style="color: #FFBF00;">
+                                <strong>Bank Transfer Reference</strong>
+                            </h6>
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <span t-field="doc.bank_transfer_ref"
+                                          style="font-size: 18px; color: #007bff; font-weight: bold;"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-3">
+                            <h6 class="text-center" style="color: #FFBF00;">
+                                <strong>Payee Name</strong>
+                            </h6>
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <span t-field="doc.partner_id.name"
+                                          style="font-size: 18px; color: #007bff; font-weight: bold;"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-3">
+                            <h6 class="text-center" style="color: #FFBF00;">
+                                <strong>Invoice Date</strong>
+                            </h6>
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <span t-field="doc.invoice_date"
+                                          style="font-size: 18px; color: #007bff; font-weight: bold;"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+
+                    <!-- جدول البنود -->
+                    <div style="width: 100%; padding: 0 40px; box-sizing: border-box;">
+                        <table class="table table-sm" dir="rtl"
+                               style="width: 100%; table-layout: fixed; font-size: 16px; border-collapse: collapse; margin: 0;">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:right; vertical-align: middle; width: 15%;">Amount</th>
+                                    <th style="text-align:right; vertical-align: middle; width: 10%;">Taxes</th>
+                                    <th style="text-align:right; vertical-align: middle; width: 15%;">Unit Price</th>
+                                    <th style="text-align:right; vertical-align: middle; width: 10%;">Quantity</th>
+                                    <th style="text-align:left; vertical-align: middle; width: 50%;">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="doc.invoice_line_ids" t-as="line">
+                                    <tr>
+                                        <td style="text-align:right; vertical-align: middle;">
+                                            <t t-set="subtotal" t-value="line.price_subtotal"/>
+                                            <span t-esc="subtotal"/>
+                                            <span style="font-size: 12px;" t-esc="doc.currency_id.name"/>
+                                        </td>
+
+                                        <td style="text-align:right; vertical-align: middle;">
+                                            <!-- Taxes -->
+                                        </td>
+                                        <td style="text-align:right; vertical-align: middle;">
+                                            <span t-field="line.price_unit"/>
+                                        </td>
+                                        <td style="text-align:right; vertical-align: middle;">
+                                            <span t-field="line.quantity"/>
+                                        </td>
+                                        <td style="text-align:left; vertical-align: middle;">
+                                            <t t-if="line.product_id and line.name and line.name != line.product_id.name">
+                                                <span t-esc="line.product_id.name"/>
+                                                -
+                                                <span t-esc="line.name"/>
+                                            </t>
+                                            <t t-elif="line.product_id">
+                                                <span t-esc="line.product_id.name"/>
+                                            </t>
+                                            <t t-else="">
+                                                <span t-esc="line.name"/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                </t>
+
+                                <tr>
+                                    <td colspan="5">
+                                        <hr style="border: 1px solid #000; margin: 5px 0;"/>
+                                    </td>
+                                </tr>
+                                <tr style="text-align:right; font-weight:bold; color: #003366;">
+                                    <td colspan="5">
+                                        <t t-set="total_amount"
+                                           t-value="sum(doc.invoice_line_ids.mapped('price_subtotal'))"/>
+                                        Total:
+                                        <t t-esc="total_amount"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <table class="o_has_total_table table o_main_table table-borderless mt-4">
+                            <thead>
+                                <tr>
+                                    <th class="text-start">
+                                        <strong>Position</strong>
+                                    </th>
+                                    <th class="text-start">
+                                        <strong>Name</strong>
+                                    </th>
+                                    <th class="text-start">
+                                        <strong>Job Title</strong>
+                                    </th>
+                                    <th class="text-start">
+                                        <strong>Signature</strong>
+                                    </th>
+                                    <th class="text-start">
+                                        <strong>Date</strong>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Prepared by</td>
+                                    <td>
+                                        <span t-field="doc.signs_prepared"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="doc.prepared_job_title"/>
+                                    </td>
+                                    <td>
+                                        <img t-if="doc.sign_prepared and (doc.sign_prepared.check_image and doc.sign_prepared.signature_image or doc.sign_prepared.digital_signature)"
+                                             t-att-src="image_data_uri(doc.sign_prepared.check_image and doc.sign_prepared.signature_image or doc.sign_prepared.digital_signature)"
+                                             style="max-height: 50px;"
+                                             alt="signature"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="doc.date_prepared"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Reviewed by</td>
+                                    <td>
+                                        <span t-field="doc.sign_reviewed"/>
+                                    </td>
+                                     <td>
+                                        <span t-field="doc.reviewed_job_title"/>
+                                    </td>
+                                    <td>
+                                        <img t-if="doc.signature_reviewed and (doc.signature_reviewed.check_image and doc.signature_reviewed.signature_image or doc.signature_reviewed.digital_signature)"
+                                             t-att-src="image_data_uri(doc.signature_reviewed.check_image and doc.signature_reviewed.signature_image or doc.signature_reviewed.digital_signature)"
+                                             style="max-height: 50px;"
+                                             alt="signature"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="doc.date_review"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Approved by</td>
+                                    <td>
+                                        <span t-field="doc.sign_approved"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="doc.approved_job_title"/>
+                                    </td>
+                                    <td>
+                                        <img t-if="doc.signature_approved and (doc.signature_approved.check_image and doc.signature_approved.signature_image or doc.signature_approved.digital_signature)"
+                                             t-att-src="image_data_uri(doc.signature_approved.check_image and doc.signature_approved.signature_image or doc.signature_approved.digital_signature)"
+                                             style="max-height: 50px;"
+                                             alt="signature"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="doc.date_approve"/>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- تعريف التقرير -->
+    <record id="print_vendors_bills_reports" model="ir.actions.report">
+        <field name="name">Vendors Bills Report</field>
+        <field name="model">account.move</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">inherit_account_move.print_vendors_bills_reports_info</field>
+        <field name="report_file">inherit_account_move.print_vendors_bills_reports_info</field>
+    </record>
+</odoo>

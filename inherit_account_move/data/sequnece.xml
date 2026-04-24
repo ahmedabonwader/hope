@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="seq_oms_bank_list" model="ir.sequence">
+        <field name="name">Bank List</field>
+        <field name="code">bank.list</field>
+        <field name="prefix">B</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="seq_oms_bank_letters" model="ir.sequence">
+        <field name="name">Bank Letters</field>
+        <field name="code">bank.letters</field>
+        <field name="prefix">L</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>

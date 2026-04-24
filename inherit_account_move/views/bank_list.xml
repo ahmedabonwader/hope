@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_bank_list_list" model="ir.ui.view">
+        <field name="name">bank.list</field>
+        <field name="model">bank.list</field>
+        <field name="arch" type="xml">
+            <list
+                    decoration-success="state == 'active'"
+                    decoration-danger="state == 'close'"
+                    decoration-warning="state == 'suspend'"
+                    decoration-info="state == 'draft'">
+                <field name="ref"/>
+                <field name="name"/>
+                <field name="date"/>
+                <field name="branch"/>
+                <field name="number"/>
+                <field name="state"
+                       decoration-success="state == 'active'"
+                       decoration-danger="state == 'close'"
+                       decoration-warning="state == 'suspend'"
+                       decoration-info="state == 'draft'"
+                       widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_bank_list_form" model="ir.ui.view">
+        <field name="name">bank.list.form</field>
+        <field name="model">bank.list</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_active" string="Active" type="object" data-hotkey="k"
+                            class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_reset_to_draft" string="Reset To Draft" type="object" data-hotkey="k"
+                            invisible="state == 'draft'"/>
+                    <button name="action_suspend" string="Suspend" type="object" data-hotkey="k"
+                            class="btn-warning" invisible="state != 'active'"/>
+                    <button name="action_close" string="Close" type="object" data-hotkey="k"
+                            class="btn-danger" invisible="state in ('close', 'draft')"/>
+                    <field name="state" widget="statusbar" nolabel="1"/>
+                </header>
+                <sheet>
+                    <div class="oe_titel">
+                        <h4>
+                            <field name="ref" readonly="1"/>
+                        </h4>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                            <field name="bank_name" required="1"/>
+                            <field name="date"/>
+                        </group>
+                        <group>
+                            <field name="branch" required="1"/>
+                            <field name="number" required="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter reload_on_attachment="True"/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_bank_list_search" model="ir.ui.view">
+        <field name="name">bank.list.search</field>
+        <field name="model">bank.list</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="branch"/>
+                <field name="number"/>
+                <searchpanel>
+                    <field name="state" icon="fa-users" string="State" enable_counters="1"/>
+                </searchpanel>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_bank_list" model="ir.actions.act_window">
+        <field name="name">Bank List</field>
+        <field name="res_model">bank.list</field>
+        <field name="view_mode">list,form,search</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your Bank List !!!
+            </p>
+        </field>
+    </record>
+
+
+</odoo>

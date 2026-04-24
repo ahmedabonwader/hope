@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Main Custody Menu under Accounting -->
+    <menuitem id="menu_custody_root"
+              name="Custodies"
+              parent="account.menu_finance"
+              action="action_custody"
+              sequence="6"/>
+    
+   
+    
+    <!-- HR Custody Records Menu -->
+    <menuitem id="menu_hr_custody"
+              name="Custody Records"
+              parent="hr.menu_hr_root"
+              action="custody.action_hr_custody"
+              sequence="10"/>
+   
+   
+   <menuitem id="menu_hr_custody_config"
+              name="Configuration"
+              parent="hr.menu_human_resources_configuration"
+              sequence="100"/>
+    <menuitem id="menu_custody_item"
+              name="Custody Items"
+              parent="menu_hr_custody_config"
+              action="action_custody_item"
+              sequence="1"/>
+
+</odoo> 

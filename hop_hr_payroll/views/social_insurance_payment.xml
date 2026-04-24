@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_social_insurance_payment_tree" model="ir.ui.view">
+        <field name="name">social.insurance.payment.list</field>
+        <field name="model">social.insurance.payment</field>
+        <field name="arch" type="xml">
+            <list
+                    decoration-success="state == 'done'"
+                    decoration-info="state == 'draft'"
+                    decoration-warning="state == 'review'">
+                <field name="ref"/>
+                <field name="name"/>
+                <field name="date"/>
+                <field name="project_id"/>
+                <field name="total_amount"/>
+                <field name="state"
+                       decoration-success="state == 'done'"
+                       decoration-info="state == 'draft'"
+                       decoration-warning="state == 'review'"
+                       widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_social_insurance_payment_form" model="ir.ui.view">
+        <field name="name">social.insurance.payment.form</field>
+        <field name="model">social.insurance.payment</field>
+        <field name="arch" type="xml">
+            <form string="Activity">
+                <header>
+                    <button name="action_confirm" string="Confirm" type="object"
+                            class="oe_highlight" data-hotkey="k" invisible="state != 'draft'"/>
+                    <button name="action_review" string="Review" type="object"
+                            class="oe_highlight" data-hotkey="k" invisible="state != 'confirm'"/>
+                    <button name="action_approve" string="Approve" type="object"
+                            class="oe_highlight" data-hotkey="k" invisible="state != 'review'"/>
+                    <button name="action_done" string="Done" type="object"
+                            class="oe_highlight" data-hotkey="k" invisible="state != 'approve'"/>
+                    <button name="action_create_bill" string="Create Bill" type="object"
+                            class="oe_highlight" data-hotkey="k" invisible="state != 'done' or craeted_bill == True"/>
+                    <button name="action_back" string="Rest To Draft" type="object"
+                            data-hotkey="k" invisible="state != 'confirm'"/>
+                    <field name="state" widget="statusbar" nolabel="1"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box" position="inside">
+                        <button name="action_bill_count" type="object" class="oe_stat_button" icon="fa-rouble">
+                            <div class="o_stat_info">
+                                <field name="bill_count" class="o_stat_value"/>
+                                <span class="o_stat_text">Bills</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="oe_titel">
+                        <h4>
+                            <field name="ref" readonly="1"/>
+                        </h4>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="date" readonly="1"/>
+                            <field name="operation_type" widget="radio" options="{'horizontal':true}" required="1" readonly="state != 'draft'"/>
+                            <field name="salary_type" widget="radio" options="{'horizontal':true}" required="1" readonly="state != 'draft'"/>
+                            <field name="project_id" readonly="state != 'draft'" invisible="salary_type == 'by_contract'"
+                                   required="salary_type == 'by_project'"/>
+                            <field name="account_id" invisible="state == 'draft'" readonly="state != 'confirm'"
+                                   required="state == 'confirm'"/>
+                            <field name="budget_line" invisible="state == 'draft'" readonly="state != 'confirm'" domain="[('project_id', '=', project_id), ('account_id', '=', account_id)]"
+                                   required="state == 'confirm'"/>
+                            <field name="approval_currency_id" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="total_amount" readonly="1" widget="monetary" force_save="1"
+                                               options="{'currency_field': 'currency_id'}"/>
+                            <field name="amount_in_currency" readonly="1"/>
+                            
+                            <field name="currency_id" readonly="1"/>
+                            <field name="branch_id" readonly="0"/>
+                            <field name="payslips_batches_ids" widget="many2many_tags" domain="[('project_id', '=', project_id), ('state', '=', 'done')]"
+                                   readonly="state != 'draft'"/>
+                            <field name="craeted_bill" invisible="1"/>
+                            <field name="user_id" readonly="1"/>
+                            
+                        </group>
+                    </group>
+                </sheet>
+                <!-- Chatter -->
+                <chatter reload_on_attachment="True"/>
+            </form>
+        </field>
+    </record>
+    <record id="view_social_insurance_payment_search" model="ir.ui.view">
+        <field name="name">social.insurance.payment.search</field>
+        <field name="model">social.insurance.payment</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="ref"/>
+                <searchpanel>
+                    <field name="state" icon="fa-users" string="State" enable_counters="1"/>
+                    <field name="operation_type" icon="fa-users" string="Operation Type" enable_counters="1"/>
+                </searchpanel>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_social_insurance_payment" model="ir.actions.act_window">
+        <field name="name">Social Insurance Payment</field>
+        <field name="res_model">social.insurance.payment</field>
+        <field name="view_mode">list,form,search</field>
+        <field name="context">{"search_default_state":'run'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your First Social Insurance Payment !
+            </p>
+        </field>
+    </record>
+
+</odoo>

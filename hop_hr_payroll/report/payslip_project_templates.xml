@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="create_report_view">
+            <t t-call="web.basic_layout">
+                <div class="page">
+                    <!-- Company Header -->
+                    <table border="0" width="100%" height="100%" align="center">
+                        <tr align="center">
+                            <td style="padding:5px 0px 10px 0px;" width="15%"></td>
+                            <td style="padding:10px" width="70%">
+                                <h4 style="text-align:center; font-family: Amiri;font-weight: bold;">Hope and Friendship
+                                    for Development Organization
+                                </h4>
+                                <h4 style="text-align:center; font-family: Amiri;font-weight: bold;">Staff Monthly
+                                    Salary
+                                </h4>
+                                <h4 style="text-align:center; font-family: Amiri; font-weight: bold;">
+                                    <span t-field="docs.month" t-options="{'widget': 'selection'}"/>
+                                    Paysheet
+                                </h4>
+                                <t t-if="docs.salary_type == 'by_project'">
+                                    <div class="col-4">
+                                        <h6 class="text-center" style="color: #FFBF00;">
+                                            <strong>Project Code</strong>
+                                        </h6>
+                                        <div class="row">
+                                            <div class="col-12 text-center">
+                                                <span t-field="docs.project_id.project_code"
+                                                      style="font-size: 16px; color: #003366;"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </t>
+                                <br/>
+                                <t t-if="docs.state_id">
+                                    <div>State:
+                                        <t t-esc="docs.state_id.name"/>
+                                    </div>
+                                </t>
+                                <t t-if="docs.salary_type != 'by_project'">
+                                    <h4 style="text-align:center; font-family: Amiri;font-weight: bold;">
+                                        <span t-esc="docs.date_from.strftime('%B %Y')"/>
+                                        Paysheet
+                                    </h4>
+                                </t>
+                            </td>
+                            <td style="padding:5px 0px 10px 0px;" width="15%"></td>
+                        </tr>
+                    </table>
+
+                    <!-- Table -->
+                    <table style="width:100%; margin-top:20px; font-size: 8px; border-collapse: collapse; table-layout: fixed;">
+                        <thead>
+                            <tr style="background-color:#dfdfdf; height: 35px;">
+                                <th style="border:1px solid black; width: 3%; text-align:center; vertical-align: middle;">NO</th>
+                                <th style="border:1px solid black; width: 12%; text-align:center; vertical-align: middle;">Name</th>
+                                <th style="border:1px solid black; width: 10%; text-align:center; vertical-align: middle;">Title</th>
+                                <th style="border:1px solid black; width: 6%; text-align:center; vertical-align: middle;">Gross</th>
+                                <th style="border:1px solid black; width: 6%; text-align:center; vertical-align: middle;">Basic</th>
+                                <th style="border:1px solid black; width: 5%; text-align:center; vertical-align: middle;">Cola</th>
+                                <th style="border:1px solid black; width: 6%; text-align:center; vertical-align: middle;">Transport</th>
+                                <th style="border:1px solid black; width: 5%; text-align:center; vertical-align: middle;">Hazard</th>
+                                <th style="border:1px solid black; width: 5%; text-align:center; vertical-align: middle;">Housing</th>
+                                <th style="border:1px solid black; width: 7%; text-align:center; vertical-align: middle;">Soc. Ins.</th>
+                                <th style="border:1px solid black; width: 5%; text-align:center; vertical-align: middle;">Taxes</th>
+                                <th style="border:1px solid black; width: 5%; text-align:center; vertical-align: middle;">Loan</th>
+                                <th style="border:1px solid black; width: 5%; text-align:center; vertical-align: middle;">Advance</th>
+                                <th style="border:1px solid black; width: 6%; text-align:center; vertical-align: middle;">Net</th>
+                                <th style="border:1px solid black; width: 6%; text-align:center; vertical-align: middle;">Net(SDG)</th>
+                                <t t-if="docs.print_type == 'with_signature'">
+                                    <th style="border:1px solid black; width: 10%; text-align:center; vertical-align: middle;">Signature</th>
+                                </t>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-set="counter" t-value="1"/>
+                            <t t-set="total_gross" t-value="0"/>
+                            <t t-set="total_basic" t-value="0"/>
+                            <t t-set="total_cola" t-value="0"/>
+                            <t t-set="total_transport" t-value="0"/>
+                            <t t-set="total_hazard" t-value="0"/>
+                            <t t-set="total_housing" t-value="0"/>
+                            <t t-set="total_insurance" t-value="0"/>
+                            <t t-set="total_taxes" t-value="0"/>
+                            <t t-set="total_loan" t-value="0"/>
+                            <t t-set="total_advance" t-value="0"/>
+                            <t t-set="total_net" t-value="0"/>
+                            <t t-set="total_net_sdg" t-value="0"/>
+
+                            <t t-foreach="docs.batches_line_ids" t-as="order_line">
+                                <tr style="height: 40px;">
+                                    <td style="border:1px solid black; text-align:center; vertical-align: middle;"><span t-esc="counter"/></td>
+                                    <td style="border:1px solid black; text-align: left; vertical-align: middle; padding-left: 2px;">
+                                        <span t-field="order_line.employee_id.name" style="display: inline-block; vertical-align: middle;"/>
+                                    </td>
+                                    <td style="border:1px solid black; text-align: left; vertical-align: middle; padding-left: 2px;">
+                                        <span t-field="order_line.job_title" style="display: inline-block; vertical-align: middle;"/>
+                                    </td>
+                                    <td style="border:1px solid black; text-align:center; vertical-align: middle;"><span t-field="order_line.gross_salary_usd"/> <span t-if="order_line.curr_id" t-esc="order_line.curr_id.symbol"/></td>
+                                    <td style="border:1px solid black; text-align:center; vertical-align: middle;"><span t-field="order_line.basic_monthly_salary"/> <span t-if="order_line.curr_id" t-esc="order_line.curr_id.symbol"/></td>
+                                    <td style="border:1px solid black; text-align:center; vertical-align: middle;"><span t-field="order_line.cola"/> <span t-if="order_line.curr_id" t-esc="order_line.curr_id.symbol"/></td>
+                                    <td style="border:1px solid black; text-align:center; vertical-align: middle;"><span t-field="order_line.transportation"/> <span t-if="order_line.curr_id" t-esc="order_line.curr_id.symbol"/></td>
+                                    <td style="border:1px solid black; text-align:center; vertical-align: middle;"><span t-field="order_line.hazard"/> <span t-if="order_line.curr_id" t-esc="order_line.curr_id.symbol"/></td>
+                                    <td style="border:1px solid black; text-align:center; vertical-align: middle;"><span t-field="order_line.housing"/> <span t-if="order_line.curr_id" t-esc="order_line.curr_id.symbol"/></td>
+                                    <td style="border:1px solid black; text-align:center; vertical-align: middle;"><span t-field="order_line.insurance_usd"/> <span t-if="order_line.curr_id" t-esc="order_line.curr_id.symbol"/></td>
+                                    <td style="border:1px solid black; text-align:center; vertical-align: middle;"><span t-field="order_line.taxes_usd"/> <span t-if="order_line.curr_id" t-esc="order_line.curr_id.symbol"/></td>
+                                    <td style="border:1px solid black; text-align:center; vertical-align: middle;"><span t-field="order_line.loan"/> <span t-if="order_line.curr_id" t-esc="order_line.curr_id.symbol"/></td>
+                                    <td style="border:1px solid black; text-align:center; vertical-align: middle;"><span t-field="order_line.advance"/> <span t-if="order_line.curr_id" t-esc="order_line.curr_id.symbol"/></td>
+                                    <td style="border:1px solid black; text-align:center; vertical-align: middle;"><span t-field="order_line.net_salary"/> <span t-if="order_line.curr_id" t-esc="order_line.curr_id.symbol"/></td>
+                                    <td style="border:1px solid black; text-align:center; vertical-align: middle;"><span t-field="order_line.salary_in_sdg"/></td>
+                                    <t t-if="docs.print_type == 'with_signature'">
+                                        <td style="border:1px solid black; vertical-align: middle;"></td>
+                                    </t>
+
+                                    <t t-set="total_gross" t-value="total_gross + (order_line.gross_salary_usd or 0)"/>
+                                    <t t-set="total_basic" t-value="total_basic + (order_line.basic_monthly_salary or 0)"/>
+                                    <t t-set="total_cola" t-value="total_cola + (order_line.cola or 0)"/>
+                                    <t t-set="total_transport" t-value="total_transport + (order_line.transportation or 0)"/>
+                                    <t t-set="total_hazard" t-value="total_hazard + (order_line.hazard or 0)"/>
+                                    <t t-set="total_housing" t-value="total_housing + (order_line.housing or 0)"/>
+                                    <t t-set="total_insurance" t-value="total_insurance + (order_line.insurance_usd or 0)"/>
+                                    <t t-set="total_taxes" t-value="total_taxes + (order_line.taxes_usd or 0)"/>
+                                    <t t-set="total_loan" t-value="total_loan + (order_line.loan or 0)"/>
+                                    <t t-set="total_advance" t-value="total_advance + (order_line.advance or 0)"/>
+                                    <t t-set="total_net" t-value="total_net + (order_line.net_salary or 0)"/>
+                                    <t t-set="total_net_sdg" t-value="total_net_sdg + (order_line.salary_in_sdg or 0)"/>
+                                    <t t-set="counter" t-value="counter + 1"/>
+                                </tr>
+                            </t>
+
+                            <tr style="background-color:#efefef; font-weight: bold; height: 35px;">
+                                <td colspan="3" style="border:1px solid black; text-align:center; vertical-align: middle;">TOTAL</td>
+                                <td style="border:1px solid black; text-align:center; vertical-align: middle;">  <span t-if="docs.batches_line_ids[:1].curr_id"
+                                          t-esc="docs.batches_line_ids[:1].curr_id.symbol"/><span t-esc="'{:,.0f}'.format(total_gross)"/></td>
+                                <td style="border:1px solid black; text-align:center; vertical-align: middle;"> <span t-if="docs.batches_line_ids[:1].curr_id"
+                                          t-esc="docs.batches_line_ids[:1].curr_id.symbol"/><span t-esc="'{:,.0f}'.format(total_basic)"/></td>
+                                <td style="border:1px solid black; text-align:center; vertical-align: middle;"> <span t-if="docs.batches_line_ids[:1].curr_id"
+                                          t-esc="docs.batches_line_ids[:1].curr_id.symbol"/><span t-esc="'{:,.0f}'.format(total_cola)"/></td>
+                                <td style="border:1px solid black; text-align:center; vertical-align: middle;"> <span t-if="docs.batches_line_ids[:1].curr_id"
+                                          t-esc="docs.batches_line_ids[:1].curr_id.symbol"/><span t-esc="'{:,.0f}'.format(total_transport)"/></td>
+                                <td style="border:1px solid black; text-align:center; vertical-align: middle;"> <span t-if="docs.batches_line_ids[:1].curr_id"
+                                          t-esc="docs.batches_line_ids[:1].curr_id.symbol"/><span t-esc="'{:,.0f}'.format(total_hazard)"/></td>
+                                <td style="border:1px solid black; text-align:center; vertical-align: middle;"> <span t-if="docs.batches_line_ids[:1].curr_id"
+                                          t-esc="docs.batches_line_ids[:1].curr_id.symbol"/><span t-esc="'{:,.0f}'.format(total_housing)"/></td>
+                                <td style="border:1px solid black; text-align:center; vertical-align: middle;"> <span t-if="docs.batches_line_ids[:1].curr_id"
+                                          t-esc="docs.batches_line_ids[:1].curr_id.symbol"/><span t-esc="'{:,.0f}'.format(total_insurance)"/></td>
+                                <td style="border:1px solid black; text-align:center; vertical-align: middle;"> <span t-if="docs.batches_line_ids[:1].curr_id"
+                                          t-esc="docs.batches_line_ids[:1].curr_id.symbol"/><span t-esc="'{:,.0f}'.format(total_taxes)"/></td>
+                                <td style="border:1px solid black; text-align:center; vertical-align: middle;"> <span t-if="docs.batches_line_ids[:1].curr_id"
+                                          t-esc="docs.batches_line_ids[:1].curr_id.symbol"/><span t-esc="'{:,.0f}'.format(total_loan)"/></td>
+                                <td style="border:1px solid black; text-align:center; vertical-align: middle;"> <span t-if="docs.batches_line_ids[:1].curr_id"
+                                          t-esc="docs.batches_line_ids[:1].curr_id.symbol"/><span t-esc="'{:,.0f}'.format(total_advance)"/></td>
+                                <td style="border:1px solid black; text-align:center; vertical-align: middle;"> <span t-if="docs.batches_line_ids[:1].curr_id"
+                                          t-esc="docs.batches_line_ids[:1].curr_id.symbol"/><span t-esc="'{:,.0f}'.format(total_net)"/></td>
+                                <td style="border:1px solid black; text-align:center; vertical-align: middle;"><span t-esc="'{:,.0f}'.format(total_net_sdg)"/></td>
+                                <t t-if="docs.print_type == 'with_signature'">
+                                    <td style="border:1px solid black; vertical-align: middle;"></td>
+                                </t>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <br/>
+                    <!-- الشرط -->
+                    <t t-if="len(docs.batches_line_ids) > 9">
+                        <!-- Page Break للتواقيع -->
+                        <div style="page-break-before: always; margin-top:50px;"></div>
+                    </t>
+
+                    <table class="o_has_total_table table o_main_table table-borderless mt-4">
+                        <thead style="border-bottom: 2px solid black;">
+                            <tr>
+                                <th class="text-start">
+                                    <strong>Position</strong>
+                                </th>
+                                <th class="text-start">
+                                    <strong>Name</strong>
+                                </th>
+                                <th class="text-start">
+                                    <strong>Signature</strong>
+                                </th>
+                                <th class="text-start">
+                                    <strong>Date</strong>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Prepared by</td>
+                                <td>
+                                    <span t-field="docs.created_by.name"/>
+                                </td>
+                                <td>
+                                    <img t-if="docs.created_by.digital_signature"
+                                         t-att-src="image_data_uri(docs.created_by.digital_signature)"
+                                         style="max-height: 50px;" alt="signature"/>
+                                </td>
+                                <td>
+                                    <span t-field="docs.date_prepared"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Reviewed by</td>
+                                <td>
+                                    <span t-field="docs.signature_reviewed.name"/>
+                                </td>
+                                <td>
+                                    <img t-if="docs.signature_reviewed.digital_signature"
+                                         t-att-src="image_data_uri(docs.signature_reviewed.digital_signature)"
+                                         style="max-height: 50px;" alt="signature"/>
+                                </td>
+                                <td>
+                                    <span t-field="docs.date_review"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Approved by</td>
+                                <td>
+                                    <span t-field="docs.signature_approved.name"/>
+                                </td>
+                                <td>
+                                    <img t-if="docs.signature_approved.digital_signature"
+                                         t-att-src="image_data_uri(docs.signature_approved.digital_signature)"
+                                         style="max-height: 50px;" alt="signature"/>
+                                </td>
+                                <td>
+                                    <span t-field="docs.date_approve"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </template>
+
+        <record id="create_report_paper_format" model="report.paperformat">
+            <field name='name'>Custom A4</field>
+            <field name="default" eval="False"/>
+            <field name="disable_shrinking" eval="True"/>
+            <field name='format'>custom</field>
+            <field name='orientation'>Landscape</field>
+            <field name='page_height'>0</field>
+            <field name='page_width'>0</field>
+            <field name='margin_top'>3</field>
+            <field name='margin_bottom'>1</field>
+            <field name='margin_left'>0</field>
+            <field name='margin_right'>0</field>
+            <field name='header_spacing'>35</field>
+            <field name='dpi'>90</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_oms_branch,oms.branch,model_oms_branch,,1,1,1,1
+access_oms_branch_project,oms.branch.project,model_oms_branch_project,,1,1,1,1
+access_oms_branch_line,oms.branch.line,model_oms_branch_line,,1,1,1,1
+access_project_authorizations_line,project.authorizations.line,model_project_authorizations_line,,1,1,1,1
+

@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="create_report_view">
+            <t t-call="web.basic_layout">
+                <div class="page">
+                    <table style="border-collapse: collapse; border: none !important;  width: 100%; height: 100%; page-break-inside: avoid;" align="center">
+                        <tr align="center">
+                            <td style="padding:5px 0px 10px 0px;" width="15%"></td>
+                            <td style="padding:10px" width="70%">
+                                <h4 style="text-align:center; font-family: Amiri;font-weight: bold;">Project Title :
+                                    <span t-esc="project_name"/>
+                                </h4>
+                                <h4 style="text-align:center; font-family: Amiri;font-weight: bold;">Donor :
+                                    <span t-esc="donor"/>
+                                </h4>
+                                <t t-if="date_from">
+
+                                    <h4 style="text-align:center; font-family: Amiri;font-weight: bold;">Period :
+                                        From : <span t-esc="date_from"/> To: <span t-esc="date_to "/>
+                                    </h4>
+                                </t>
+                            </td>
+                            <td style="padding:5px 0px 10px 0px;" width="15%"></td>
+                        </tr>
+                    </table>
+                    <t t-foreach="budgets" t-as="budget">
+                        <t t-foreach="budget" t-as="budget_line">
+
+                            <!-- Table -->
+                            <t t-set="i" t-value="1"/>
+                            <t t-set="amount_usd" t-value="0"/>
+                            <t t-set="amount_sdg" t-value="0"/>
+                            <t t-set="amount_rate" t-value="0"/>
+                            <t t-set="balance_sdg" t-value="0"/>
+
+
+                            <table style="width:100%; margin-top:30px; border-collapse: collapse; page-break-inside: avoid;">
+                                <thead>
+                                    <tr style="background-color:#dfdfdf; text-align:center;">
+                                        <th style="border:1px solid black; width:3%;">NO#</th>
+                                        <th style="border:1px solid black; width:5%;">Budget Code</th>
+                                        <th style="border:1px solid black; width:5%;">Payment Name</th>
+                                        <th style="border:1px solid black; width:7%;">Transaction Details</th>
+                                        <th style="border:1px solid black; width:5%;">Bill Date</th>
+                                        <th style="border:1px solid black; width:5%;">Bill Reference</th>
+                                        <th style="border:1px solid black; width:5%;">Amount in USD</th>
+                                        <th style="border:1px solid black; width:5%;">Rate</th>
+                                        <th style="border:1px solid black; width:5%;">Amount in SDG<br/>(Credit)</th>
+                                        <th style="border:1px solid black; width:5%;">Amount in SDG<br/>(Debit)</th>
+                                        <th style="border:1px solid black; width:5%;">Balance In SDG</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <tr style="text-align:center;">
+                                        <td colspan="6" style="border:1px solid black;">
+                                            <span t-field="budget_line.quarter"/>
+                                            <!-- quarter['quarter'] -->
+                                        </td>
+                                        <td style="border:1px solid black;">
+                                            <span t-esc="budget.planned_amount" t-options="{'widget':'float','precision':0}"/>
+                                        </td>
+                                        <td style="border:1px solid black;">
+                                            <span t-esc="budget.rate" t-options="{'widget':'float','precision':0}"/>
+                                        </td>
+                                        <td style="border:1px solid black;">
+
+                                            <span t-esc="budget.get_foreign_exchange(price=budget_line.planned_amount, rate=budget_line.rate)" t-options="{'widget':'float','precision':0}"/>
+                                        </td>
+                                        <td style="border:1px solid black; ">
+                                        </td>
+                                        <td style="border:1px solid black;">
+                                            <span t-esc="budget.get_foreign_exchange(price=budget_line.planned_amount, rate=budget_line.rate)" t-options="{'widget':'float','precision':0}"/>
+                                            <t t-set="balance_sdg" t-value="budget.get_foreign_exchange(price=budget_line.planned_amount, rate=budget_line.rate)"/>
+                                        </td>
+                                    </tr>
+                                     <t t-set="line_no" t-value="0"/>
+                                    
+                                           <!-- <tr style="text-align:center;">
+                                                <td style="border:1px solid black; padding:8px;">
+
+                                                    <t t-set="line_no" t-value="line_no + 1"/>
+                                                    <span t-esc="quarter['quarter']"/>
+
+                                                </td>
+                                                <td style="border:1px solid black; padding:8px;">
+                                                    <span t-esc="bill['budget_item_line_id']"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                        </t> -->
+                                    <t t-foreach="docs" t-as="account_move">
+
+
+                                        <t t-as="line"
+                                        t-foreach="account_move.invoice_line_ids.filtered(lambda line: line.quarter_id == budget_line)">
+                                            <tr style="text-align:center;">
+                                                <td style="border:1px solid black;">
+
+                                                    <t t-set="line_no" t-value="line_no + 1"/>
+                                                    <span t-esc="line_no"/>
+
+                                                </td>
+                                                <td style="border:1px solid black;">
+                                                    <span t-field="line.budget_item_line_id"/>
+                                                </td>
+                                                <td style="border:1px solid black;">
+                                                    <span t-field="account_move.partner_id.name"/>
+                                                </td>
+
+                                                <td style="border:1px solid black;">
+                                                    <span t-field="line.name"/>
+                                                </td>
+
+                                                <td style="border:1px solid black;">
+                                                    <span t-field="account_move.invoice_date"/>
+                                                </td>
+                                                <td style="border:1px solid black;">
+                                                    <span t-field="account_move.name"/>
+                                                </td>
+                                                 <td style="border:1px solid black;">
+                                                    <span t-field="account_move.bank_transfer_ref"/>
+                                                </td>
+                                                <td style="border:1px solid black;">
+                                                    <span t-esc="account_move.get_foreign_exchange(price=line.price_subtotal, rate=account_move.rate)" t-options="{'widget':'float','precision':0}"/>
+                                                </td>
+                                                <td style="border:1px solid black;">
+                                                    <span t-field="account_move.rate" t-options="{'widget':'float','precision':0}"/>
+                                                </td>
+                                                <td style="border:1px solid black;">
+                                                    <t t-if="account_move.move_type == 'in_refund'">
+                                                        <span t-esc="line.price_subtotal"/>
+                                                        <t t-set="amount_sdg" t-value="amount_sdg - line.price_subtotal"/>
+                                                    </t>
+                                                    <t t-else="">
+                                                        ----
+                                                    </t>
+                                                </td>
+                                                <td style="border:1px solid black;">
+                                                    <t t-if="account_move.move_type == 'in_invoice'">
+                                                        <span t-esc="line.price_subtotal" t-options="{'widget':'float','precision':0}"/>
+                                                        <t t-set="amount_sdg" t-value="amount_sdg + line.price_subtotal"/>
+                                                    </t>
+                                                    <t t-else="">
+                                                        ----
+                                                    </t>
+                                                </td>
+                                                <td style="border:1px solid black;">
+                                                    <t t-if="account_move.move_type == 'in_invoice'">
+                                                        <t t-set="balance_sdg" t-value="balance_sdg - line.price_subtotal"/>
+                                                    </t>
+                                                    <t t-if="account_move.move_type == 'in_refund'">
+                                                        <t t-set="balance_sdg" t-value="balance_sdg + line.price_subtotal"/>
+                                                    </t>
+                                                    <span t-esc="balance_sdg" t-options="{'widget':'float','precision':0}"/>
+                                                </td>
+                                                <t t-if="account_move.move_type == 'in_invoice'">
+                                                    <t t-set="amount_usd"
+                                                t-value="amount_usd + account_move.get_foreign_exchange(price=line.price_subtotal, rate=account_move.rate)"/>
+                                                </t>
+                                                <t t-if="account_move.move_type == 'in_refund'">
+                                                    <t t-set="amount_usd" t-value="amount_usd - account_move.get_foreign_exchange(price=line.price_subtotal, rate=account_move.rate)"/>
+                                                </t>
+                                               
+                                                <!-- <t t-set="amount_rate"
+                                                t-value="amount_rate + account_move.rate"/> -->
+                                                
+                                                <!-- <t t-set="balance_sdg" t-value="balance_sdg - amount_sdg"/> -->
+                                            </tr>
+
+                                        </t>
+
+                                    </t>
+
+
+                                </tbody>
+                                <tr style="background-color:#dfdfdf; text-align:center;">
+                                    <th colspan="6" style="border:1px solid black; padding:8px;">Total</th>
+                                    <th style="border:1px solid black; padding:8px;">
+                                        <strong t-esc="amount_usd" t-options="{'widget':'float','precision':0}"/>
+                                    </th>
+                                    <th style="border:1px solid black; padding:8px;">
+                                        <strong t-esc="amount_rate" t-options="{'widget':'float','precision':0}"/>
+                                    </th>
+                                    <th style="border:1px solid black; padding:8px;">
+                                        ----
+                                    </th>
+                                    <th style="border:1px solid black; padding:8px;">
+                                        
+                                        <strong t-esc="amount_sdg" t-options="{'widget':'float','precision':0}"/>
+                                    </th>
+                                    <th style="border:1px solid black; padding:8px;">
+                                        <strong t-esc="budget.get_foreign_exchange(price=budget_line.planned_amount, rate=budget_line.rate) - amount_sdg" t-options="{'widget':'float','precision':0}"/>
+
+                                    </th>
+                                </tr>
+                            </table>
+                            <table style="width:40%; margin-top:30px; border-collapse: collapse; page-break-inside: avoid;">
+                                <thead>
+                                    <tr style="background-color:#dfdfdf; text-align:center;">
+                                        <th style="border:1px solid black; padding:8px;">quarter</th>
+                                        <th style="border:1px solid black; padding:8px;">Amount in USD</th>
+                                        <th style="border:1px solid black; padding:8px;">Rate</th>
+                                        <th style="border:1px solid black; padding:8px;">Amount in SDG</th>
+                                    </tr>
+                                    <tbody>
+                                        <tr style="text-align:center;">
+
+                                            <td style="border:1px solid black; padding:8px;">
+                                                <span t-field="budget_line.quarter"/>
+
+                                            </td>
+                                            <td style="border:1px solid black; padding:8px;">
+                                                <span t-field="budget_line.planned_amount" t-options="{'widget':'float','precision':0}"/>
+
+                                            </td>
+                                            <td style="border:1px solid black; padding:8px;">
+
+                                                <span t-field="budget_line.rate" t-options="{'widget':'float','precision':0}"/>
+
+                                            </td>
+                                            <td style="border:1px solid black; padding:8px;">
+                                                <span t-esc="budget.get_foreign_exchange(price=budget_line.planned_amount, rate=budget_line.rate)" t-options="{'widget':'float','precision':0}"/>
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </thead>
+                            </table>
+                        </t>
+                        <table class="o_has_total_table table o_main_table table-borderless mt-4"
+                            style="font-size: 11px; width: 100%; page-break-inside: avoid;">
+                            <thead>
+                                <tr style="border-bottom: 2px solid #003366;">
+                                    <th style="text-align: left; width: 20%; vertical-align: middle;"><strong>Position</strong></th>
+                                    <th style="text-align: left; width: 25%; vertical-align: middle;"><strong>Name</strong></th>
+                                    <th style="text-align: left; width: 30%; vertical-align: middle;"><strong>Signature</strong></th>
+                                    <th style="text-align: left; width: 25%; vertical-align: middle;"><strong>Date</strong></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Prepared by</td>
+                                    <td><span t-esc="prepared"/></td>
+                                    <td>
+                                        <img t-if="prepared_signature" t-att-src="'data:image/png;base64,%s' % prepared_signature" style="max-height: 50px;" />
+                                    </td>
+                                    <td><span t-esc="prepared_date"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Reviewed by</td>
+                                    <td><span t-esc="revision_review"/></td>
+                                    <td>
+                                        <img t-if="revision_review_signature" t-att-src="'data:image/png;base64,%s' % revision_review_signature" style="max-height: 50px;" />
+                                    </td>
+                                    <td><span t-esc="revision_review_date"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Approved by</td>
+                                    <td><span t-esc="revision_approve"/></td>
+                                    <td>
+                                        <img t-if="revision_approve_signature" t-att-src="'data:image/png;base64,%s' % revision_approve_signature" style="max-height: 50px;" />
+                                    </td>
+                                    <td><span t-esc="revision_approve_date"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </t>
+                   
+                </div>
+            </t>
+        </template>
+        <record id="create_report_paper_format" model="report.paperformat">
+            <field name='name'>Custom A4</field>
+            <field name="default" eval="False"/>
+            <field name="disable_shrinking" eval="True"/>
+            <field name='format'>custom</field>
+            <field name='orientation'>Landscape</field>
+            <field name='page_height'>0</field>
+            <field name='page_width'>0</field>
+            <field name='margin_top'>3</field>
+            <field name='margin_bottom'>1</field>
+            <field name='margin_left'>0</field>
+            <field name='margin_right'>0</field>
+            <field name='header_spacing'>35</field>
+            <field name='dpi'>90</field>
+        </record>
+
+
+    </data>
+</odoo>

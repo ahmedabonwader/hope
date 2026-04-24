@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View -->
+    <record id="view_journal_transfer_list" model="ir.ui.view">
+        <field name="name">journal.transfer.list</field>
+        <field name="model">journal.transfer</field>
+        <field name="arch" type="xml">
+            <list string="Journal Transfers" decoration-info="state == 'draft'" decoration-danger="state == 'cancelled'" decoration-success="state == 'posted'">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="from_journal_id"/>
+                <field name="to_journal_id"/>
+                <field name="transfer_date"/>
+                <field name="amount" sum="Total"/>
+                <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-danger="state == 'cancelled'" decoration-success="state == 'posted'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_journal_transfer_form" model="ir.ui.view">
+        <field name="name">journal.transfer.form</field>
+        <field name="model">journal.transfer</field>
+        <field name="arch" type="xml">
+            <form string="Journal Transfer">
+                <header>
+                    <button name="action_post" string="Post" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_draft" string="Reset to Draft" type="object" invisible="state not in ('cancelled','posted')"/>
+                    <button name="action_cancel" string="Cancel" type="object" invisible="state != 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,posted,cancelled"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object" name="action_view_payments" icon="fa-money">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Payments</span>
+                            </div>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Transfered" bg_color="text-bg-success" invisible="state != 'posted'"/>
+                    <widget name="web_ribbon" title="Cancelled" bg_color="text-bg-danger" invisible="state != 'cancelled'"/>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                            <field name="description"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="date" readonly="state == 'posted'"/>
+                            <field name="from_journal_id" options="{'no_create': True}" readonly="state == 'posted'"/>
+                            <field name="amount" readonly="state == 'posted'"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="interim_transfer_account_id" options="{'no_create': True}" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="transfer_date" readonly="0"/>
+                            <field name="to_journal_id" options="{'no_create': True}" readonly="state == 'posted'"/>
+                            <field name="rate" placeholder="let empty if same currency or use default exchange rate" readonly="state == 'posted'"/>
+                            <field name="transfer_amount" readonly="1"/>
+                            <field name="to_journal_currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Notes">
+                            <field name="notes" placeholder="Add notes here..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_journal_transfer_search" model="ir.ui.view">
+        <field name="name">journal.transfer.search</field>
+        <field name="model">journal.transfer</field>
+        <field name="arch" type="xml">
+            <search string="Journal Transfers">
+                <field name="name" string="Reference"/>
+                <field name="from_journal_id"/>
+                <field name="to_journal_id"/>
+                <field name="notes"/>
+                <filter string="Draft" name="draft" domain="[('state','=','draft')]"/>
+                <filter string="Posted" name="posted" domain="[('state','=','posted')]"/>
+                <filter string="Cancelled" name="cancelled" domain="[('state','=','cancelled')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="status" context="{'group_by': 'state'}"/>
+                    <filter string="From Journal" name="from_journal" context="{'group_by': 'from_journal_id'}"/>
+                    <filter string="To Journal" name="to_journal" context="{'group_by': 'to_journal_id'}"/>
+                    <filter string="Date" name="date" context="{'group_by': 'date'}"/>
+                    <filter string="Transfer Date" name="transfer_date" context="{'group_by': 'transfer_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+     <record id="action_journal_transfer" model="ir.actions.act_window">
+        <field name="name">Journal Transfers</field>
+        <field name="res_model">journal.transfer</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_journal_transfer_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first journal transfer
+            </p>
+            <p>
+                Journal transfers allow you to move money between bank and cash journals.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_payments" model="ir.actions.act_window">
+        <field name="name">Journal Transfer Payments</field>
+        <field name="res_model">account.payment</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem
+        id="menu_action_journal_transfer"
+        name="Transfers"
+        parent="account.menu_finance"
+        sequence="10"/>
+    <menuitem
+        id="menu_action_journal_transfer_list"
+        name="Transfers"
+        action="action_journal_transfer"
+        parent="menu_action_journal_transfer"
+        sequence="1"/>
+      <menuitem
+        id="menu_action_journal_transfer_payments" 
+        name="Payments"
+        action="action_payments"
+        parent="menu_action_journal_transfer"
+        sequence="2"/>
+
+</odoo> 

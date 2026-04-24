@@ -1,0 +1,139 @@
+<odoo>
+    <record id="view_budget_quarter_search" model="ir.ui.view">
+        <field name="name">budget.quarte.search</field>
+        <field name="model">budget.quarte</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="budget_id"/>
+                <field name="project_id"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_my_custom_model_tree" model="ir.ui.view">
+        <field name="name">budget.quarter.list</field>
+        <field name="model">budget.quarte</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="date"/>
+                <field name="budget_id"/>
+                <field name="project_id"/>
+                <field name="budget_line_id"/>
+                <field name="planned_amount"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_my_custom_model_form" model="ir.ui.view">
+        <field name="name">budget.quarter.form</field>
+        <field name="model">budget.quarte</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+
+
+                    <button string="Confirm" name="action_confirm" type="object"
+                            class="oe_highlight" invisible="state in ('done', 'confirm','review')"/>
+                    <button string="mmm" name="action_mm" type="object" class="oe_highlight" invisible="1"/>
+                    <button string="Review" name="action_review" type="object" class="oe_highlight"
+                            invisible="state in ('draft', 'review') or approval_status in ('review', 'approve')"/>
+                    <button string="Approve" name="action_done" type="object" class="oe_highlight"
+                            invisible="state in ('draft', 'confirm', 'done')"/>
+                    <button string="Approve" name="action_approve" type="object" class="oe_highlight"
+                            invisible="state != 'done' or approval_status != 'review'"/>
+                    
+                    <button string="Draft" name="action_draft" type="object"
+                            invisible="state in ('draft','done',)"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirm,review,done"/>
+                </header>
+                <sheet>
+                    <field name="approval_status" invisible="1"/>
+                    <widget name="web_ribbon" title="Reviewed"
+                            invisible="state != 'done' or approval_status != 'review'"
+                            bg_color="bg-success"/>
+                    <widget name="web_ribbon" title="Approved"
+                            invisible="state != 'done' or approval_status != 'approve'"
+                            bg_color="bg-success"/>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1" class="oe_inline"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="budget_id" readonly="state not in ('draft')"/>
+                            <field name="budget_line_id" readonly="state not in ('draft')"/>
+                            <field name="create_by" readonly="1"/>
+                            <field name="more_details" readonly="1"/>
+                            <button name="action_update_budget_lines" 
+                                    string="Update Budget Lines" 
+                                    type="object" 
+                                    class="oe_highlight" 
+                                    icon="fa-refresh"/>
+                            <field name="signature_approved" readonly="1" invisible="1"/>
+                            <field name="signature_reviewed" readonly="1" invisible="1"/>
+                            <field name="date_approve" readonly="1" invisible="1"/>
+                            <field name="date_review" readonly="1" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="project_id"/>
+                            <field name="date"/>
+                            <field name="planned_amount"/>
+                            <field name="allowed_increase" force_save="1" readonly="1"/>
+                            <field name="total_line_amount" invisible="1"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Budget Plan">
+                            <field name="quarter_line_ids" nolabel="1">
+                                <list string="" editable="bottom" delete="0">
+                                    <field name="seq" widget="handle"/>
+                                    <field name="line_code" readonly="parent.state == 'done'"/>
+                                    <field name="budget_state" column_invisible="parent.more_details != True" readonly="parent.state == 'done'"/>
+                                    <field name="budget_account" column_invisible="parent.more_details != True" readonly="parent.state == 'done'"/>
+                                    <field name="account_id"
+                                           readonly="parent.state == 'done'"/>
+                                    <field name="description" readonly="parent.state == 'done'"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                    <field name="planned_amount" readonly="parent.state in ('done')" widget="monetary" options="{'currency_field': 'currency_id'}" sum="Total"/>
+                                    <button name="action_update_plan_quarter" type="object" icon="fa-list" width="0.1" title="Details" invisible="1"/>
+                                    <button name="action_update_quarter" type="object" icon="fa-list" width="0.1" title="Details" invisible="0"/>
+                                    <field name="theoritical_amount" widget="monetary" options="{'currency_field': 'currency_id'}" readonly="parent.state == 'done'"/>
+                                    <field name="allowed_increase_line" force_save="1" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="remaining_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="burn_rate"/>
+                                    <field name="quarter_type"/>
+                                </list>
+                                <form string="Budget Plan">
+                                    <group>
+                                        <field name="line_code"/>
+                                        <field name="account_id"/>
+                                        <field name="planned_amount"/>
+                                        <field name="theoritical_amount"/>
+                                        <field name="remaining_amount"/>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- إضافة القائمة -->
+
+
+    <record id="action_budget_quarter" model="ir.actions.act_window">
+        <field name="name">Budget Quarter</field>
+        <field name="res_model">budget.quarte</field>
+        <field name="view_mode">list,form,search</field>
+    </record>
+
+    <menuitem id="menu_budget_quarter" name="Quarte Plans" parent="om_account_budget_iteme.menu_finance_budgets"
+              sequence="4"
+              action="action_budget_quarter"/>
+</odoo>

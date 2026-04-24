@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="print_bank_statement_reports_info">
+        <t t-call="web.html_container">
+            <t t-call="web.basic_layout">
+                <div class="page" style="margin: 0 30px;">
+                    <t t-if="form_data.get('report_logo')">
+                        <div style="position: absolute; top: 10px; left: 30px; z-index: 1;">
+                            <img t-att-src="'data:image/png;base64,%s' % form_data['report_logo']"
+                                 style="max-height: 80px; max-width: 150px;"/>
+                        </div>
+                    </t>
+
+                    <div style="text-align: center; font-family: KacstOne; color: #003366;">
+                        <t t-if="lines and len(lines) > 0">
+                            <h3 t-esc="lines[0]['company_name']" style="text-decoration: underline;"/>
+                        </t>
+                        <h3 style="text-decoration: underline;">Finance Management</h3>
+                        <h3 style="text-decoration: underline;">Bank Statement Report</h3>
+                    </div>
+                    <br/>
+                    
+                    <div class="sec_header_data" style="text-align:right; width:100%;">
+                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px;" dir="ltr">
+                            <tr>
+                                <td style="width: 50%; padding: 3px; border: 1px solid #000; text-align:left;">
+                                    <strong>Journal :</strong>
+                                    <t t-esc="journal_names"/>
+                                </td>
+                                <td style="width: 50%; padding: 3px; border: 1px solid #000; text-align:left;">
+                                    <strong>Project :</strong>
+                                    <t t-esc="project_name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 50%; padding: 3px; border: 1px solid #000; text-align:left;">
+                                    <strong>Account Name :</strong>
+                                    <t t-esc="account_name"/>
+                                </td>
+                                <td style="width: 50%; padding: 3px; border: 1px solid #000; text-align:left;">
+                                    <strong>Period :</strong>
+                                    <t t-esc="'From %s To %s' % (form_data.get('date_from') or '', form_data.get('date_to') or '')"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <br/>
+
+                    <div style="margin-top: 5px;">
+                        <t t-set="counter" t-value="2"/>
+                        <table style="width: 100%; table-layout: fixed; font-size: 11px; border-collapse: collapse; border: 1px solid black; page-break-inside: auto;">
+                            
+                            <thead style="display: table-header-group;">
+                                <tr style="background-color: #f0f0f0; page-break-inside: avoid;">
+                                    <th style="padding: 8px; text-align: center; border: 1px solid black; width: 3%;">NO</th>
+                                    <th style="padding: 8px; text-align: center; border: 1px solid black; width: 7%;">Date</th>
+                                    <th style="padding: 8px; text-align: center; border: 1px solid black; width: 10%;">Trans ID</th>
+                                    <th style="padding: 8px; text-align: center; border: 1px solid black; width: 10%;">Bank Transfer Ref</th>
+                                    <th style="padding: 8px; text-align: center; border: 1px solid black; width: 13%;">Partner</th>
+                                    <th style="padding: 8px; text-align: center; border: 1px solid black; width: 14%;">Reference</th>
+                                    <th style="padding: 8px; text-align: center; border: 1px solid black; width: 11%;">Related Bill/Invoice</th>
+                                    <th style="padding: 8px; text-align: center; border: 1px solid black; width: 10%;">Debit</th>
+                                    <th style="padding: 8px; text-align: center; border: 1px solid black; width: 10%;">Credit</th>
+                                    <th style="padding: 8px; text-align: center; border: 1px solid black; width: 12%;">Balance</th>
+                                </tr>
+                            </thead>
+
+                            <tbody style="page-break-inside: avoid;">
+                                <tr style="background-color: #f0f0f0; font-weight: bold;">
+                                    <td colspan="7" style="text-align: center; border: 1px solid black; padding: 6px; font-size: 12px;">
+                                        Balance Before Period
+                                    </td>
+                                    <td style="text-align: center; border: 1px solid black;">
+                                        <t t-esc="ob_debit" t-options="{'widget': 'float', 'precision': 2}"/>
+                                    </td>
+                                    <td style="text-align: center; border: 1px solid black;">
+                                        <t t-esc="ob_credit" t-options="{'widget': 'float', 'precision': 2}"/>
+                                    </td>
+                                    <td style="text-align: center; border: 1px solid black;">
+                                        <t t-esc="opening_balance" t-options="{'widget': 'float', 'precision': 2}"/>
+                                        <t t-if="lines"><t t-esc="lines[0]['currency_symbol']"/></t>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            
+
+                            <t t-foreach="lines" t-as="expense">
+                                <tbody style="page-break-inside: avoid;"> 
+                                    <tr>
+                                        <td style="text-align: center; border: 1px solid black;">
+                                            <t t-esc="counter"/>
+                                            <t t-set="counter" t-value="counter + 1"/>
+                                        </td>
+                                        <td style="text-align: center; border: 1px solid black;">
+                                            <t t-esc="expense['date']"/>
+                                        </td>
+                                        <td style="text-align: center; border: 1px solid black; word-wrap: break-word;">
+                                            <t t-esc="expense['transaction_id']"/>
+                                        </td>
+                                        <td style="text-align: center; border: 1px solid black; word-wrap: break-word;">
+                                            <t t-esc="expense['bank_reference']"/>
+                                        </td>
+                                        <td style="text-align: left; border: 1px solid black; word-wrap: break-word;">
+                                            <t t-esc="expense['partner']"/>
+                                        </td>
+                                        <td style="text-align: left; border: 1px solid black; word-wrap: break-word;">
+                                            <t t-esc="expense['reference']"/>
+                                        </td>
+                                        <td style="text-align: left; border: 1px solid black; word-wrap: break-word;">
+                                            <t t-esc="expense['related_invoices']"/>
+                                        </td>
+                                        <td style="text-align: center; border: 1px solid black;">
+                                            <t t-esc="expense['debit']"
+                                               t-options="{'widget': 'float', 'precision': 2}"/>
+                                            <t t-esc="expense['currency_symbol']"/>
+                                        </td>
+                                        <td style="text-align: center; border: 1px solid black;">
+                                            <t t-esc="expense['credit']"
+                                               t-options="{'widget': 'float', 'precision': 2}"/>
+                                            <t t-esc="expense['currency_symbol']"/>
+                                        </td>
+                                        <td style="text-align: center; border: 1px solid black;">
+                                            <t t-esc="expense['balance']"
+                                               t-options="{'widget': 'float', 'precision': 2}"/>
+                                            <t t-esc="expense['currency_symbol']"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </t>
+
+                            <tbody style="page-break-inside: avoid;">
+                                <tr style="background-color: #f0f0f0; font-weight: bold;">
+                                    <td colspan="7" style="text-align: center; border: 1px solid black; padding: 6px; font-size: 12px;">
+                                        Total
+                                    </td>
+                                    <td style="text-align: center; border: 1px solid black; padding: 6px;">
+                                        <t t-esc="total_debit" t-options="{'widget': 'float', 'precision': 2}"/>
+                                        <t t-if="lines"><t t-esc="lines[0]['currency_symbol']"/></t>
+                                    </td>
+                                    <td style="text-align: center; border: 1px solid black; padding: 6px;">
+                                        <t t-esc="total_credit" t-options="{'widget': 'float', 'precision': 2}"/>
+                                        <t t-if="lines"><t t-esc="lines[0]['currency_symbol']"/></t>
+                                    </td>
+                                    <td style="text-align: center; border: 1px solid black; padding: 6px;">
+                                        <t t-esc="total_balance" t-options="{'widget': 'float', 'precision': 2}"/>
+                                        <t t-if="lines"><t t-esc="lines[0]['currency_symbol']"/></t>
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+    <!-- Paper Format -->
+    <record id="create_bank_statement_format" model="report.paperformat">
+        <field name='name'>Custom A4</field>
+        <field name="default" eval="False"/>
+        <field name="disable_shrinking" eval="True"/>
+        <field name='format'>A4</field> <field name='orientation'>Landscape</field>
+        <field name='margin_top'>15</field>
+        <field name='margin_bottom'>15</field>
+        <field name='margin_left'>7</field>
+        <field name='margin_right'>7</field>
+        <field name='header_spacing'>10</field>
+        <field name='dpi'>90</field>
+    </record>
+
+    <!-- Report Action -->
+    <record id="action_print_bank_statement_reports" model="ir.actions.report">
+        <field name="name">Bank Statement Report</field>
+        <field name="model">bank.statement.wizard</field> <!-- Must match with the Wizard -->
+        <field name="report_type">qweb-pdf</field>
+        <field name="paperformat_id" ref="inherit_account_move.create_bank_statement_format"/>
+        <field name="report_name">inherit_account_move.print_bank_statement_reports_info</field>
+        <field name="report_file">inherit_account_move.print_bank_statement_reports_info</field>
+    </record>
+</odoo>

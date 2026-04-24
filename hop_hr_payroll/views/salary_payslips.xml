@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_hr_payslips_batches_form" model="ir.ui.view">
+            <field name="name">hr.payslips.batches.form</field>
+            <field name="model">payslips.batches</field>
+            <field name="arch" type="xml">
+                <form string="Pay Sheet">
+                    <header>
+                        <button name="print_payslips" string="Print Paysheet" type="object"
+                                class="oe_highlight" data-hotkey="k" invisible="1"/>
+
+                        <button name="action_paysheet_wizard" string="Print Paysheet" type="object"
+                                class="oe_highlight" data-hotkey="k"/>
+                        <!--                                class="oe_highlight" data-hotkey="k" invisible="state != 'done'"/>-->
+                        <button name="action_payslip_approve" string="Approve" type="object"
+                                class="oe_highlight" data-hotkey="k" invisible="state != 'review'"/>
+                        <button name="action_create_bills" string="Create Bills" type="object"
+                                groups="hop_hr_payroll.group_hr_payroll_account,hop_hr_payroll.group_hr_payroll_manager"
+                                class="oe_highlight" data-hotkey="k"
+                                invisible="state != 'done' or create_bills ==True"/>
+                        <button string="Confirm" name="action_payslip_to_confirm" type="object"
+                                groups="hop_hr_payroll.group_hr_payroll_user,hop_hr_payroll.group_hr_payroll_manager"
+                                class="oe_highlight" invisible="state in ('done', 'confirm','review', 'approve')"/>
+                        <button string="Review" name="action_payslip_review" type="object" class="oe_highlight"
+                                groups="hop_hr_payroll.group_hr_payroll_account"
+                                invisible="state in ('draft','done', 'review', 'approve')"/>
+                        <button string="Done" name="action_payslip_done" type="object" class="oe_highlight"
+                                invisible="state != 'approve'"
+                                groups="hop_hr_payroll.group_hr_payroll_account"
+                        />
+                        <button string="Print Salary Payment Sheet" name="action_print_salary_payment_sheet"
+                                type="object" class="btn-warning"
+                        />
+                        <button string="Social Insurance and Tax Report" name="action_print_social_insurance_and_tax_print_report"
+                                type="object" class="btn-warning"/>
+
+                        <button string="Create Bank Letters" name="action_create_bank_letters"
+                                groups="hop_hr_payroll.group_hr_payroll_account"
+                                type="object" class="oe_highlight" invisible="state != 'done' or letter_created == True"/>
+
+                        <!-- <button string="Taxes Report" name="action_print_taxes_report"
+                                type="object" class="btn-warning"/> -->
+
+                        <button string="Draft" name="action_payslip_to_draft" type="object"
+                                groups="hop_hr_payroll.group_hr_payroll_manager"
+                                invisible="state in ('draft','done',)"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirm,review,approve,done"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box" position="inside">
+                            <button name="action_bill_count" type="object" class="oe_stat_button" icon="fa-rouble">
+                                <div class="o_stat_info">
+                                    <field name="salary_bill_count" class="o_stat_value"/>
+                                    <span class="o_stat_text">Bills</span>
+                                </div>
+                            </button>
+
+                            <button name="action_bank_letters_count" type="object" class="oe_stat_button" icon="fa-university">
+                                <div class="o_stat_info">
+                                    <field name="bank_letters_count" class="o_stat_value"/>
+                                    <span class="o_stat_text">Bank Letters</span>
+                                </div>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="reference" readonly="1" class="oe_inline"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="salary_type" invisible="1"/>
+
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="name" placeholder="E.g. Salary for June 2025 – All departments"/>
+                                <field name="project_id" options="{'no_create': True}" readonly="1"
+                                       invisible="salary_type == 'by_contract'"/>
+                                <field name="salary_type" readonly="1"/>
+                                <field name="payment_no" readonly="1"/>
+                                <field name="salary_conf_id" readonly="1" invisible="salary_type != 'by_project'"/>
+                                <field name="created_by" readonly="1" invisible="salary_type != 'by_project'"/>
+                                <field name="insurance_payment" invisible="1"/>
+                                <field name="taxes_payment" invisible="1"/>
+                                <field name="user_id" readonly="1" invisible="salary_type == 'by_project'"/>
+                                <field name="branch_ids" widget="many2many_tags" options="{'no_create': True}"
+                                       invisible="1"/>
+                                <button name="action_get_update" string="Update Data" type="object"
+                                        class="oe_highlight" data-hotkey="k" invisible="state != 'draft'"/>
+                                <field name="account_id" invisible="state == 'draft'"
+                                       readonly="state in ('done', 'validate')"/>
+                                <button string="Set Employee" name="action_set_employee" type="object"
+                                        class="oe_highlight"
+                                        invisible="salary_type != 'by_contract' or check_set_employee == 1"/>
+                            </group>
+                            <group>
+                                <field name="date_from" readonly="state == 'done'" invisible="1"/>
+                                <field name="date_to" readonly="state == 'done'" invisible="1"/>
+                                <field name="date" readonly="state == 'done'"/>
+                                <field name="date_prepared" invisible="1"/>
+                                <field name="rate" readonly="state in ('approve', 'done')"/>
+                                <field name="company_id" invisible="1"/>
+                                <field name="check_set_employee" invisible="1"/>
+                                <field name="currency_id" invisible="0" readonly="state in ('approve', 'done')"/>
+                                <field name="total_salary_in_sdg" invisible="0" widget="monetary"
+                                               options="{'currency_field': 'currency_id'}"/>
+                                
+                                <field name="total_social_insurance" invisible="0" widget="monetary"
+                                               options="{'currency_field': 'currency_id'}"/>
+                                <field name="total_taxes" invisible="0" widget="monetary"
+                                               options="{'currency_field': 'currency_id'}"/>
+                                <field name="month" readonly="salary_type == 'by_project'"
+                                       required="salary_type == 'by_contract'"/>
+                                <field name="state_id"/>
+                                <field name="missing_one" invisible="1" widget="boolean_toggle"/>
+                                <field name="create_bills" invisible="1"/>
+                                <field name="letter_created" invisible="1"/>
+                                <field name="print_type" invisible="1"/>
+
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Pay sheet">
+                                <field name="batches_line_ids" colspan="4" nolabel="1"
+                                       readonly="state in ('review', 'approve', 'done')">
+                                    <list string="Payslips Batches Information" editable="bottom">
+                                        <field name="line_number"/>
+                                        <field name="batches_id" column_invisible="1"/>
+                                        <field name="bill_created" column_invisible="1" readonly="1"/>
+                                        <field name="account_id" required="parent.state == 'draft'"
+                                               readonly="parent.state == 'done'"
+                                               column_invisible="parent.state == 'draft'"/>
+                                        <field name="budget_line"
+                                               required="parent.salary_type == 'by_project' and parent.state == 'confirm'"
+                                               column_invisible=" parent.salary_type == 'by_contract' or parent.state == 'draft'"
+                                               readonly="parent.state == 'done'" options="{'no_create': True}"/>
+                                        <field name="project_salary_id" column_invisible="1"/>
+
+                                        <field name="employee_id" options="{'no_create': True}"/>
+                                        <field name="job_title" optional="hide"/>
+                                        <field name="state" optional="hide"/>
+                                        <field name="currency_id" column_invisible="1"/>
+                                        <field name="curr_id" column_invisible="0" optional="hide"/>
+                                        <field name="analytic_account_id" optional="hide" options="{'no_create': True}"
+                                               readonly="1"/>
+                                        <field name="gross_salary_usd" widget="monetary"
+                                               options="{'currency_field': 'curr_id'}" sum="Total" readonly="1"/>
+                                        <field name="curr_id" column_invisible="1"/>
+                                        <field name="basic_monthly_salary" sum="Total" widget="monetary"
+                                               options="{'currency_field': 'curr_id'}" optional="hide"/>
+                                        <field name="cola" sum="Total" widget="monetary"
+                                               options="{'currency_field': 'curr_id'}" optional="hide"/>
+                                        <field name="project_id" column_invisible="1"/>
+                                        <field name="transportation" sum="Total" widget="monetary"
+                                               options="{'currency_field': 'curr_id'}" optional="hide"/>
+                                        <field name="hazard" sum="Total" widget="monetary"
+                                               options="{'currency_field': 'curr_id'}" optional="hide"/>
+                                        <field name="housing" sum="Total" widget="monetary"
+                                               options="{'currency_field': 'curr_id'}" optional="hide"/>
+                                        <field name="insurance_usd" sum="Total" widget="monetary"
+                                               options="{'currency_field': 'curr_id'}" readonly="1"/>
+                                        <field name="taxes_usd" sum="Total" widget="monetary"
+                                               options="{'currency_field': 'curr_id'}" readonly="1"/>
+                                        <field name="loan_currency" column_invisible="1"/>
+                                        <field name="loan" sum="Total" widget="monetary"
+                                               options="{'currency_field': 'loan_currency'}" readonly="1"/>
+                                        <!--                                        <field name="loan_rate" />-->
+                                        <field name="advance_currency" column_invisible="1"/>
+                                        <field name="advance" sum="Total" widget="monetary"
+                                               options="{'currency_field': 'advance_currency'}" readonly="1"/>
+                                        <!--                                        <field name="advance_rate"/>-->
+                                        <field name="disciplinary_deduction" optional="hide" sum="Total"/>
+                                        <field name="reason" optional="hide" required="reason_check == 1"/>
+                                        <field name="total_deductions" sum="Total" widget="monetary"
+                                               options="{'currency_field': 'curr_id'}"/>
+                                        <field name="net_salary" widget="monetary"
+                                               options="{'currency_field': 'curr_id'}" sum="Total" readonly="1"/>
+                                        <field name="salary_in_sdg" sum="Total"/>
+                                        <!--                                        <field name="net_salary_usd" column_invisible="1" sum="Total"/>-->
+                                        <!--                                        <field name="total_net_salary_usd" options="{'currency_field': 'curr_id'}" sum="Total"/>-->
+                                        <!--                                        <field name="salary_sdg" sum="Total"/>-->
+                                    </list>
+                                    <form string="Payslip Line">
+                                        <group col="4">
+                                            <field name="account_id"/>
+                                            <field name="budget_line"/>
+                                            <field name="employee_id"/>
+                                            <field name="job_title"/>
+                                            <field name="analytic_account_id"/>
+                                            <field name="gross_salary_usd"/>
+                                            <field name="currency_id"/>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                            <page string='Bank Accounts'>
+                                <field name="bank_account_line_ids">
+                                    <list create="0" delete="0" editable="bottom">
+                                        <field name="line_number"/>
+                                        <field name="employee_id"/>
+                                        <field name="job_title"/>
+                                        <field name="bank_account_id"/>
+                                        <field name="branch"/>
+                                        <field name="amount"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <!-- عرض بنود الطلب -->
+        <record id="view_hr_payslips_batches_list" model="ir.ui.view">
+            <field name="name">hr.payslips.batches.list</field>
+            <field name="model">payslips.batches</field>
+            <field name="arch" type="xml">
+                <list decoration-info="state == 'draft'"
+                      decoration-warning="state == 'review'"
+                      decoration-success="state == 'done'"
+                >
+                    <field name="reference"/>
+                    <field name="name"/>
+                    <field name="month"/>
+                    <!--                    <field name="salary_type" invisible="1"/>-->
+                    <field name="project_id" invisible="salary_type == 'by_contract'"/>
+                    <field name="state"
+                           widget="badge"
+                           decoration-info="state == 'draft'"
+                           decoration-warning="state == 'review'"
+                           decoration-success="state == 'done'"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_hr_payslips_batches_search" model="ir.ui.view">
+            <field name="name">hr.payslips.batches.list</field>
+            <field name="model">payslips.batches</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="project_id"/>
+                    <field name="name"/>
+                    <field name="reference"/>
+                    <filter name="filter_project_id" string="Project" domain="[]" context="{'group_by': 'project_id'}"/>
+                    <searchpanel>
+                        <field name="state" icon="fa-users" string="State" enable_counters="1"/>
+                        <field name="month" icon="fa-users" string="Month" enable_counters="1"/>
+                        <!-- <field name="request_type" icon="fa-users" string="Request Type" enable_counters="1"/> -->
+                    </searchpanel>
+                </search>
+            </field>
+        </record>
+
+        الإجراءات
+        <record id="action_hr_payslips_batches_by_project" model="ir.actions.act_window">
+            <field name="name">Pay Sheet By Project</field>
+            <field name="res_model">payslips.batches</field>
+            <field name="domain">[('salary_type', 'in', ['by_project'])]</field>
+            <field name="context">{'default_salary_type': 'by_project', 'search_default_filter_project_id': 1,}</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new Pay Sheet
+                </p>
+            </field>
+        </record>
+
+        <record id="action_hr_payslips_contract_batches" model="ir.actions.act_window">
+            <field name="name">Pay Sheet By Contract</field>
+            <field name="res_model">payslips.batches</field>
+            <field name="domain">[('salary_type', 'in', ['by_contract'])]</field>
+            <field name="context">{'default_salary_type': 'by_contract'}</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new Pay Sheet
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_hr_hope_payslips_batches" parent="menu_hr_payslip_project_root" name="Payslips Batches"
+                  sequence="15"/>
+
+        <menuitem id="menu_hr_hope_by_project_batches" name="Batches Salary By Project"
+                  parent="menu_hr_hope_payslips_batches"
+                  action="action_hr_payslips_batches_by_project"/>
+
+        <menuitem id="menu_hr_by_contract_salary_batches" name="Batches Salary By Contract"
+                  parent="menu_hr_hope_payslips_batches"
+                  action="action_hr_payslips_contract_batches"/>
+    </data>
+</odoo>

@@ -1,0 +1,22 @@
+
+    def change_subject_line(self):
+        for rec in self:
+            if rec.exam_type == 'final':
+                rec.subject_ids = False
+                rec.semester_id = rec.class_id.semester_id
+                for line in rec.program_id.level_line:
+                    if rec.level_id and rec.level_id.id == line.level.id:
+                        for t in line.semester_line:
+                            if rec.semester_id and rec.semester_id.id == t.semester_id.id:
+                                subject_vals = []
+                                for l in t.subject_line:
+                                    subject_vals.append((0, 0, {
+                                        'subject_id': l.subject.id,
+                                    }))
+                                rec.subject_ids = subject_vals
+
+            if rec.exam_type == 'supplement_exam':
+                for line in rec.program_id.level_line:
+                    if rec.level_id and rec.level_id.id == line.level.id:
+                        semester_ids = [s.semester_id.id for s in line.semester_line]
+                        return {'domain': {'semester_id': [('id', 'in', semester_ids)]}}

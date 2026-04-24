@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Custody Item Tree View -->
+    <record id="view_custody_item_tree" model="ir.ui.view">
+        <field name="name">custody.item.tree</field>
+        <field name="model">custody.item</field>
+        <field name="arch" type="xml">
+            <list string="Custody Items">
+                <field name="name"/>
+                <field name="description"/>
+                <field name="serial_number"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Custody Item Form View -->
+    <record id="view_custody_item_form" model="ir.ui.view">
+        <field name="name">custody.item.form</field>
+        <field name="model">custody.item</field>
+        <field name="arch" type="xml">
+            <form string="Custody Item">
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Item Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="serial_number"/>
+                            <field name="employee_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <field name="description" placeholder="Enter a description..."/>
+                        </page>
+                        <page string="Employee History">
+                            <field name="employee_history" readonly="1">
+                                <list 
+                                    decoration-success="return_date" 
+                                    decoration-bf="lost_date">
+                                    <field name="employee_id"/>
+                                    <field name="assign_date"/>
+                                    <field name="return_date"/>
+                                    <field name="lost_date"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter reload_on_attachment="True"/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Custody Item Search View -->
+    <record id="view_custody_item_search" model="ir.ui.view">
+        <field name="name">custody.item.search</field>
+        <field name="model">custody.item</field>
+        <field name="arch" type="xml">
+            <search string="Search Custody Items">
+                <field name="name"/>
+                <field name="description"/>
+                <field name="serial_number"/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_serial_number" string="Serial Number" context="{'group_by': 'serial_number'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Custody Item Action -->
+    <record id="action_custody_item" model="ir.actions.act_window">
+        <field name="name">Custody Items</field>
+        <field name="res_model">custody.item</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_custody_item_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first custody item!
+            </p>
+            <p>
+                Define custody items that can be assigned to employees.
+            </p>
+        </field>
+    </record>
+</odoo> 

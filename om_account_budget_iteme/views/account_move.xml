@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+        <record model="ir.ui.view" id="account_created_note_invoice_form">
+            <field name="name">Account Invoice</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                
+                <xpath expr="//field[@name='invoice_vendor_bill_id']" position="after">
+                    
+                    <field name="refund_case" invisible="1" widget="radio" options="{'horizontal':true}" required="move_type == 'in_refund'"/>
+                    <field name="is_credit" invisible="1" readonly="1"/>
+                    <field name="rate" invisible="move_type == 'entry'"/>
+                    <field name="required_rate" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='ref']" position="after">
+                    <field name="pay_state" invisible="1"/>
+                </xpath>
+            
+                <xpath expr="//button[@name='action_reverse']" position="attributes">
+                    <attribute name="invisible">is_credit == True</attribute>
+                </xpath>
+                <xpath expr="//field[@name='account_id']" position="attributes">
+                    <attribute name="domain">
+                        [('deprecated', '=', False), ('company_ids', 'parent_of', company_id),
+                        ('account_type', 'not in', ('asset_receivable', 'liability_payable', 'off_balance')),
+                        ('account_type', '=', 'expense')
+                        ]
+                    </attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="account.menu_finance_receivables" model="ir.ui.menu">
+            <field name="active">False</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="stock_picking_inherit_form" model="ir.ui.view">
+        <field name="name">stock.picking</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='picking_type_id']" position="after">
+                <field name="project_id" readonly="state=='done'"/>
+                <field name="project_code"/>
+            </xpath>
+
+            <xpath expr="//field[@name='origin']" position="after">
+                <field name="prs" readonly="state=='done'"/>
+                <field name="purchase_id"/>
+                <field name="users_id" string="User" readonly="0" invisible="1"/>
+            </xpath>
+
+            <xpath expr="//button[@name='510']" position="after">
+                <button name="action_print_grn" string="GRN Report" type="object" class="btn-warning"
+                        invisible="state != 'done'"/>
+            </xpath>
+
+            <xpath expr="//button[@name='510']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+            <notebook position="inside">
+                <page name="name" string="Delivered Details">
+                    <group>
+                        <field name="delivered_by" required="1" placeholder="Enter The Delivered Person Name" readonly="state=='done'"/>
+                        <field name="title" placeholder="Enter The Delivered Person Title" readonly="state=='done'"/>
+                        <field name="date_de" placeholder="Enter The Delivered Date" readonly="state=='done'"/>
+                    </group>
+                </page>
+            </notebook>
+
+        </field>
+    </record>
+</odoo>

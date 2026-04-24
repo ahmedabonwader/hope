@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hms_expense_request_list" model="ir.ui.view">
+        <field name="name">hms.expense.request.list</field>
+        <field name="model">hms.expense.request</field>
+        <field name="arch" type="xml">
+            <list decoration-info="state == 'draft'"
+                  decoration-success="state == 'done'"
+                  decoration-warning="state == 'confirm'"
+                  decoration-danger="state == 'cancel'">
+                <field name="ref" readonly="1"/>
+                <field name="description" readonly="1"/>
+                <!--                <field name="expense"/>-->
+                <field name="expense_type"/>
+                <field name="partner_id"/>
+                <field name="employee_id"/>
+                <field name="time"/>
+                <field name="user_id"/>
+                <field name="amount" sum="Total" invisible="expense_type == 'expense'"/>
+                <field name="expense_amount" sum="Total" invisible="expense_type != 'expense'"/>
+                <field name="payment_method"/>
+                <field name="payment_status"
+                       widget="badge"
+                       decoration-success="payment_status == 'paid'"
+                       decoration-info="payment_status == 'not_paid'"/>
+                <field name="state" readonly="1"
+                       widget="badge"
+                       decoration-danger="state == 'cancel'"
+                       decoration-warning="state == 'confirm'"
+                       decoration-info="state == 'draft'"
+                       decoration-success="state == 'done'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_hms_expense_request_form" model="ir.ui.view">
+        <field name="name">hms.expense.request.form</field>
+        <field name="model">hms.expense.request</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_confirm" string="Confirm" type="object" class="oe_highlight"
+                            invisible="state in ('done', 'cancel', 'confirm', 'review') or check_invisible_confirm_button == True"
+                            groups="expense.group_oms_expense_administrator,expense.group_expense_user,expense.group_expense_finance_admin"/>
+                    <button name="action_review" string="Review" type="object" class="oe_highlight"
+                            invisible="state != 'confirm' or hr_review_approval != 'approve'"
+                            groups="expense.group_oms_expense_administrator,expense.group_expense_finance_admin"/>
+                    <button name="action_rev" string="Review" type="object" class="oe_highlight"
+                            invisible="state != 'confirm' or operation_department == 'hr_expense'"
+                            groups="expense.group_oms_expense_administrator,expense.group_expense_finance_admin"/>
+                    <button name="action_hr_review" string="HR Review" type="object" class="oe_highlight"
+                            invisible="state != 'confirm' or operation_department != 'hr_expense' or hr_review_approval in ('review', 'approve')"
+                            groups="expense.group_oms_expense_administrator,expense.group_expense_hr_admin"/>
+                    <button name="action_hr_approval" string="HR Approval" type="object" class="oe_highlight"
+                            invisible="state != 'confirm' or operation_department !=  'hr_expense' or hr_review_approval != 'review'"
+                            groups="expense.group_oms_expense_administrator,expense.group_expense_hr_admin"/>
+                    <button string="Back" name="action_back" type="object" invisible="1"/>
+                    <!--                    <button confirm="Are you sure to perform this operation?" name="action_pay" string="Pay"-->
+                    <!--                            type="object" class="oe_highlight"-->
+                    <!--                            invisible="state != 'done' or payment_status == 'paid'"/>-->
+                    <button confirm="Are you sure to perform this operation?" name="action_approve" string="Approve"
+                            type="object" class="oe_highlight"
+                            invisible="state in ('done', 'cancel', 'draft', 'confirm')"
+                            groups="expense.group_oms_expense_administrator,expense.group_expense_finance_admin"/>
+                    <button confirm="Are you sure to perform this operation?" name="action_reset_to_draft"
+                            string="Reset To Draft" type="object"
+                            invisible="state != 'confirm'"
+                            groups="expense.group_oms_expense_administrator,expense.group_expense_user,expense.group_expense_finance_admin"/>
+                    <button confirm="Are you sure to perform this operation?" name="action_cancel" string="Cancel"
+                            type="object"
+                            invisible="state in ('cancel', 'done') or payment_status == 'paid'"
+                            groups="expense.group_oms_expense_administrator,expense.group_expense_user,expense.group_expense_finance_admin"/>
+                    <button name="action_print_petty_cash_payment" string="Print Petty Cash Payment" type="object"
+                            invisible="state != 'done' or expense_type != 'expense' or payment_status != 'paid'"
+                            class="oe_highlight"
+                            groups="expense.group_oms_expense_administrator,expense.group_expense_user,expense.group_expense_finance_admin"/>
+                    <button name="print_advance_payment" string="Print Advance/Loan Payment" type="object"
+                            invisible="state != 'done' or expense_type == 'expense'" class="oe_highlight"
+                            groups="expense.group_oms_expense_administrator,expense.group_expense_user,expense.group_expense_finance_admin"/>
+                    <field name="state" widget="statusbar" nolabel="1"/>
+                </header>
+                <sheet>
+                    <field name="payment_status" invisible="1"/>
+                    <widget name="web_ribbon" title="Paid"
+                            invisible="state != 'done' or payment_status == 'not_paid'"
+                            bg_color="bg-success"/>
+
+                    <field name="hr_review_approval" invisible="1"/>
+                    <widget name="web_ribbon" title="HR Admin Reviewed"
+                            invisible="state != 'confirm' or hr_review_approval != 'review'"
+                            bg_color="bg-success"/>
+                    <widget name="web_ribbon" title="HR Admin Approved"
+                            invisible="state != 'confirm' or hr_review_approval != 'approve'"
+                            bg_color="bg-success"/>
+                    <div class="oe_titel">
+                        <h4>
+                            <field name="ref" readonly="1"/>
+                        </h4>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="expense" invisible="1"/>
+                            <field name="description" placeholder="Please Enter What The Expense You Need"
+                                   readonly="state == 'done'"/>
+                            <!--                            <field name="description" invisible="expense_type == 'expense'" required="expense_type != 'expense'"/>-->
+                            <field name="partner_id" readonly="state != 'draft'" invisible="expense_type != 'expense'"
+                                   required="expense_type == 'expense'"/>
+                            <field name="employee_id" options="{'no_quick_create': True, 'no_create_edit' : True}"
+                                   readonly="state != 'draft'" invisible="expense_type == 'expense'"
+                                   required="expense_type != 'expense'"/>
+                            <field name="contract_type" readonly="1" invisible="expense_type == 'expense'"/>
+                            <field name="time"/>
+                            <field name="user_id"/>
+                            <field name="expense_amount" invisible="expense_type != 'expense'"/>
+                            <field name="company_id" invisible="1"/>
+                            <field name="branch_id" options="{'no_quick_create': True, 'no_create_edit' : True}"/>
+                            <field name="project_select" invisible="contract_type == 'contract'" readonly="1"/>
+                            <field name="check_invisible_confirm_button" force_save="1" readonly="1" invisible="1"/>
+                            <field name="check_contract" widget="boolean_toggle" readonly="1" invisible="contract_type not in ('project', 'hybrid')"/>
+                            <button name="action_select_contract" string="Select Contract" type="object" class="oe_highlight"
+                                    invisible="state != 'draft' or contract_type not in ('project', 'hybrid') or check_invisible_confirm_button == False"/>
+                            <field name="signature_reviewed" invisible="1"/>
+                            <field name="signature_approved" invisible="1"/>
+                            <field name="signature_hr_approved" invisible="1"/>
+                            <field name="sign_hr_reviewed" invisible="1"/>
+                            <field name="hr_review_approval" invisible="1"/>
+                            <field name="account_id" invisible="expense_type == 'expense' or state == 'draft'"/>
+                            <field name="budget_line" invisible="expense_type == 'expense' or state == 'draft'" domain="[('project_id', '=', project_select), ('account_id', '=', account_id)]"/>
+                        </group>
+                        <group>
+                            <field name="expense_type" widget="radio" options="{'horizontal':true}"
+                                   readonly="state == 'done'"/>
+                            <field name="currency_id"/>
+                            <field name="month" invisible="expense_type != 'salary'"
+                                   required="expense_type == 'salary'"/>
+                            <field name="amount" invisible="expense_type == 'expense'"/>
+                            <field name="rate" invisible="state == 'draft'"/>
+                            <field name="loan_duration" invisible="expense_type != 'loan'"/>
+                            <field name="how_much_deduct" invisible="expense_type != 'loan'"/>
+                            <field name="move_id" readonly="1"/>
+                            <field name="payment_method" readonly="1"/>
+                            <field name="method_payment_check" invisible="1"/>
+                            <field name="bank_account" placeholder="add bank account number" invisible="0"/>
+                            <field name="operation_department"/>
+
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="info" string="Expense Information" invisible="expense_type != 'expense'">
+                            <field name="expense_line_ids" readonly="state == 'done'">
+                                <list editable="bottom">
+                                    <field name="pro_id"/>
+                                    <field name="account_id" readonly="state == 'draft'"/>
+                                    <field name="qty"/>
+                                    <field name="unit_price"/>
+                                    <field name="currency_id" column_invisible="True"/>
+                                    <field name="total_amount" sum="Total" widget="monetary"
+                                           options="{'currency_field': 'currency_id'}"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page name="note" string="Notes">
+                            <field name="note" placeholder="add an internal note"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <!-- Chatter -->
+                <chatter reload_on_attachment="True"/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_hms_expense_request_search" model="ir.ui.view">
+        <field name="name">hms.expense.request.search</field>
+        <field name="model">hms.expense.request</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="expense"/>
+                <field name="ref"/>
+                <separator/>
+                <filter string="Today" name="today"
+                        domain="[('time', '&gt;=', datetime.datetime.now().strftime('%Y-%m-%d 00:00:00')),('time', '&lt;=',datetime.datetime.now().strftime('%Y-%m-%d 23:59:59'))]"/>
+                <searchpanel>
+                    <field name="state" icon="fa-users" string="state" enable_counters="1"/>
+                    <field name="payment_status" icon="fa-users" string="Payment Status" enable_counters="1"/>
+                    <field name="payment_method" icon="fa-users" string="Payment Method" enable_counters="1"/>
+                    <field name="expense_type" icon="fa-users" string="Expense Type" enable_counters="1"/>
+                </searchpanel>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_hms_expense_request" model="ir.actions.act_window">
+        <field name="name">Expenses</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hms.expense.request</field>
+        <field name="view_mode">list,form,search</field>
+        <field name="context">{"search_default_today":1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create Your First Expenses request
+            </p>
+        </field>
+    </record>
+
+
+    <record id="view_account_journal_form_inherit" model="ir.ui.view">
+        <field name="name">account.journal.form</field>
+        <field name="model">account.journal</field>
+        <field name="inherit_id" ref="account.view_account_journal_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='type']" position="after">
+                <field name="user_id"/>
+
+            </xpath>
+        </field>
+    </record>
+
+
+</odoo>

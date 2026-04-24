@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_account_payment_register_form_inherit" model="ir.ui.view">
+            <field name="name">account.payment.register.form</field>
+            <field name="model">account.payment.register</field>
+            <field name="inherit_id" ref="account.view_account_payment_register_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='communication']" position="after">
+                    <field name="bank_transfer_ref" invisible="0" placeholder="Enter your Bank Reference"/>
+                    <field name="move_id" invisible="1"/>
+                    <field name="project_id" invisible="1"/>
+                    <field name="expense_id" invisible="1"/>
+                    <field name="salary_payslips_id" invisible="1"/>
+                    <field name="bill_type" invisible="1"/>
+                </xpath>
+<!--                <xpath expr="//field[@name='journal_id']" position="replace">-->
+<!--                   <field name="journal_id"-->
+<!--                            domain="[-->
+<!--                                ('user_ids', 'in', uid),-->
+<!--                                ('type', 'in', ['bank', 'cash']),-->
+<!--                                '|',-->
+<!--                                    ('is_custody', '=', False),-->
+<!--                                    ('custody_status', '=', 'active')-->
+<!--                            ]"/>-->
+<!--                </xpath>-->
+            </field>
+        </record>
+    </data>
+</odoo>

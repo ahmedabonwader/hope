@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View -->
+    <record id="view_expense_admin_tree" model="ir.ui.view">
+        <field name="name">expense.admin.tree</field>
+        <field name="model">expense.admin</field>
+        <field name="arch" type="xml">
+            <list string="Expense Admins" editable="top">
+                <field name="user_id"/>
+                <field name="admin_ids" widget="many2many_tags"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_expense_admin" model="ir.actions.act_window">
+        <field name="name">Expense Admins</field>
+        <field name="res_model">expense.admin</field>
+        <field name="view_mode">list</field>
+    </record>
+
+</odoo> 

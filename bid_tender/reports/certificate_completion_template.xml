@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <template id="action_prints_certificate_completion_report_template_info">
+        <t t-call="web.html_container">
+            <t t-call="web.basic_layout">
+                <t t-foreach="docs" t-as="doc">
+                    <div class="page" style="font-family: 'Times New Roman', serif; font-size: 16px; color: #000; line-height: 1.5;">
+                        
+                        <div class="header_section" style="border-bottom: 2px solid #333; padding-bottom: 15px;">
+                            <div class="row" style="margin-bottom: 10px; align-items: center; display: flex;">
+                                
+                                <div style="width: 20%; text-align: left;">
+                                    <t t-if="doc.company_id.logo">
+                                        <img t-att-src="image_data_uri(doc.company_id.logo)"
+                                             style="max-height: 100px; max-width: 160px;"/>
+                                    </t>
+                                </div>
+
+                                <div style="width: 60%; text-align: center;">
+                                    <h2 style="text-decoration: underline; font-weight: bold; margin: 0; font-size: 26px;">HOPE and Friendship for Devolopment Organization</h2>
+                                    <h2 style="text-decoration: underline; font-weight: bold; margin: 0; font-size: 26px;">Certificate Completion</h2>
+                                </div>
+
+                                <div style="width: 20%; text-align: right;">
+                                    <t t-if="doc.company_id.logo">
+                                        <img t-att-src="image_data_uri(doc.company_id.logo)"
+                                             style="max-height: 100px; max-width: 160px;"/>
+                                    </t>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="border: 1px solid #000; padding: 5px; background-color: #f0f0f0; margin-top: 20px; margin-bottom: 10px;">
+                            <div style="text-align: left; font-weight: bold; margin-bottom: 5px;">
+                                Project Name:
+                            </div>
+                            <h3 t-field="doc.project_id.name" 
+                                style="margin: 0; text-align: center; color: #000; font-weight: bold;"/>
+                            
+                            <t t-if="not doc.project_id">
+                                <h3 style="margin: 0; text-align: center; color: #000;">N/A</h3>
+                            </t>
+                        </div>
+                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px;" dir="ltr">
+                            <tr>
+                                <td style="width: 50%; padding: 5px; border: 1px solid #000; text-align:left;">
+                                    <strong>Certificate NO:</strong>
+                                    <span t-field="doc.ref"/> </td>
+                                <td style="width: 50%; padding: 5px; border: 1px solid #000; text-align:left;">
+                                    <strong>Date :</strong>
+                                    <span t-field="doc.time"/> </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 50%; padding: 5px; border: 1px solid #000; text-align:left;">
+                                    <strong>PRS NO:</strong>
+                                    <span t-field="doc.prs.ref"/> </td>
+                                <td style="width: 50%; padding: 5px; border: 1px solid #000; text-align:left;">
+                                    <strong>PO NO :</strong>
+                                    <span t-field="doc.purchase_order.name"/> </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 50%; padding: 5px; border: 1px solid #000; text-align:left;">
+                                    <strong>Supplier Name:</strong>
+                                    <span t-field="doc.suppliers.name"/> </td>
+                                <td style="width: 50%; padding: 5px; border: 1px solid #000; text-align:left;">
+                                    <strong>Branch :</strong>
+                                    <span t-field="doc.branch_id.name"/> </td>
+                            </tr>
+                        </table>
+
+                        <div style="text-align: center; margin-top: 25px; margin-bottom: 10px;">
+                            <h3 style="text-decoration: underline; font-weight: bold; text-transform: uppercase; font-size: 22px;">
+                                CERTIFICATE OF COMPLETION
+                            </h3>
+                        </div>
+                        
+                        <div style="width: 100%; border: 1px solid #000; min-height: 150px; margin-top: 15px; padding: 10px; position: relative;">
+                            <div style="font-weight: bold; margin-bottom: 10px;">
+                                Note :
+                            </div>
+                            
+                            <div style="padding-left: 15px; text-align: justify; line-height: 1.6;">
+                                <span t-field="doc.note"/>
+                            </div>
+                        </div>
+
+                        <table class="o_has_total_table table o_main_table table-borderless mt-4"
+                           style="font-size: 11px; width: 100%;">
+                            <thead>
+                                <tr style="border-bottom: 2px solid #003366;">
+                                    <th style="text-align: left; width: 20%; vertical-align: middle;"><strong>Position</strong></th>
+                                    <th style="text-align: left; width: 25%; vertical-align: middle;"><strong>Name</strong></th>
+                                    <th style="text-align: left; width: 25%; vertical-align: middle;"><strong>Job Title</strong></th>
+                                    <th style="text-align: left; width: 30%; vertical-align: middle;"><strong>Signature</strong></th>
+                                    <th style="text-align: left; width: 25%; vertical-align: middle;"><strong>Date</strong></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="vertical-align: top; padding: 4px;">Prepared by</td>
+                                    <td style="vertical-align: top; padding: 4px;"><span t-field="doc.user_id.name"/></td>
+                                    <td style="vertical-align: top; padding: 4px;"><span t-field="doc.prepared_job_title"/></td>
+                                    <td style="vertical-align: top; padding: 4px; text-align: left;">
+                                        <img t-if="doc.user_id.digital_signature"
+                                            t-att-src="image_data_uri(doc.user_id.digital_signature)"
+                                            style="max-height: 50px; max-width: 100%; display: block; margin-left: 0;"/>
+                                    </td>
+                                    <td style="vertical-align: top; padding: 4px;"><span t-field="doc.time"/></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td style="vertical-align: top; padding: 4px;">Approved by</td>
+                                    <td style="vertical-align: top; padding: 4px;"><span t-field="doc.sign_approved"/></td>
+                                    <td style="vertical-align: top; padding: 4px;"><span t-field="doc.approved_job_title"/></td>
+                                    <td style="vertical-align: top; padding: 4px; text-align: left;">
+                                        <img t-if="doc.signature_approved.digital_signature"
+                                            t-att-src="image_data_uri(doc.signature_approved.digital_signature)"
+                                            style="max-height: 50px; max-width: 100%; display: block; margin-left: 0;"/>
+                                    </td>
+                                    <td style="vertical-align: top; padding: 4px;"><span t-field="doc.date_approve"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <div class="footer" style="border-top: 2px solid black; font-size: 12pt; text-align: center; margin-top: 20px; width: 100%;">
+                            <p style="margin: 5px 0;">مبنى رقم (154)، مربع (5)، حي المطار، بورسودان، ولاية البحر الأحمر – السودان</p>
+                            <p style="margin: 2px 0; direction: ltr;">Building # (154), Block # (5), Matar Area, Port-Sudan, Red Sea State - Sudan</p>
+                            <p style="margin: 2px 0; direction: ltr;">Website: www.hopesudan.org | Tel: +249120023500 | Email: hopesudan2015@gmail.com</p>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="custom_certificate_completion_format" model="report.paperformat">
+        <field name="name">Staff Certificate Completion Custom</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">25</field>
+        <field name="margin_left">3</field>
+        <field name="margin_right">3</field>
+        <field name="dpi">96</field>
+    </record>
+
+    <record id="action_prints_certificate_completion_report_template" model="ir.actions.report">
+        <field name="name">Certificate Completion Report</field>
+        <field name="model">certificate.completion</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">bid_tender.action_prints_certificate_completion_report_template_info</field>
+        <field name="report_file">bid_tender.action_prints_certificate_completion_report_template_info</field>
+        <field name="paperformat_id" ref="bid_tender.custom_certificate_completion_format"/>
+    </record>
+</odoo>

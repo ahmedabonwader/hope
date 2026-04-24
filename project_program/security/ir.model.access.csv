@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_project_followup_template_user,project.followup.template.user,model_project_followup_template,project.group_project_user,1,0,0,0
+access_project_followup_template_manager,project.followup.template.manager,model_project_followup_template,project.group_project_manager,1,1,1,1
+access_project_staff_line,project.staff.line,model_project_staff_line,,1,1,1,1

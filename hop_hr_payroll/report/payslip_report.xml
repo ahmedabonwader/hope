@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+        <record id="report_payslips_batches" model="ir.actions.report">
+            <field name="name">Paysheet Batches</field>
+            <field name="model">payslips.batches</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="paperformat_id" ref="hop_hr_payroll.create_report_paper_format"/>
+            <field name="report_name">hop_hr_payroll.create_report_view</field>
+            <field name="report_file">hop_hr_payroll.create_report_view</field>
+            <field name="print_report_name">'Paysheet Batches - %s' % (object.reference)</field>
+            <field name="binding_model_id" ref="model_payslips_batches"/>
+            <field name="binding_type">report</field>
+        </record>
+
+
+    </data>
+</odoo>

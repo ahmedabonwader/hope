@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_hr_project_salary_configuration_form" model="ir.ui.view">
+            <field name="name">project.salary.configuration.form</field>
+            <field name="model">project.salary.configuration</field>
+            <field name="arch" type="xml">
+                <form string="Payslip">
+                    <header>
+                        <button string="Confirm" name="action_payslip_to_confirm" type="object"
+                                class="oe_highlight"
+                                invisible="state in ('done', 'cancel', 'confirm','review','validate')"/>
+                        <button string="Review" name="action_payslip_review" type="object" class="oe_highlight"
+                                invisible="state in ('draft','done', 'cancel', 'validate','review')"/>
+                        <button string="Back" name="action_back_to_review" type="object" class="oe_highlight"
+                                invisible="1"/>
+                        <button string="Approved" name="action_payslip_validate" type="object" class="oe_highlight"
+                                invisible="state in ('draft','done', 'confirm', 'cancel')" groups="hop_hr_payroll.group_hr_payroll_admin"/>
+                                                        
+                        
+                        <button string="Draft" name="action_payslip_to_draft" type="object"
+                                invisible="state in ('draft', 'cancel', 'validate',)"/>
+
+                        <button string="To Review" name="action_payslip_to_review" type="object"
+                                invisible="state in ('draft','done', 'cancel','review','confirm')"
+                                groups="hop_hr_payroll.group_hr_payroll_manager"
+                        />
+
+                        <button string="Cancel" name="action_payslip_cancel" type="object"
+                                invisible="state in ('cancel', 'done')"/>
+
+                        <button string="Create Sheet" name="action_create_sheet" type="object"
+                                invisible="state in ('draft', 'cancel','review','confirm','validate') or salary_check == True"
+                        />
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,confirm,review,validate,done,cancel"/>
+                    </header>
+                    <sheet>
+                        <field name="project_salary_state" invisible="1"/>
+                        <widget name="web_ribbon" title="Finished"
+                                invisible="state != 'done' or project_salary_state != 'finsh'"
+                                bg_color="bg-danger"/>
+                        <widget name="web_ribbon" title="Running"
+                                invisible="state != 'done' or project_salary_state != 'run'"
+                                bg_color="bg-success"/>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="reference" readonly="1" class="oe_inline"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="name" placeholder="E.g. Salary for June 2025 – All departments"/>
+                                <field name="date" readonly="0"/>
+                                <field name="date_to" readonly="0"/>
+                                <field name="project_id" invisible="salary_type != 'by_project' "
+                                       readonly="state in ('done', 'validate')"
+                                       options="{'no_create': True}"/>
+                                <field name="state_id" readonly="state != 'draft'"/>
+                                <button string="Set Employee" name="action_set_employee_confirm" type="object"
+                                        class="oe_highlight" invisible="salary_type == 'by_contract' "/>
+                            </group>
+                            <group>
+                                <field name="number_of_month" readonly="state in ('done', 'validate')"
+                                       invisible="salary_type == 'by_contract'"/>
+                                <field name="salary_type" readonly="1"/>
+                                <field name="salary_check" readonly="1" invisible="1"/>
+                                <field name="payment_no" readonly="1" invisible="salary_type != 'by_project'"/>
+                                <field name="month" readonly="0" invisible="salary_type != 'by_project'"/>
+                                <field name="user_id" readonly="1"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page string="Salary Line">
+                                <field name="project_salary_ids" colspan="4" nolabel="1">
+                                    <list string="Payslips Information" editable="bottom">
+                                        <!-- <field name="sequence" widget="handle"/> -->
+                                        <field name="line_number"/>
+                                        <field name="contract_line_id" column_invisible="1"/>
+                                        <field name="employee_id" readonly="parent.state in ('done', 'validate')"
+                                               options="{'no_create': True}"/>
+                                        <field name="job_title"/>
+                                        <field name="contract_line_id" column_invisible="1"/>
+                                        <button name="button_pending" type="object" string="Pause" class="btn-warning"
+                                                icon="fa-pause"
+                                        />
+                                        <button name="button_start" type="object" string="Run" class="btn btn-primary"
+                                                icon="fa-play"
+                                        />
+                                        <field name="state"/>
+                                        <field name="currency_id" optional="hide"
+                                               readonly="parent.state in ('done', 'validate')" column_invisible="0"/>
+                                        <field name="project_id" optional="hide"
+                                               readonly="parent.state in ('done', 'validate')"/>
+                                        <field name="gross_salary_usd" sum="gross_salary_usd"/>
+                                        <field name="basic_monthly_salary" sum="basic_monthly_salary"/>
+                                        <field name="cola" sum="cola"/>
+                                        <field name="transportation" sum="transportation"/>
+                                        <field name="housing" sum="housing"/>
+                                        <field name="hazard" sum="hazard"/>
+                                        <field name="social_insurance" sum="social_insurance"/>
+                                        <field name="staff_income_taxes" sum="staff_income_taxes"/>
+                                        <field name="net_salary" sum="net_salary"/>
+
+                                    </list>
+                                    <form string="Payslip Line">
+                                        <group col="4">
+                                            <field name="sequence"/>
+                                            <field name="employee_id" options="{'no_create': True}"/>
+                                            <field name="job_title"/>
+                                            <field name="project_id" optional="hide" options="{'no_create': True}"/>
+                                            <field name="currency_id" optional="hide"/>
+                                            <field name="gross_salary_usd" sum="gross_salary_usd"/>
+                                            <field name="net_salary" sum="net_salary"/>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                            <page string="Batches Line">
+                                <field name="payslips_batches_line_ids">
+                                    <list string="Batches Information" create="0" delete="0">
+                                        <field name="name"/>
+                                        <field name="project_id"/>
+                                        <field name="date_from"/>
+                                        <field name="date_to"/>
+                                        <field name="payment_no"/>
+                                        <field name="total_salary_in_sdg"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <!-- عرض بنود الطلب -->
+        <record id="view_project_salary_configuration_list" model="ir.ui.view">
+            <field name="name">project.salary.configuration.list</field>
+            <field name="model">project.salary.configuration</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="reference"/>
+                    <field name="project_id"/>
+                    <field name="project_salary_state" readonly="1" widget="badge"
+                           decoration-danger="project_salary_state == 'finsh'"
+                           decoration-success="project_salary_state == 'run'"/>
+                    <field name="state"
+                           decoration-success="state == 'done'"
+                           decoration-info="state == 'draft'"
+                           decoration-warning="state == 'review'"
+                           decoration-muted="state == 'validate'"
+                           decoration-danger="state == 'cancel'"
+                           widget="badge"
+                           />
+                </list>
+            </field>
+        </record>
+
+        <record id="view_project_salary_configuration_search" model="ir.ui.view">
+            <field name="name">project.salary.configuration.search</field>
+            <field name="model">project.salary.configuration</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="reference"/>
+                    <field name="name"/>
+                    <field name="project_id"/>
+                    <filter name="filter_project_id" string="Project" domain="[]" context="{'group_by': 'project_id'}"/>
+                    <searchpanel>
+                        <field name="state" icon="fa-users" string="State" enable_counters="1"/>
+                        <field name="project_salary_state" icon="fa-users" string="Project State" enable_counters="1"/>
+                        <field name="month" icon="fa-users" string="Month" enable_counters="1"/>
+                    </searchpanel>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_project_salary_configuration" model="ir.actions.act_window">
+            <field name="name">Salary Project Configuration</field>
+            <field name="res_model">project.salary.configuration</field>
+            <field name="domain">[('salary_type', 'in', ['by_project'])]</field>
+            <field name="context">{'default_salary_type': 'by_project', 'search_default_filter_project_id': 1,}</field>
+            <field name="view_mode">list,form,search</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new payslip
+                </p>
+            </field>
+        </record>
+
+        <record id="action_contract_salary_configuration" model="ir.actions.act_window">
+            <field name="name">Salary Contract Configuration</field>
+            <field name="res_model">project.salary.configuration</field>
+            <field name="domain">[('salary_type', 'in', ['by_contract'])]</field>
+            <field name="context">{'default_salary_type': 'by_contract'}</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new payslip
+                </p>
+            </field>
+        </record>
+
+
+        <menuitem id="menu_project_salary" name=" Salary By Project " parent="menu_hr_project_salary_configuration"
+                  groups="group_hr_payroll_user,group_hr_payroll_manager"
+                  action="action_project_salary_configuration"/>
+
+        <menuitem id="menu_contract_salary" name=" Salary By Contract " parent="menu_hr_project_salary_configuration"
+                  groups="group_hr_payroll_user,group_hr_payroll_manager"
+                  action="action_contract_salary_configuration" active="False"/>
+
+    </data>
+</odoo>

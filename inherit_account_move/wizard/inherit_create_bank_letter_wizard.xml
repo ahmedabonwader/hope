@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_inherit_create_bank_letters_wizard_form" model="ir.ui.view">
+            <field name="name">create.bank.letters.wizard.form</field>
+            <field name="model">create.bank.letters.wizard</field>
+            <field name="inherit_id" ref="hop_hr_payroll.view_create_bank_letters_wizard_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='bank_name_letter']" position="after">
+                    <field name="bank_id" required="1"></field>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

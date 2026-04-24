@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="print_salary_payment_sheet_reports_info">
+        <t t-call="web.html_container">
+            <t t-call="web.basic_layout">
+                <div class="page" style="margin: 0 30px;">
+                    <div class="page"
+                         style="margin: 0 30px; position: relative; font-family: KacstOne; color: #003366;">
+                        <t t-if="data and len(data) > 0 and data[0].get('report_logo')">
+                            <div style="position: absolute; top: 10px; left: 30px; z-index: 1;">
+                                <img t-att-src="'data:image/png;base64,%s' % data[0]['report_logo']"
+                                     style="max-height: 80px; max-width: 150px;"/>
+                            </div>
+                        </t>
+                        <div style="text-align: center; margin-top: 20px;">
+                            <t t-if="data and len(data) > 0">
+                                <h3 t-esc="data[0]['company_name']" style="text-decoration: underline;"/>
+                            </t>
+                            <h3 style="text-decoration: underline;">Admin and HR Department</h3>
+                            <h3 style="text-decoration: underline;">
+                                <t t-esc="data[0]['month'].capitalize()"/>
+                                Payslip
+                            </h3>
+
+                        </div>
+                        <t t-if="data and len(data) > 0 and data[0].get('report_logo')">
+                            <div style="position: absolute; top: 10px; right: 30px; z-index: 1;">
+                                <img t-att-src="'data:image/png;base64,%s' % data[0]['report_logo']"
+                                     style="max-height: 80px; max-width: 150px;"/>
+                            </div>
+                        </t>
+                    </div>
+                    <br/>
+                    <br/>
+                    <t t-if="data[0]['salary_type'] == 'by_project'">
+                        <div style="border: 1px solid #000; padding: 5px; background-color: #f0f0f0; margin-bottom: 10px;">
+                            <div style="text-align: left; font-weight: bold; margin-bottom: 5px;">
+                                Project Name :
+                            </div>
+                            <h3 t-esc="data[0]['project_name'] or 'Project Name'"
+                                style="margin: 0; text-align: center; color: #000;"/>
+                        </div>
+                    </t>
+                    <div class="sec_hedar_data" style="text-align:right; width:100%;">
+                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px;" dir="ltr">
+                            <tr>
+                                <td style="width: 50%; padding: 3px; border: 1px solid #000; text-align:left;">
+                                    <strong>Employee Name :</strong>
+                                    <t t-esc="data[0]['staff_name']"/>
+                                </td>
+                                <td style="width: 50%; padding: 3px; border: 1px solid #000; text-align:left;">
+                                    <strong>Job Title :</strong>
+                                    <t t-esc="data[0]['title']"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 3px; border: 1px solid #000; text-align:left;">
+                                    <strong>Duty Station :</strong>
+                                    <t t-esc="data[0]['state']"/>
+                                </td>
+                                <td style="padding: 3px; border: 1px solid #000; text-align:left;">
+                                    <strong>Salary Payment For :</strong>
+                                    <t t-esc="data[0]['month'].capitalize()"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 3px; border: 1px solid #000; text-align:left;">
+                                    <strong>Gross Monthly Salary :</strong>
+                                    <t t-esc="'%s %s' % (data[0]['currency_symbol'], '%.0f' % (data[0]['gross_monthly_salary'] or 0))"/>
+                                </td>
+                                <td style="padding: 3px; border: 1px solid #000; text-align:left;">
+                                    <strong>Net Salary :</strong>
+                                    <t t-esc="'%s %s' % (data[0]['currency_symbol'], data[0]['net_salary'] or 0)"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <br/>
+                    <div style="margin-top: 5px;">
+                        <!-- ====================== Entitlements ====================== -->
+                        <h3 style="margin: 0; text-align: left;">Entitlements Breakdown :</h3>
+                        <table dir="rtl"
+                               style="width: 100%;
+                                  table-layout: fixed;
+                                  font-size: 14px;
+                                  border-collapse: collapse;
+                                  border: 2px solid black;
+                                  text-align: center;">
+                            <thead>
+                                <tr style="background-color: #f2f2f2; border: 2px solid black;">
+                                    <th style="border: 1px solid black; padding: 6px;">IN SDG</th>
+                                    <th style="border: 1px solid black; padding: 6px;">Exchange Rate</th>
+                                    <th style="border: 1px solid black; padding: 6px;">Currency</th>
+                                    <th style="border: 1px solid black; padding: 6px;">Amount</th>
+                                    <th style="border: 1px solid black; padding: 6px;">Item</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Gross Monthly Salary -->
+                                <!--                                <tr>-->
+                                <!--                                    <td style="border: 1px solid black; padding: 6px;">-->
+                                <!--                                        <t t-esc="float(data[0]['gross_monthly_salary'] or 0) * float(data[0]['rate'] or 0)"-->
+                                <!--                                           t-options="{'widget':'float','precision':0}"/>-->
+                                <!--                                    </td>-->
+                                <!--                                    <td style="border: 1px solid black; padding: 6px;">-->
+                                <!--                                        <t t-esc="data[0]['rate']" t-options="{'widget':'float','precision':0}"/>-->
+                                <!--                                    </td>-->
+                                <!--                                    <td style="border: 1px solid black; padding: 6px;">-->
+                                <!--                                        <t t-esc="data[0]['currency']"/>-->
+                                <!--                                    </td>-->
+                                <!--                                    <td style="border: 1px solid black; padding: 6px;">-->
+                                <!--                                        <t t-esc="'%s %s' % ('%.0f' % (data[0]['gross_monthly_salary'] or 0), data[0]['currency_symbol'])"/>-->
+                                <!--                                    </td>-->
+                                <!--                                    <td style="border: 1px solid black; padding: 6px; text-align: left;">Gross Monthly-->
+                                <!--                                        Salary-->
+                                <!--                                    </td>-->
+                                <!--                                </tr>-->
+                                <!-- Basic Monthly Salary -->
+                                <tr>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="float(data[0]['basic_monthly_salary'] or 0) * float(data[0]['rate'] or 0)"
+                                           t-options="{'widget':'float','precision':0}"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="data[0]['rate']" t-options="{'widget':'float','precision':0}"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="data[0]['currency']"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="'%s %s' % (data[0]['basic_monthly_salary'] or 0, data[0]['currency_symbol'])"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px; text-align: left;">Basic Monthly
+                                        Salary
+                                    </td>
+                                </tr>
+                                <!-- COLA -->
+                                <tr>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="float(data[0]['cola'] or 0) * float(data[0]['rate'] or 0)"
+                                           t-options="{'widget':'float','precision':0}"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="data[0]['rate']" t-options="{'widget':'float','precision':0}"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="data[0]['currency']"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="'%s %s' % (data[0]['cola'] or 0, data[0]['currency_symbol'])"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px; text-align: left;">COLA</td>
+                                </tr>
+                                <!-- Transport Allowance -->
+                                <tr>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="float(data[0]['transportation'] or 0) * float(data[0]['rate'] or 0)"
+                                           t-options="{'widget':'float','precision':0}"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="data[0]['rate']" t-options="{'widget':'float','precision':0}"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="data[0]['currency']"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="'%s %s' % (data[0]['transportation'] or 0, data[0]['currency_symbol'])"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px; text-align: left;">Transport
+                                        Allowance
+                                    </td>
+                                </tr>
+                                <!-- Hazard -->
+                                <tr>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="float(data[0]['hazard'] or 0) * float(data[0]['rate'] or 0)"
+                                           t-options="{'widget':'float','precision':0}"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="data[0]['rate']" t-options="{'widget':'float','precision':0}"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="data[0]['currency']"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="'%s %s' % (data[0]['hazard'] or 0, data[0]['currency_symbol'])"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px; text-align: left;">Hazard</td>
+                                </tr>
+                                <!-- Housing -->
+                                <tr>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="float(data[0]['housing'] or 0) * float(data[0]['rate'] or 0)"
+                                           t-options="{'widget':'float','precision':0}"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="data[0]['rate']" t-options="{'widget':'float','precision':0}"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="data[0]['currency']"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="'%s %s' % (data[0]['housing'] or 0, data[0]['currency_symbol'])"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px; text-align: left;">Housing</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- ====================== Deductions ====================== -->
+                        <h3 style="margin: 0; text-align: left;">Deductions :</h3>
+                        <table dir="rtl"
+                               style="width: 100%;
+                                  table-layout: fixed;
+                                  font-size: 14px;
+                                  border-collapse: collapse;
+                                  border: 2px solid black;
+                                  text-align: center;">
+                            <thead>
+                                <tr style="background-color: #f2f2f2; border: 2px solid black;">
+                                    <th style="border: 1px solid black; padding: 6px;">IN SDG</th>
+                                    <th style="border: 1px solid black; padding: 6px;">Exchange Rate</th>
+                                    <th style="border: 1px solid black; padding: 6px;">Currency</th>
+                                    <th style="border: 1px solid black; padding: 6px;">Amount</th>
+                                    <th style="border: 1px solid black; padding: 6px;">Item</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- من Social Insurance لحدي Net Salary -->
+                                <tr>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="float(data[0]['social_insurance'] or 0) * float(data[0]['rate'] or 0)"
+                                           t-options="{'widget':'float','precision':0}"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="data[0]['rate']" t-options="{'widget':'float','precision':0}"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="data[0]['currency']"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="'%s %s' % (data[0]['social_insurance'] or 0, data[0]['currency_symbol'])"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px; text-align: left;">Social
+                                        Insurance Deduction
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="float(data[0]['taxes'] or 0) * float(data[0]['rate'] or 0)"
+                                           t-options="{'widget':'float','precision':0}"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="data[0]['rate']" t-options="{'widget':'float','precision':0}"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="data[0]['currency']"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="'%s %s' % (data[0]['taxes'] or 0, data[0]['currency_symbol'])"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px; text-align: left;">Taxes Deduction
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="data[0]['loan']" t-options="{'widget':'float','precision':0}"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        1
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        SDG
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="data[0]['loan']" t-options="{'widget':'float','precision':0}"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px; text-align: left;">Loan Deduction
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="data[0]['advance']" t-options="{'widget':'float','precision':0}"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        1
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        SDG
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="data[0]['advance']" t-options="{'widget':'float','precision':0}"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px; text-align: left;">Advance
+                                        Deduction
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="float(data[0]['disciplinary_deduction'] or 0) * float(data[0]['rate'] or 0)"
+                                           t-options="{'widget':'float','precision':0}"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        1
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        SDG
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="data[0]['disciplinary_deduction']"
+                                           t-options="{'widget':'float','precision':0}"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px; text-align: left;">Disciplinary
+                                        Deduction
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="float(data[0]['total_deductions'] or 0) * float(data[0]['rate'] or 0)"
+                                           t-options="{'widget':'float','precision':0}"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="data[0]['rate']" t-options="{'widget':'float','precision':0}"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="data[0]['currency']"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="'%s %s' % (data[0]['total_deductions'] or 0, data[0]['currency_symbol'])"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px; text-align: left;">Total
+                                        Deductions
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="
+                                            (float(data[0]['net_salary'] or 0) * float(data[0]['rate'] or 0))
+                                            - float(data[0]['loan'] or 0)
+                                            - float(data[0]['advance'] or 0)
+                                        "
+                                        t-options="{'widget':'float','precision':0}"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="data[0]['rate']" t-options="{'widget':'float','precision':0}"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="data[0]['currency']"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px;">
+                                        <t t-esc="'%s %s' % (data[0]['net_salary'] or 0, data[0]['currency_symbol'])"/>
+                                    </td>
+                                    <td style="border: 1px solid black; padding: 6px; text-align: left;">Net Salary</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                        <br/>
+                        <div class="sec_hedar_data" style="text-align:right; width:100%;">
+                            <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;" dir="ltr">
+                                <tr>
+                                    <td style="width: 50%; padding: 5px; border: 1px solid #000; text-align:left;">
+                                        <strong>Paid To :</strong>
+                                        <t t-esc="data[0]['staff_name']"/>
+                                    </td>
+                                    <td style="width: 50%; padding: 5px; border: 1px solid #000; text-align:left;">
+                                        <strong>Title :</strong>
+                                        <t t-esc="data[0]['title']"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 5px; border: 1px solid #000; text-align:left;">
+                                        <strong>Signature :</strong>
+                                        ....................................................................................................
+                                    </td>
+                                    <td style="padding: 5px; border: 1px solid #000; text-align:left;">
+                                        <strong>Date :</strong>
+                                        <!--                                        <t t-esc="datetime.datetime.strptime(data[0]['date_to'], '%Y-%m-%d').strftime('%d %B %Y')"/>-->
+                                        .....................................................................................................
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div style="page-break-after: always;"></div>
+                    <div class="footer text-center">
+                        <table width="100%"
+                               style="font-family: KacstOne; font-weight: none; border-top:4px solid black">
+                            <tr>
+                                <td width="100%">
+
+                                    <div style="text-align:left; direction: ltr; line-height: 1.5;">
+                                        <p style="font-family: Arial, sans-serif; font-size:14pt; text-align:justify; margin:0 0 0 65px;">
+                                            <br/>
+                                            Website: www.hopesudan.org, Tel.: +249120023500, E-mail:
+                                            hopesudan2015@gmail.com
+                                        </p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <record id="custom_salary_payment_sheet_paper_format" model="report.paperformat">
+        <field name="name">Salary Payment Sheet</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">25</field>
+        <field name="margin_left">3</field>
+        <field name="margin_right">3</field>
+        <field name="dpi">96</field>
+    </record>
+
+    <record id="print_salary_payment_sheet_reports" model="ir.actions.report">
+        <field name="name">Salary Payment Sheet Report</field>
+        <field name="model">salary.payment.sheet.report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hop_hr_payroll.print_salary_payment_sheet_reports_info</field>
+        <field name="report_file">hop_hr_payroll.print_salary_payment_sheet_reports_info</field>
+        <!-- اسم الملف عند الطباعة: اسم الموظف + الشهر + payslip -->
+        <field name="print_report_name">
+            "'%s %s Payslip' % (object.employee_id.employee_id.name.lower().replace(' ', '_'),
+            object.batches_id.month.lower())"
+        </field>
+        <field name="binding_model_id" eval="False"/>
+        <field name="binding_type">report</field>  <!-- الصحيح -->
+        <field name="paperformat_id" ref="hop_hr_payroll.custom_salary_payment_sheet_paper_format"/>
+    </record>
+
+</odoo>

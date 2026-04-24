@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_purchase_request_list" model="ir.ui.view">
+        <field name="name">purchase.request.list</field>
+        <field name="model">project.purchase.request</field>
+        <field name="arch" type="xml">
+            <list decoration-muted="state == 'rejected'" decoration-success="state == 'done'"
+                  decoration-info="state == 'draft'">
+                <field name="ref"/>
+                <field name="name"/>
+                <field name="request_type"/>
+                <field name="request_date"/>
+                <field name="project_id" widget="many2one_avatar"/>
+                <field name="sum_line_total_price"/>
+                <field name="requester_id" widget="many2one_avatar"/>
+                <field name="payment_status" widget="badge"
+                       decoration-success="payment_status == 'paid'"
+                       decoration-info="payment_status == 'not_paid'"/>
+                <field name="state"
+                       widget="badge"
+                       decoration-danger="state == 'rejected'"
+                       decoration-warning="state == 'review'"
+                       decoration-info="state == 'draft'"
+                       decoration-success="state == 'done'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_purchase_request_form" model="ir.ui.view">
+        <field name="name">purchase.request.form</field>
+        <field name="model">project.purchase.request</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,confirm,review,approved,rejected,cancel,done"/>
+                    <!-- <field name="state" widget="statusbar" options="{'clickable': '1'}"
+                           statusbar_visible="draft,confirm,review,approved,rejected,cancel,done"/> -->
+                    <button name="action_confirm" string="Confirm" type="object" class="oe_highlight"
+                            groups="project_purchase_request.group_purchase_request_manager,project_purchase_request.group_purchase_request_finance,project_purchase_request.group_purchase_request_officer,project_purchase_request.group_purchase_request_user"
+                            invisible="state != 'draft'"/>
+                    <button name="action_reviwe" string="Review" type="object" class="oe_highlight"
+                            invisible="state != 'confirm'"
+                            groups="project_purchase_request.group_purchase_request_finance"/>
+                    <!--                            states="to_approve"/>-->
+                    <button name="action_approve" string="Approved" type="object" class="oe_highlight"
+                            invisible="state != 'review'"
+                            groups="project_purchase_request.group_purchase_request_manager"/>
+
+                    <button name="action_reject" string="Rejected" type="object" class="oe_stat_button"
+                            invisible="state != 'confirm'"
+                            groups="project_purchase_request.group_purchase_request_manager"/>
+                    <!--                            states="to_approve"/>-->
+                    <button name="action_done" string=" Done" type="object" class="oe_highlight"
+                            invisible="state != 'approved' or request_type == 'purchase_request'"
+                            groups="project_purchase_request.group_purchase_request_manager"/>
+
+                    <button name="action_procurement_done" string=" Done" type="object" class="btn-warning"
+                            invisible="state != 'approved' or request_type != 'purchase_request'"
+                            groups="project_purchase_request.group_purchase_request_procurement"/>
+
+                    <button name="action_procurement_draft" string=" Draft" type="object"
+                            invisible="state != 'approved' or request_type != 'purchase_request'"
+                            groups="project_purchase_request.group_purchase_request_procurement"/>
+
+                    <button name="print_tor_advance_payment" string=" Print Tor/Advance" type="object"
+                            class="oe_highlight" invisible="state != 'done' or request_type != 'tor_advance'"/>
+                    <button name="print_prs_request" string=" Print PRS" type="object" class="oe_highlight"
+                            invisible="state != 'done' or request_type == 'tor_advance'"/>
+
+                    <button name="action_create_bill" string=" Create Bill" type="object" class="btn-warning"
+                            invisible="state != 'done' or request_type != 'tor_advance' or created_bill == True"
+                            groups="project_purchase_request.group_purchase_request_finance"/>
+
+                    <button name="action_reset_to_draft" string=" Reset to draft" type="object" class="oe_stat_button"
+                            invisible="state not in  ('confirm', 'review')"
+                            groups="project_purchase_request.group_purchase_request_manager,project_purchase_request.group_purchase_request_user,project_purchase_request.group_purchase_request_officer"/>
+
+                    <button name="action_cancel" string="Cancel" type="object" class="btn-danger"
+                            groups="project_purchase_request.group_purchase_request_manager,project_purchase_request.group_purchase_request_finance,project_purchase_request.group_purchase_request_officer,project_purchase_request.group_purchase_request_user"
+                            invisible="state in ('done', 'approved', 'draft', 'rejected', 'cancel')"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box" position="inside">
+                        <button name="action_tor_bill_count" type="object" class="oe_stat_button" icon="fa-rouble"
+                                invisible="request_type == 'purchase_request'">
+                            <div class="o_stat_info">
+                                <field name="tor_bill_count" class="o_stat_value"/>
+                                <span class="o_stat_text">Bills</span>
+                            </div>
+                        </button>
+                        <button name="action_prs_bill_count" type="object" class="oe_stat_button" icon="fa-rouble"
+                                invisible="request_type != 'purchase_request'">
+                            <div class="o_stat_info">
+                                <field name="prs_bill_count" class="o_stat_value"/>
+                                <span class="o_stat_text">Bills</span>
+                            </div>
+                        </button>
+                        <button name="action_bid_tender_count" type="object" class="oe_stat_button" icon="fa-gavel"
+                                invisible="request_type != 'purchase_request'">
+                            <div class="o_stat_info">
+                                <field name="tender_count" class="o_stat_value"/>
+                                <span class="o_stat_text">Bid/Tender</span>
+                            </div>
+                        </button>
+                        <button name="action_purchase_order_count" type="object" class="oe_stat_button" icon="fa-shopping-cart"
+                                invisible="request_type != 'purchase_request'">
+                            <div class="o_stat_info">
+                                <field name="purchase_count" class="o_stat_value"/>
+                                <span class="o_stat_text">Purchase Order</span>
+                            </div>
+                        </button>
+                    </div>
+                    <field name="payment_status" invisible="1"/>
+                    <widget name="web_ribbon" title="Paid"
+                            invisible="state != 'done' or payment_status != 'paid'"
+                            bg_color="bg-success"/>
+                    <widget name="web_ribbon" title="Partial"
+                            invisible="state != 'done' or payment_status != 'partial'"
+                            bg_color="bg-success"/>
+                    <div class="oe_titel">
+                        <h4>
+                            <field name="ref" readonly="1"/>
+                        </h4>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name" placeholder="Description What you Need in your Project !!!" readonly="state!='draft'"/>
+                            <field name="request_type" widget="radio" />
+                            <field name="received_by" widget="radio" invisible="request_type != 'tor_advance'"
+                                   required="request_type == 'tor_advance' and check_task_ids == True" readonly="state!='draft'"/>
+                            <field name="partner_id"
+                                   invisible="received_by == 'employee' or request_type == 'purchase_request'"
+                                   required="received_by == 'vendor'" readonly="state!='draft'"/>
+                            <field name="employee_id" invisible="received_by != 'employee'"
+                                   required="received_by != 'vendor'" readonly="state!='draft'"/>
+                            <field name="date_from" invisible="request_type != 'tor_advance'" readonly="state!='draft'"
+                                   required="request_type == 'tor_advance' and check_task_ids == True"/>
+                            <field name="date_to" invisible="request_type != 'tor_advance'" readonly="state!='draft'"
+                                   required="request_type == 'tor_advance' and check_task_ids == True"/>
+                            <field name="request_date" invisible="request_type == 'tor_advance'" readonly="state=='done'"/>
+                            <field name="signature_reviewed" invisible="1"/>
+                            <field name="signature_approved" invisible="1"/>
+                            <field name="branch_id" options="{'no_quick_create': True, 'no_create_edit' : True}" readonly="state=='done'"
+                                   groups="project_purchase_request.group_purchase_request_manager,project_purchase_request.group_purchase_request_finance,project_purchase_request.group_purchase_request_officer,project_purchase_request.group_purchase_request_user"/>
+                            <field name="rate" invisible="state == 'draft'" readonly="state!='confirm'"/>
+                            <field name="sum_line_total_price" invisible="request_type != 'tor_advance'"/>
+                            <field name="approval_currency_id" invisible="1"/>
+                            <field name="currency_id" readonly="state!='draft'"/>
+                            <field name="product_type" readonly="state!='approved'" invisible="request_type == 'tor_advance' or state not in  ('approved', 'done')" widget="radio"/>
+                        </group>
+                        <group>
+                            <field name="project_id" placeholder="Select your project carefully" readonly="state!='draft'"/>
+                            <field name="project_code"/>
+                            <field name="task_ids" placeholder="Select your Activity carefully"
+                                   domain="[('project_id', '=', project_id)]" invisible="activity_issue != 'no'" readonly="state!='draft'"/>
+                            <field name="activity_issue" widget="radio"/>
+                            <field name="avtivity_char" invisible="activity_issue == 'no'" placeholder="Enter your Activity Carefully"/>
+                            <field name="check_task_ids" force_save="1" invisible="1"/>
+                            <field name="requester_id" readonly="1"/>
+                            <div style="background-color: #d4edda; padding: 5px;"
+                                invisible="1">
+                                <field name="move_id" readonly="1"
+                                       invisible="1"/>
+                            </div>
+                            <field name="specific_objectives" invisible="request_type != 'tor_advance'"
+                                   placeholder="Enter your specific objectives" readonly="state=='done'"
+                                   required="request_type == 'tor_advance' and check_task_ids == True"/>
+                            <field name="general_objective" invisible="request_type != 'tor_advance'"
+                                   placeholder="Enter your general objective" readonly="state=='done'"
+                                   required="request_type == 'tor_advance' and check_task_ids == True"/>
+                            <field name="location" placeholder="Enter the location of the purchase request" readonly="state=='done'"
+                                   required="request_type == 'tor_advance' and check_task_ids == True"/>
+                            <field name="number_of_beneficiaries" invisible="request_type != 'tor_advance'" readonly="state=='done'"
+                                   placeholder="Enter the Number OF Beneficiaries"
+                                   required="request_type == 'tor_advance' and check_task_ids == True"/>
+                            <field name="total_amount" invisible="1"/>
+                            <field name="amount_in_currency" invisible="1"/>
+                            <field name="prepared_job_title" invisible="1" force_save="1"/>
+                            <field name="reviewed_job_title" invisible="1" force_save="1"/>
+                            <field name="approved_job_title" invisible="1" force_save="1"/>
+                            <field name="created_bill" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Order items" invisible="request_type != 'purchase_request'">
+                            <field name="line_ids" readonly="state in ('done', 'approved')">
+                                <list editable="bottom" string="Order items">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="product_id" placeholder="Type the product that you need to purchase"
+                                           required="request_type == 'purchase_request'"/>
+                                    <!-- <field name="document" widget="pdf_viewer"/> -->
+                                    <field name="description"/>
+                                    <field name="product_uom"/>
+                                    <field name="budget_line_code" placeholder="Enter your budget line code"
+                                           domain="[('project_id', '=', project_id)]"
+                                           column_invisible="parent.state == 'draft'"/>
+                                    <field name="account_id" column_invisible="parent.state in ('draft', 'confirm')"/>
+                                    <field name="quantity"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Tor / Advance Request" invisible="request_type != 'tor_advance'">
+                            <field name="service_line_ids" readonly="state in ('done', 'approved')">
+                                <list editable="bottom" string="Tor / Advance Request">
+                                    <field name="description_of_activities"
+                                           placeholder="Enter the description of the activities"
+                                           required="request_type == 'tor_advance'"/>
+                                    <!-- <field name="document" widget="pdf_viewer"/> -->
+                                    <field name="unit_uom"/>
+                                    <field name="quantity"/>
+                                    <field name="unit_price" widget="monetary"
+                                           options="{'currency_field': 'currency_id'}"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                    <field name="frequency"/>
+                                    <field name="budget_line_code" placeholder="Enter your budget line code"
+                                           domain="[('project_id', '=', project_id)]"
+                                           column_invisible="parent.state == 'draft'"/>
+                                    <field name="account_id" column_invisible="parent.state in ('draft', 'confirm')"/>
+                                    <field name="total_price" widget="monetary"
+                                           options="{'currency_field': 'currency_id'}" sum="Total"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notes">
+                            <field name="notes" placeholder="أدخل أي ملاحظات إضافية هنا..."/>
+                        </page>
+                        <page string="Attachment">
+                            <field name="attachment_line_ids">
+                                <list editable="bottom">
+                                    <field name="document_filename" invisible="0" placeholder="Description Your File"/>
+                                    <field name="document" filename="document_filename"/>
+                                </list>
+                            </field>
+                        </page>
+
+                    </notebook>
+                </sheet>
+                <!--                Chatter-->
+                <chatter reload_on_attachment="True"/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_purchase_request_search" model="ir.ui.view">
+        <field name="name">project.purchase.request.search</field>
+        <field name="model">project.purchase.request</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="project_id"/>
+                <field name="name"/>
+                <field name="ref"/>
+                <filter name="filter_project_id" string="Project" domain="[]" context="{'group_by': 'project_id'}"/>
+                <searchpanel>
+                    <field name="state" icon="fa-users" string="State" enable_counters="1"/>
+                    <!-- <field name="request_type" icon="fa-users" string="Request Type" enable_counters="1"/> -->
+                </searchpanel>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_purchase_request_line_list" model="ir.ui.view">
+        <field name="name">purchase.request.line.list</field>
+        <field name="model">purchase.request.line</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/>
+                <field name="product_id"/>
+                <field name="quantity"/>
+                <field name="product_uom"/>
+            </list>
+        </field>
+    </record>
+
+
+    <record id="action_purchase_request" model="ir.actions.act_window">
+        <field name="name">TOR Request</field>
+        <field name="res_model">project.purchase.request</field>
+        <field name="view_mode">list,kanban,form,search</field>
+        <field name="context">{'default_state': 'draft', 'search_default_filter_project_id': 1, 'default_request_type':
+            'tor_advance'}
+        </field>
+        <field name="domain">[('request_type','=', 'tor_advance')]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new TOR Request order
+            </p>
+        </field>
+    </record>
+
+    <record id="view_purchase_request_kanban" model="ir.ui.view">
+        <field name="name">purchase.request.kanban</field>
+        <field name="model">project.purchase.request</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state">
+                <field name="id"/>
+                <field name="ref"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="oe_kanban_content">
+                                <div class="o_kanban_record_title">
+                                    <field name="ref"/>
+                                </div>
+                                <div>
+                                    <field name="project_id" widget="many2one_avatar"/>
+                                </div>
+                                <div>
+                                    <field name="requester_id" widget="many2one_avatar"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+</odoo>

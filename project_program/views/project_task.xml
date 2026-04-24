@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inherit Task Form View -->
+    <record id="view_task_form2_inherited" model="ir.ui.view">
+        <field name="name">project.task.form.inherited.budget</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_ids']" position="after">
+                <field name="currency_id" invisible="1"/>
+                <field name="expected_budget" widget="monetary"/>
+                <field name="subtask_expected_budget" widget="monetary" readonly="1" 
+                       invisible="not child_ids"/>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Followup Report" name="followup_report">
+                    <group>
+                        <field name="followup_template_id"/>
+                    </group>
+                    <field name="followup_report" widget="html"/>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Inherit Task Tree View -->
+    <record id="view_task_tree2_inherited" model="ir.ui.view">
+        <field name="name">project.task.tree.inherited.budget</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_tree2"/>
+        <field name="arch" type="xml">
+            <field name="user_ids" position="after">
+                <field name="currency_id" invisible="1"/>
+                <field name="expected_budget" widget="monetary" sum="Total Expected Budget"/>
+                <field name="subtask_expected_budget" widget="monetary" sum="Total Subtasks Budget"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- Inherit Task Kanban View -->
+    <record id="view_task_kanban_inherited" model="ir.ui.view">
+        <field name="name">project.task.kanban.inherited.budget</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='tag_ids']" position="after">
+                <field name="currency_id" invisible="1"/>
+                <div>
+                    <strong>Expected Budget: </strong>
+                    <field name="expected_budget" widget="monetary" class="ms-2"/>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo> 

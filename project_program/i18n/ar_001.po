@@ -1,0 +1,1008 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* hms_expense
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-05-13 06:40+0000\n"
+"PO-Revision-Date: 2024-05-13 06:40+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: hms_expense
+#: model:ir.actions.report,print_report_name:hms_expense.action_daily_report_print
+msgid "'daily report'"
+msgstr ""
+
+#. module: hms_expense
+#: model_terms:ir.ui.view,arch_db:hms_expense.res_config_settings_view_form
+msgid "<span class=\"o_form_label\">Account</span>"
+msgstr ""
+
+#. module: hms_expense
+#: model_terms:ir.ui.view,arch_db:hms_expense.print_daily_report_temp
+msgid "<span>Expense</span>"
+msgstr ""
+
+#. module: hms_expense
+#: model_terms:ir.ui.view,arch_db:hms_expense.print_daily_report_temp
+msgid "<span>Income</span>"
+msgstr ""
+
+#. module: hms_expense
+#: model_terms:ir.ui.view,arch_db:hms_expense.res_config_settings_view_form
+msgid "<span>Owner Expense Account</span>"
+msgstr ""
+
+#. module: hms_expense
+#: model_terms:ir.ui.view,arch_db:hms_expense.res_config_settings_view_form
+msgid "<span>Rent Expense Account</span>"
+msgstr ""
+
+#. module: hms_expense
+#: model_terms:ir.ui.view,arch_db:hms_expense.res_config_settings_view_form
+msgid "<span>Salary Expense Account</span>"
+msgstr ""
+
+#. module: hms_expense
+#: model_terms:ir.ui.view,arch_db:hms_expense.print_daily_report_temp
+msgid "<span>الايرادات</span>"
+msgstr ""
+
+#. module: hms_expense
+#: model_terms:ir.ui.view,arch_db:hms_expense.print_daily_report_temp
+msgid "<span>المصروفات</span>"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_expense_vat__message_needaction
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll__message_needaction
+#: model:ir.model.fields,field_description:hms_expense.field_hms_percentage__message_needaction
+#: model:ir.model.fields,field_description:hms_expense.field_hms_rent__message_needaction
+#: model:ir.model.fields,field_description:hms_expense.field_hms_salary__message_needaction
+msgid "Action Needed"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_expense_vat__activity_ids
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll__activity_ids
+#: model:ir.model.fields,field_description:hms_expense.field_hms_percentage__activity_ids
+#: model:ir.model.fields,field_description:hms_expense.field_hms_rent__activity_ids
+#: model:ir.model.fields,field_description:hms_expense.field_hms_salary__activity_ids
+msgid "Activities"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_expense_vat__activity_exception_decoration
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll__activity_exception_decoration
+#: model:ir.model.fields,field_description:hms_expense.field_hms_percentage__activity_exception_decoration
+#: model:ir.model.fields,field_description:hms_expense.field_hms_rent__activity_exception_decoration
+#: model:ir.model.fields,field_description:hms_expense.field_hms_salary__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_expense_vat__activity_state
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll__activity_state
+#: model:ir.model.fields,field_description:hms_expense.field_hms_percentage__activity_state
+#: model:ir.model.fields,field_description:hms_expense.field_hms_rent__activity_state
+#: model:ir.model.fields,field_description:hms_expense.field_hms_salary__activity_state
+msgid "Activity State"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_expense_vat__activity_type_icon
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll__activity_type_icon
+#: model:ir.model.fields,field_description:hms_expense.field_hms_percentage__activity_type_icon
+#: model:ir.model.fields,field_description:hms_expense.field_hms_rent__activity_type_icon
+#: model:ir.model.fields,field_description:hms_expense.field_hms_salary__activity_type_icon
+msgid "Activity Type Icon"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_pos_session__admin_payment_status
+msgid "Admin Payment Status"
+msgstr ""
+
+#. module: hms_expense
+#: model:res.groups,name:hms_expense.group_hms_expense_administrator
+msgid "Administrator"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll_line__amount
+#: model:ir.model.fields,field_description:hms_expense.field_hms_salary__amount
+msgid "Amount"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_expense_vat__message_attachment_count
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll__message_attachment_count
+#: model:ir.model.fields,field_description:hms_expense.field_hms_percentage__message_attachment_count
+#: model:ir.model.fields,field_description:hms_expense.field_hms_rent__message_attachment_count
+#: model:ir.model.fields,field_description:hms_expense.field_hms_salary__message_attachment_count
+msgid "Attachment Count"
+msgstr ""
+
+#. module: hms_expense
+#: model_terms:ir.ui.view,arch_db:hms_expense.view_daily_report_form
+msgid "Cancel"
+msgstr "إلغاء"
+
+#. module: hms_expense
+#: model:ir.module.category,description:hms_expense.module_category_hms_expense
+msgid "Category For Hms Expense System"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll_line__closing_date
+msgid "Closing Date"
+msgstr ""
+
+#. module: hms_expense
+#: model_terms:ir.ui.view,arch_db:hms_expense.view_hms_payroll_form
+msgid "Compute"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model,name:hms_expense.model_res_config_settings
+msgid "Config Settings"
+msgstr "تهيئة الإعدادات "
+
+#. module: hms_expense
+#: model:ir.ui.menu,name:hms_expense.hms_config_menu
+msgid "Configuration"
+msgstr ""
+
+#. module: hms_expense
+#: model_terms:ir.ui.view,arch_db:hms_expense.view_hms_expense_form
+#: model_terms:ir.ui.view,arch_db:hms_expense.view_hms_payroll_form
+#: model_terms:ir.ui.view,arch_db:hms_expense.view_hms_percentage_form
+#: model_terms:ir.ui.view,arch_db:hms_expense.view_hms_rent_form
+msgid "Confirm"
+msgstr "تأكيد"
+
+#. module: hms_expense
+#: model_terms:ir.actions.act_window,help:hms_expense.action_hms_expense
+msgid "Create Your First Expense"
+msgstr ""
+
+#. module: hms_expense
+#: model_terms:ir.actions.act_window,help:hms_expense.action_hms_payroll
+msgid "Create Your First Payroll"
+msgstr ""
+
+#. module: hms_expense
+#: model_terms:ir.actions.act_window,help:hms_expense.action_hms_percentage
+#: model_terms:ir.actions.act_window,help:hms_expense.action_hms_rent
+msgid "Create Your First Rent"
+msgstr ""
+
+#. module: hms_expense
+#: model_terms:ir.actions.act_window,help:hms_expense.action_hms_salary
+msgid "Create Your First Salary"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_daily_report__create_uid
+#: model:ir.model.fields,field_description:hms_expense.field_hms_expense_vat__create_uid
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll__create_uid
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll_line__create_uid
+#: model:ir.model.fields,field_description:hms_expense.field_hms_percentage__create_uid
+#: model:ir.model.fields,field_description:hms_expense.field_hms_rent__create_uid
+#: model:ir.model.fields,field_description:hms_expense.field_hms_salary__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_daily_report__create_date
+#: model:ir.model.fields,field_description:hms_expense.field_hms_expense_vat__create_date
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll__create_date
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll_line__create_date
+#: model:ir.model.fields,field_description:hms_expense.field_hms_percentage__create_date
+#: model:ir.model.fields,field_description:hms_expense.field_hms_rent__create_date
+#: model:ir.model.fields,field_description:hms_expense.field_hms_salary__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.actions.act_window,name:hms_expense.view_daily_report_action
+#: model_terms:ir.ui.view,arch_db:hms_expense.view_daily_report_form
+msgid "Daily Report"
+msgstr "التقرير اليومي"
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_percentage__date
+#: model:ir.model.fields,field_description:hms_expense.field_hms_rent__date
+#: model:ir.model.fields,field_description:hms_expense.field_hms_salary__date
+msgid "Date"
+msgstr "التاريخ"
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_daily_report__date_from
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll__date_from
+#: model_terms:ir.ui.view,arch_db:hms_expense.print_daily_report_temp
+msgid "Date From"
+msgstr "التاريخ من"
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_daily_report__date_to
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll__date_to
+msgid "Date To"
+msgstr "التاريخ إلي"
+
+#. module: hms_expense
+#: model_terms:ir.ui.view,arch_db:hms_expense.print_daily_report_temp
+msgid "Date to"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_daily_report__display_name
+#: model:ir.model.fields,field_description:hms_expense.field_hms_expense_vat__display_name
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll__display_name
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll_line__display_name
+#: model:ir.model.fields,field_description:hms_expense.field_hms_percentage__display_name
+#: model:ir.model.fields,field_description:hms_expense.field_hms_rent__display_name
+#: model:ir.model.fields,field_description:hms_expense.field_hms_salary__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields.selection,name:hms_expense.selection__hms_expense_vat__state__done
+#: model:ir.model.fields.selection,name:hms_expense.selection__hms_percentage__state__done
+#: model:ir.model.fields.selection,name:hms_expense.selection__hms_rent__state__done
+msgid "Done"
+msgstr "تم"
+
+#. module: hms_expense
+#: model:ir.model.fields.selection,name:hms_expense.selection__hms_expense_vat__state__draft
+#: model:ir.model.fields.selection,name:hms_expense.selection__hms_percentage__state__draft
+#: model:ir.model.fields.selection,name:hms_expense.selection__hms_rent__state__draft
+msgid "Draft"
+msgstr "مبدئي"
+
+#. module: hms_expense
+#: model:ir.model.fields.selection,name:hms_expense.selection__hms_salary__percentage_type__employee
+msgid "Employee"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll__total_due
+msgid "Employee Due"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.actions.act_window,name:hms_expense.action_hms_expense
+#: model:ir.ui.menu,name:hms_expense.hms_expense_menu
+msgid "Expense"
+msgstr "المنصرفات"
+
+#. module: hms_expense
+#: model:ir.model.fields.selection,name:hms_expense.selection__hms_salary__salary_type__fixed
+msgid "Fixed"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_expense_vat__message_follower_ids
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll__message_follower_ids
+#: model:ir.model.fields,field_description:hms_expense.field_hms_percentage__message_follower_ids
+#: model:ir.model.fields,field_description:hms_expense.field_hms_rent__message_follower_ids
+#: model:ir.model.fields,field_description:hms_expense.field_hms_salary__message_follower_ids
+msgid "Followers"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_expense_vat__message_partner_ids
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll__message_partner_ids
+#: model:ir.model.fields,field_description:hms_expense.field_hms_percentage__message_partner_ids
+#: model:ir.model.fields,field_description:hms_expense.field_hms_rent__message_partner_ids
+#: model:ir.model.fields,field_description:hms_expense.field_hms_salary__message_partner_ids
+msgid "Followers (Partners)"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,help:hms_expense.field_hms_expense_vat__activity_type_icon
+#: model:ir.model.fields,help:hms_expense.field_hms_payroll__activity_type_icon
+#: model:ir.model.fields,help:hms_expense.field_hms_percentage__activity_type_icon
+#: model:ir.model.fields,help:hms_expense.field_hms_rent__activity_type_icon
+#: model:ir.model.fields,help:hms_expense.field_hms_salary__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr ""
+
+#. module: hms_expense
+#: model_terms:ir.ui.view,arch_db:hms_expense.print_daily_report_temp
+msgid "General Reports"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.ui.menu,name:hms_expense.hms_expense_menu_parent
+#: model_terms:ir.ui.view,arch_db:hms_expense.res_config_settings_view_form
+msgid "HMS Expense"
+msgstr "منصرفات الصيدلية"
+
+#. module: hms_expense
+#: model:ir.model,name:hms_expense.model_hms_payroll
+msgid "HMS Payroll"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model,name:hms_expense.model_hms_rent
+msgid "HMS Rent"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model,name:hms_expense.model_hms_salary
+msgid "HMS Salary"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model,name:hms_expense.model_hms_percentage
+msgid "HMS owner payment"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_expense_vat__has_message
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll__has_message
+#: model:ir.model.fields,field_description:hms_expense.field_hms_percentage__has_message
+#: model:ir.model.fields,field_description:hms_expense.field_hms_rent__has_message
+#: model:ir.model.fields,field_description:hms_expense.field_hms_salary__has_message
+msgid "Has Message"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.module.category,name:hms_expense.module_category_hms_expense
+msgid "Hms Expense System"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model,name:hms_expense.model_hms_payroll_line
+msgid "Hms Payroll Line"
+msgstr ""
+
+#. module: hms_expense
+#: model_terms:ir.ui.view,arch_db:hms_expense.res_config_settings_view_form
+msgid "Hospital Management"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_daily_report__id
+#: model:ir.model.fields,field_description:hms_expense.field_hms_expense_vat__id
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll__id
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll_line__id
+#: model:ir.model.fields,field_description:hms_expense.field_hms_percentage__id
+#: model:ir.model.fields,field_description:hms_expense.field_hms_rent__id
+#: model:ir.model.fields,field_description:hms_expense.field_hms_salary__id
+msgid "ID"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_expense_vat__activity_exception_icon
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll__activity_exception_icon
+#: model:ir.model.fields,field_description:hms_expense.field_hms_percentage__activity_exception_icon
+#: model:ir.model.fields,field_description:hms_expense.field_hms_rent__activity_exception_icon
+#: model:ir.model.fields,field_description:hms_expense.field_hms_salary__activity_exception_icon
+msgid "Icon"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,help:hms_expense.field_hms_expense_vat__activity_exception_icon
+#: model:ir.model.fields,help:hms_expense.field_hms_payroll__activity_exception_icon
+#: model:ir.model.fields,help:hms_expense.field_hms_percentage__activity_exception_icon
+#: model:ir.model.fields,help:hms_expense.field_hms_rent__activity_exception_icon
+#: model:ir.model.fields,help:hms_expense.field_hms_salary__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,help:hms_expense.field_hms_expense_vat__message_needaction
+#: model:ir.model.fields,help:hms_expense.field_hms_payroll__message_needaction
+#: model:ir.model.fields,help:hms_expense.field_hms_percentage__message_needaction
+#: model:ir.model.fields,help:hms_expense.field_hms_rent__message_needaction
+#: model:ir.model.fields,help:hms_expense.field_hms_salary__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,help:hms_expense.field_hms_expense_vat__message_has_error
+#: model:ir.model.fields,help:hms_expense.field_hms_expense_vat__message_has_sms_error
+#: model:ir.model.fields,help:hms_expense.field_hms_payroll__message_has_error
+#: model:ir.model.fields,help:hms_expense.field_hms_payroll__message_has_sms_error
+#: model:ir.model.fields,help:hms_expense.field_hms_percentage__message_has_error
+#: model:ir.model.fields,help:hms_expense.field_hms_percentage__message_has_sms_error
+#: model:ir.model.fields,help:hms_expense.field_hms_rent__message_has_error
+#: model:ir.model.fields,help:hms_expense.field_hms_rent__message_has_sms_error
+#: model:ir.model.fields,help:hms_expense.field_hms_salary__message_has_error
+#: model:ir.model.fields,help:hms_expense.field_hms_salary__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr ""
+
+#. module: hms_expense
+#: model_terms:ir.ui.view,arch_db:hms_expense.view_hms_payroll_form
+msgid "Information"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_product_product__expense
+#: model:ir.model.fields,field_description:hms_expense.field_product_template__expense
+#: model_terms:ir.ui.view,arch_db:hms_expense.view_product_template_form_inherit
+msgid "Is Expense Product"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_expense_vat__message_is_follower
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll__message_is_follower
+#: model:ir.model.fields,field_description:hms_expense.field_hms_percentage__message_is_follower
+#: model:ir.model.fields,field_description:hms_expense.field_hms_rent__message_is_follower
+#: model:ir.model.fields,field_description:hms_expense.field_hms_salary__message_is_follower
+msgid "Is Follower"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_daily_report____last_update
+#: model:ir.model.fields,field_description:hms_expense.field_hms_expense_vat____last_update
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll____last_update
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll_line____last_update
+#: model:ir.model.fields,field_description:hms_expense.field_hms_percentage____last_update
+#: model:ir.model.fields,field_description:hms_expense.field_hms_rent____last_update
+#: model:ir.model.fields,field_description:hms_expense.field_hms_salary____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_daily_report__write_uid
+#: model:ir.model.fields,field_description:hms_expense.field_hms_expense_vat__write_uid
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll__write_uid
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll_line__write_uid
+#: model:ir.model.fields,field_description:hms_expense.field_hms_percentage__write_uid
+#: model:ir.model.fields,field_description:hms_expense.field_hms_rent__write_uid
+#: model:ir.model.fields,field_description:hms_expense.field_hms_salary__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_daily_report__write_date
+#: model:ir.model.fields,field_description:hms_expense.field_hms_expense_vat__write_date
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll__write_date
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll_line__write_date
+#: model:ir.model.fields,field_description:hms_expense.field_hms_percentage__write_date
+#: model:ir.model.fields,field_description:hms_expense.field_hms_rent__write_date
+#: model:ir.model.fields,field_description:hms_expense.field_hms_salary__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll__payroll_line_ids
+msgid "Line"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_expense_vat__message_main_attachment_id
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll__message_main_attachment_id
+#: model:ir.model.fields,field_description:hms_expense.field_hms_percentage__message_main_attachment_id
+#: model:ir.model.fields,field_description:hms_expense.field_hms_rent__message_main_attachment_id
+#: model:ir.model.fields,field_description:hms_expense.field_hms_salary__message_main_attachment_id
+msgid "Main Attachment"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields.selection,name:hms_expense.selection__hms_salary__percentage_type__manager
+msgid "Manager"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_expense_vat__message_has_error
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll__message_has_error
+#: model:ir.model.fields,field_description:hms_expense.field_hms_percentage__message_has_error
+#: model:ir.model.fields,field_description:hms_expense.field_hms_rent__message_has_error
+#: model:ir.model.fields,field_description:hms_expense.field_hms_salary__message_has_error
+msgid "Message Delivery error"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_expense_vat__message_ids
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll__message_ids
+#: model:ir.model.fields,field_description:hms_expense.field_hms_percentage__message_ids
+#: model:ir.model.fields,field_description:hms_expense.field_hms_rent__message_ids
+#: model:ir.model.fields,field_description:hms_expense.field_hms_salary__message_ids
+msgid "Messages"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_expense_vat__my_activity_date_deadline
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll__my_activity_date_deadline
+#: model:ir.model.fields,field_description:hms_expense.field_hms_percentage__my_activity_date_deadline
+#: model:ir.model.fields,field_description:hms_expense.field_hms_rent__my_activity_date_deadline
+#: model:ir.model.fields,field_description:hms_expense.field_hms_salary__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_expense_vat__name
+#: model:ir.model.fields,field_description:hms_expense.field_hms_salary__name
+msgid "Name"
+msgstr "إسم المنصرف"
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll__net
+msgid "Net"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_expense_vat__activity_date_deadline
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll__activity_date_deadline
+#: model:ir.model.fields,field_description:hms_expense.field_hms_percentage__activity_date_deadline
+#: model:ir.model.fields,field_description:hms_expense.field_hms_rent__activity_date_deadline
+#: model:ir.model.fields,field_description:hms_expense.field_hms_salary__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_expense_vat__activity_summary
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll__activity_summary
+#: model:ir.model.fields,field_description:hms_expense.field_hms_percentage__activity_summary
+#: model:ir.model.fields,field_description:hms_expense.field_hms_rent__activity_summary
+#: model:ir.model.fields,field_description:hms_expense.field_hms_salary__activity_summary
+msgid "Next Activity Summary"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_expense_vat__activity_type_id
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll__activity_type_id
+#: model:ir.model.fields,field_description:hms_expense.field_hms_percentage__activity_type_id
+#: model:ir.model.fields,field_description:hms_expense.field_hms_rent__activity_type_id
+#: model:ir.model.fields,field_description:hms_expense.field_hms_salary__activity_type_id
+msgid "Next Activity Type"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_expense_vat__message_needaction_counter
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll__message_needaction_counter
+#: model:ir.model.fields,field_description:hms_expense.field_hms_percentage__message_needaction_counter
+#: model:ir.model.fields,field_description:hms_expense.field_hms_rent__message_needaction_counter
+#: model:ir.model.fields,field_description:hms_expense.field_hms_salary__message_needaction_counter
+msgid "Number of Actions"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_expense_vat__message_has_error_counter
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll__message_has_error_counter
+#: model:ir.model.fields,field_description:hms_expense.field_hms_percentage__message_has_error_counter
+#: model:ir.model.fields,field_description:hms_expense.field_hms_rent__message_has_error_counter
+#: model:ir.model.fields,field_description:hms_expense.field_hms_salary__message_has_error_counter
+msgid "Number of errors"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,help:hms_expense.field_hms_expense_vat__message_needaction_counter
+#: model:ir.model.fields,help:hms_expense.field_hms_payroll__message_needaction_counter
+#: model:ir.model.fields,help:hms_expense.field_hms_percentage__message_needaction_counter
+#: model:ir.model.fields,help:hms_expense.field_hms_rent__message_needaction_counter
+#: model:ir.model.fields,help:hms_expense.field_hms_salary__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,help:hms_expense.field_hms_expense_vat__message_has_error_counter
+#: model:ir.model.fields,help:hms_expense.field_hms_payroll__message_has_error_counter
+#: model:ir.model.fields,help:hms_expense.field_hms_percentage__message_has_error_counter
+#: model:ir.model.fields,help:hms_expense.field_hms_rent__message_has_error_counter
+#: model:ir.model.fields,help:hms_expense.field_hms_salary__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll_line__opening_date
+msgid "Opening Date"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_res_config_settings__owner_id
+msgid "Owner Account"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields.selection,name:hms_expense.selection__hms_payroll__state__paid
+#: model:ir.model.fields.selection,name:hms_expense.selection__pos_session__admin_payment_status__paid
+#: model:ir.model.fields.selection,name:hms_expense.selection__pos_session__user_payment_status__paid
+msgid "Paid"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_daily_report__patient_id
+msgid "Patient"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll_line__total_payments_amount
+msgid "Payment"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_expense_vat__expense_type
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll__payment_type
+#: model:ir.model.fields,field_description:hms_expense.field_hms_percentage__expense_type
+#: model:ir.model.fields,field_description:hms_expense.field_hms_rent__expense_type
+#: model_terms:ir.ui.view,arch_db:hms_expense.view_hms_expense_vat_search
+#: model_terms:ir.ui.view,arch_db:hms_expense.view_hms_percentage_search
+#: model_terms:ir.ui.view,arch_db:hms_expense.view_hms_rent_search
+msgid "Payment Method"
+msgstr "طريقة الدفع"
+
+#. module: hms_expense
+#: model:ir.actions.act_window,name:hms_expense.action_hms_payroll
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll_line__payroll_id
+#: model:ir.ui.menu,name:hms_expense.hms_payroll_menu
+msgid "Payroll"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll__date
+msgid "Payroll Date"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.actions.act_window,name:hms_expense.action_hms_percentage
+#: model:ir.model.fields,field_description:hms_expense.field_hms_salary__percentage
+#: model:ir.model.fields.selection,name:hms_expense.selection__hms_salary__salary_type__percentage
+#: model:ir.ui.menu,name:hms_expense.hms_percentage_menu
+msgid "Percentage"
+msgstr "مسحوبات المالك"
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_salary__percentage_type
+msgid "Percentage Type"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model,name:hms_expense.model_pos_session
+msgid "Point of Sale Session"
+msgstr "جلسة نقطة البيع"
+
+#. module: hms_expense
+#: model_terms:ir.ui.view,arch_db:hms_expense.view_daily_report_form
+msgid "Print"
+msgstr "طباعة"
+
+#. module: hms_expense
+#: model:ir.model,name:hms_expense.model_daily_report
+msgid "Print Daily Report"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_expense_vat__ref
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll__ref
+#: model:ir.model.fields,field_description:hms_expense.field_hms_percentage__ref
+#: model:ir.model.fields,field_description:hms_expense.field_hms_rent__ref
+#: model:ir.model.fields,field_description:hms_expense.field_hms_salary__ref
+msgid "Reference"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.actions.act_window,name:hms_expense.action_hms_rent
+#: model:ir.ui.menu,name:hms_expense.hms_rent_menu
+msgid "Rent"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_res_config_settings__expense_id
+msgid "Rent Account"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.ui.menu,name:hms_expense.menu_daily_report
+#: model:ir.ui.menu,name:hms_expense.menu_report
+msgid "Report"
+msgstr "التقارير"
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_expense_vat__activity_user_id
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll__activity_user_id
+#: model:ir.model.fields,field_description:hms_expense.field_hms_percentage__activity_user_id
+#: model:ir.model.fields,field_description:hms_expense.field_hms_rent__activity_user_id
+#: model:ir.model.fields,field_description:hms_expense.field_hms_salary__activity_user_id
+msgid "Responsible User"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_expense_vat__message_has_sms_error
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll__message_has_sms_error
+#: model:ir.model.fields,field_description:hms_expense.field_hms_percentage__message_has_sms_error
+#: model:ir.model.fields,field_description:hms_expense.field_hms_rent__message_has_sms_error
+#: model:ir.model.fields,field_description:hms_expense.field_hms_salary__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.actions.act_window,name:hms_expense.action_hms_salary
+#: model:ir.ui.menu,name:hms_expense.hms_salary_menu
+msgid "Salary"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_res_config_settings__salary_id
+msgid "Salary Account"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_salary__salary_type
+msgid "Salary Type"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll_line__session_id
+msgid "Session"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll__total_amount
+msgid "Session Total Amount"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.actions.act_window,name:hms_expense.hms_config_settings_action
+#: model:ir.ui.menu,name:hms_expense.hms_config_settings_menu
+msgid "Settings"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll__state
+msgid "State"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_expense_vat__state
+#: model:ir.model.fields,field_description:hms_expense.field_hms_percentage__state
+#: model:ir.model.fields,field_description:hms_expense.field_hms_rent__state
+msgid "Status"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,help:hms_expense.field_hms_expense_vat__activity_state
+#: model:ir.model.fields,help:hms_expense.field_hms_payroll__activity_state
+#: model:ir.model.fields,help:hms_expense.field_hms_percentage__activity_state
+#: model:ir.model.fields,help:hms_expense.field_hms_rent__activity_state
+#: model:ir.model.fields,help:hms_expense.field_hms_salary__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_expense_vat__time
+msgid "Time"
+msgstr "التاريخ"
+
+#. module: hms_expense
+#: model:ir.model.fields,help:hms_expense.field_hms_expense_vat__activity_exception_decoration
+#: model:ir.model.fields,help:hms_expense.field_hms_payroll__activity_exception_decoration
+#: model:ir.model.fields,help:hms_expense.field_hms_percentage__activity_exception_decoration
+#: model:ir.model.fields,help:hms_expense.field_hms_rent__activity_exception_decoration
+#: model:ir.model.fields,help:hms_expense.field_hms_salary__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields.selection,name:hms_expense.selection__hms_payroll__state__unpaid
+#: model:ir.model.fields.selection,name:hms_expense.selection__pos_session__admin_payment_status__unpaid
+#: model:ir.model.fields.selection,name:hms_expense.selection__pos_session__user_payment_status__unpaid
+msgid "Unpaid"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_expense_vat__user_id
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll__user_id
+#: model:ir.model.fields,field_description:hms_expense.field_hms_percentage__user_id
+#: model:ir.model.fields,field_description:hms_expense.field_hms_rent__user_id
+msgid "User"
+msgstr "المستخدم"
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_pos_session__user_payment_status
+msgid "User Payment Status"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_expense_vat__website_message_ids
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll__website_message_ids
+#: model:ir.model.fields,field_description:hms_expense.field_hms_percentage__website_message_ids
+#: model:ir.model.fields,field_description:hms_expense.field_hms_rent__website_message_ids
+#: model:ir.model.fields,field_description:hms_expense.field_hms_salary__website_message_ids
+msgid "Website Messages"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,help:hms_expense.field_hms_expense_vat__website_message_ids
+#: model:ir.model.fields,help:hms_expense.field_hms_payroll__website_message_ids
+#: model:ir.model.fields,help:hms_expense.field_hms_percentage__website_message_ids
+#: model:ir.model.fields,help:hms_expense.field_hms_rent__website_message_ids
+#: model:ir.model.fields,help:hms_expense.field_hms_salary__website_message_ids
+msgid "Website communication history"
+msgstr ""
+
+#. module: hms_expense
+#: model_terms:ir.ui.view,arch_db:hms_expense.print_daily_report_temp
+msgid "Your Logo"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_expense_vat__amount
+#: model:ir.model.fields,field_description:hms_expense.field_hms_percentage__amount
+#: model:ir.model.fields,field_description:hms_expense.field_hms_rent__amount
+msgid "amount"
+msgstr "المبلغ"
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_percentage__name
+#: model:ir.model.fields,field_description:hms_expense.field_hms_rent__name
+msgid "name"
+msgstr "الوصف"
+
+#. module: hms_expense
+#: model:ir.model,name:hms_expense.model_product_template
+msgid "product Template"
+msgstr "المنتج"
+
+#. module: hms_expense
+#: model:ir.model,name:hms_expense.model_hms_expense_vat
+msgid "request expenses"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.model.fields,field_description:hms_expense.field_hms_payroll__salary_id
+msgid "salary rule"
+msgstr ""
+
+#. module: hms_expense
+#. odoo-python
+#: code:addons/hms_expense/wizard/daily_report.py:0
+#, python-format
+msgid ""
+"select sum(amount)\n"
+"                    from hms_expense_vat as ex\n"
+"                    join account_journal as j on j.id = ex.expense_type\n"
+"                    and j.type = 'bank'\n"
+"                    "
+msgstr ""
+
+#. module: hms_expense
+#. odoo-python
+#: code:addons/hms_expense/wizard/daily_report.py:0
+#, python-format
+msgid ""
+"select sum(amount)\n"
+"                    from hms_expense_vat as ex\n"
+"                    join account_journal as j on j.id = ex.expense_type\n"
+"                    and j.type = 'bank'\n"
+"                    and time >= '%s' and time <= '%s'\n"
+"                    "
+msgstr ""
+
+#. module: hms_expense
+#. odoo-python
+#: code:addons/hms_expense/wizard/daily_report.py:0
+#, python-format
+msgid ""
+"select sum(amount)\n"
+"                    from hms_expense_vat as ex\n"
+"                    join account_journal as j on j.id = ex.expense_type\n"
+"                    and j.type = 'cash'\n"
+"                    "
+msgstr ""
+
+#. module: hms_expense
+#. odoo-python
+#: code:addons/hms_expense/wizard/daily_report.py:0
+#, python-format
+msgid ""
+"select sum(amount)\n"
+"                    from hms_expense_vat as ex\n"
+"                    join account_journal as j on j.id = ex.expense_type\n"
+"                    and j.type = 'cash'\n"
+"                    and time >= '%s' and time <= '%s'\n"
+"                    "
+msgstr ""
+
+#. module: hms_expense
+#. odoo-python
+#: code:addons/hms_expense/wizard/daily_report.py:0
+#, python-format
+msgid ""
+"select sum(p.amount)\n"
+"                    from pos_payment as p\n"
+"                    join pos_payment_method as j on j.id = p.payment_method_id\n"
+"                    and j.name = '{\"en_US\": \"Cash\"}'"
+msgstr ""
+
+#. module: hms_expense
+#. odoo-python
+#: code:addons/hms_expense/wizard/daily_report.py:0
+#, python-format
+msgid ""
+"select sum(p.amount)\n"
+"                    from pos_payment as p\n"
+"                    join pos_payment_method as j on j.id = p.payment_method_id\n"
+"                    and j.name = '{\"en_US\": \"Cash\"}'\n"
+"                    and p.payment_date >= '%s' and p.payment_date <= '%s'\n"
+"                    "
+msgstr ""
+
+#. module: hms_expense
+#. odoo-python
+#: code:addons/hms_expense/wizard/daily_report.py:0
+#, python-format
+msgid ""
+"select sum(p.amount)\n"
+"                    from pos_payment as p\n"
+"                    join pos_payment_method as j on j.id = p.payment_method_id  \n"
+"                    and j.name = '{\"en_US\": \"Bank\"}'"
+msgstr ""
+
+#. module: hms_expense
+#. odoo-python
+#: code:addons/hms_expense/wizard/daily_report.py:0
+#, python-format
+msgid ""
+"select sum(p.amount), j.name\n"
+"                    from pos_payment as p\n"
+"                    join pos_payment_method as j on j.id = p.payment_method_id\n"
+"                    and j.name = '{\"en_US\": \"Bank\"}'\n"
+"                    and p.payment_date >= '%s' and p.payment_date <= '%s'\n"
+"                    group by j.name"
+msgstr ""
+
+#. module: hms_expense
+#: model_terms:ir.ui.view,arch_db:hms_expense.view_hms_expense_vat_search
+#: model_terms:ir.ui.view,arch_db:hms_expense.view_hms_percentage_search
+#: model_terms:ir.ui.view,arch_db:hms_expense.view_hms_rent_search
+msgid "state"
+msgstr ""
+
+#. module: hms_expense
+#: model_terms:ir.ui.view,arch_db:hms_expense.print_daily_report_temp
+msgid ""
+"التاريخ\n"
+"                            الى :"
+msgstr ""
+
+#. module: hms_expense
+#: model_terms:ir.ui.view,arch_db:hms_expense.print_daily_report_temp
+msgid "التاريخ من :"
+msgstr ""
+
+#. module: hms_expense
+#: model_terms:ir.ui.view,arch_db:hms_expense.print_daily_report_temp
+msgid "الصافي"
+msgstr ""
+
+#. module: hms_expense
+#: model_terms:ir.ui.view,arch_db:hms_expense.print_daily_report_temp
+msgid "المجموع"
+msgstr ""
+
+#. module: hms_expense
+#: model_terms:ir.ui.view,arch_db:hms_expense.print_daily_report_temp
+msgid "بنك"
+msgstr ""
+
+#. module: hms_expense
+#: model:ir.actions.report,name:hms_expense.action_daily_report_print
+msgid "تقرير الوضع المالي"
+msgstr ""
+
+#. module: hms_expense
+#: model_terms:ir.ui.view,arch_db:hms_expense.print_daily_report_temp
+msgid "تقرير عام"
+msgstr ""
+
+#. module: hms_expense
+#: model_terms:ir.ui.view,arch_db:hms_expense.print_daily_report_temp
+msgid "كاش"
+msgstr ""

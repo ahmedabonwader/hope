@@ -1,0 +1,85 @@
+<odoo>
+    <template id="custom_report_layout_info">
+        <t t-name="custom_report_layout_info">
+            <html>
+                <head>
+                    <meta charset="utf-8"/>
+                    <style>
+                        body {
+                            font-family: 'KacstOne', sans-serif;
+                            font-size: 13px;
+                            color: #000;
+                        }
+                        .custom-header {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            padding: 0 20px;
+                            height: 100px;
+                            border-bottom: 1px solid #ccc;
+                        }
+                        .logo-left img {
+                            max-height: 80px;
+                            max-width: 120px;
+                        }
+                        .header-title {
+                            text-align: center;
+                            flex-grow: 1;
+                            font-weight: bold;
+                            font-size: 16px;
+                            color: #003366;
+                        }
+                        .company-right {
+                            text-align: right;
+                            font-size: 13px;
+                            min-width: 150px;
+                        }
+                        .custom-footer {
+                            text-align: center;
+                            font-size: 10px;
+                            color: #999;
+                            margin-top: 40px;
+                        }
+                        .page {
+                            page-break-after: always;
+                            padding: 30px;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <!-- Header -->
+                    <div class="custom-header">
+                        <div class="logo-left">
+                            <t t-if="company and company.logo">
+                                <img t-att-src="'data:image/png;base64,%s' % company.logo"/>
+                            </t>
+                        </div>
+                        <div class="header-title">
+                            <t t-if="company and company.name">
+                                <t t-esc="company.name"/>
+                            </t>
+                        </div>
+                        <div class="company-right">
+                            <t t-if="company and company.vat">
+                                VAT: <t t-esc="company.vat"/>
+                            </t>
+                        </div>
+                    </div>
+
+                    <!-- Main Content -->
+                    <div class="page">
+                        <t t-raw="0"/>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="custom-footer">
+                        <p>Page <span class="pageNumber"/> of <span class="totalPages"/></p>
+                        <p>
+                            <t t-if="company and company.name">© <t t-esc="company.name"/></t>
+                        </p>
+                    </div>
+                </body>
+            </html>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_bid_tender_supplier_wizard_form" model="ir.ui.view">
+        <field name="name">bid.tender.supplier.wizard.form</field>
+        <field name="model">bid.tender.supplier.wizard</field>
+        <field name="arch" type="xml">
+            <form string="hospital patient">
+                <group>
+                    <group>
+                        <field name="bid_tender_id"/>
+                        <field name="project_id"/>
+                    </group>
+                    <group>
+                        <field name="operation_type"/>
+                        <field name="prs_id"/>
+                    </group>
+                    <group>
+                        <footer>
+                            <button name="validate_payment" string="Validate" type="object" class="btn-primary"
+                                    data-hotkey="q"/>
+                            <button special="cancel" data-hotkey="z" string="Discard" class="btn-secondary"/>
+                        </footer>
+                    </group>
+                </group>
+                <notebook>
+                    <page string="Supplier">
+                        <field name="bid_tender_supplier_line_ids">
+                            <list editable="bottom">
+                                <field name="supplier_id"/>
+                            </list>
+                        </field>
+                    </page>
+                </notebook>
+            </form>
+        </field>
+    </record>
+    <record id="bid_tender_supplier_wizard_action" model="ir.actions.act_window">
+        <field name="name">Bid Tender Supplier Wizard</field>
+        <field name="res_model">bid.tender.supplier.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

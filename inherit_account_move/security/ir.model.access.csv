@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_oms_base_location,oms.base.location,model_oms_base_location,,1,1,1,1
+access_authorized_wizard,authorized.wizard,model_authorized_wizard,,1,1,1,1
+access_bank_statement_wizard,bank.statement.wizard,model_bank_statement_wizard,,1,1,1,1
+access_bank_letters,bank.letters,model_bank_letters,,1,1,1,1
+access_bank_list,bank.list,model_bank_list,,1,1,1,1
+access_bank_letters_line,bank.letters.line,model_bank_letters_line,,1,1,1,1
+access_account_move_admin,account.move.admin,account.model_account_move,inherit_account_move.group_account_administrator,1,1,1,1
+access_account_move_approve,account.move.approve,account.model_account_move,inherit_account_move.group_account_approve,1,1,0,0
+access_account_move_review,account.move.review,account.model_account_move,inherit_account_move.group_account_review,1,1,1,0
+access_account_move_user,account.move.user,account.model_account_move,inherit_account_move.group_accounting_user,1,1,1,0
+access_account_move_donor,account.move.donor,account.model_account_move,inherit_account_move.group_accounting_doner,1,0,0,0
+access_account_move_payment,account.move.payment,account.model_account_move,inherit_account_move.group_accounting_payment,1,1,1,0

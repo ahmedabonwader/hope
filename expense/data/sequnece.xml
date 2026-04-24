@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="seq_hms_expense" model="ir.sequence">
+        <field name="name">HMS Expense</field>
+        <field name="code">hms.expense.request</field>
+        <field name="prefix">EX</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>

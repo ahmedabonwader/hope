@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="contract_template_wizard_form" model="ir.ui.view">
+        <field name="name">contract.template.wizard.form</field>
+        <field name="model">contract.template.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="employee_id" readonly="1"/>
+                            <field name="job_id" readonly="1"/>
+                            <field name="contract_type" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="department_id"/>
+                            <field name="contract_type"/>
+                            <field name="duration_text_field"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Parties Info">
+                            <group>
+                                <field name="office_location_id" required="1" options="{'no_create': True}"/>
+                                <field name="employee_office_location_id" options="{'no_create': True}"/>
+                            </group>
+                        </page>
+                        <page string="Table Settings">
+                            <group>
+                                <group string="Printing Logic">
+                                    <field name="printing_type"/>
+                                    <field name="contract_line_id" 
+                                        domain="[('contract_id', '=', contract_id), ('state', '=', 'run')]"
+                                        invisible="contract_type == 'contract' or (contract_type == 'hybrid' and printing_type == 'main')"
+                                        required="contract_type == 'project' or (contract_type == 'hybrid' and printing_type == 'project')"/>
+                                </group>
+                                <group string="Location &amp; Visits">
+                                    <field name="work_location_id" required="1" options="{'no_create': True}"/>
+                                    <field name="has_field_visits" widget="radio" options="{'horizontal': true}"/>
+                                </group>
+                                <group string="Salary Payment">
+                                    <field name="salary_payment_type" required="1" widget="radio" options="{'horizontal': true}"/>
+                                </group>    
+                            </group>
+                        </page>
+                    </notebook>
+                    <footer>
+                        <button name="action_validate" string="Print Contract" type="object" class="btn-primary"/>
+                        <button string="Discard" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="contract_template_wizard_action" model="ir.actions.act_window">
+        <field name="name">Contract Template Wizard</field>
+        <field name="res_model">contract.template.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

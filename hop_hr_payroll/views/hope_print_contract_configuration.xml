@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hope_office_list" model="ir.ui.view">
+        <field name="name">hope.office.list</field>
+        <field name="model">hope.office</field>
+        <field name="arch" type="xml">
+            <list decoration-info="type == 'inactive'"
+                  decoration-success="type == 'active'">
+                <field name="name"/>
+                <field name="mobile"/>
+                <field name="email"/>
+                <field name="country_director"/>
+                <field name="type"
+                       widget="badge"
+                       decoration-info="type == 'inactive'"
+                       decoration-success="type == 'active'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_hope_office_form" model="ir.ui.view">
+        <field name="name">hope.office.form</field>
+        <field name="model">hope.office</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" placeholder="e.g. HQ Office, North Darfur Office"/>
+                            <field name="address"/>
+                            <field name="mobile"/>
+                        </group>
+                        <group>
+                            <field name="email"/>
+                            <field name="country_director" options="{'no_quick_create': True, 'no_create_edit' : True}"/>
+                            <field name="type" widget="radio" options="{'horizontal':true}"/>
+                        </group>
+                    </group>
+                    
+                </sheet>
+                <!-- Chatter -->
+                <chatter reload_on_attachment="True"/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_hope_office_search" model="ir.ui.view">
+        <field name="name">hope.office.search</field>
+        <field name="model">hope.office</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <searchpanel>
+                    <field name="type" icon="fa-users" string="Status" enable_counters="1"/>
+                </searchpanel>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_hope_office" model="ir.actions.act_window">
+        <field name="name">Hope Office</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hope.office</field>
+        <field name="view_mode">list,form,search</field>
+        <field name="context">{"search_default_today":1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create Your First Hope Office
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_hr_state_location"
+                  name="Hope Office Location"
+                  parent="hr.menu_hr_root"
+                  action="hop_hr_payroll.action_hope_office"
+                  sequence="14"/>
+
+
+
+</odoo>

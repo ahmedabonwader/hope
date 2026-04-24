@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="create_report_view">
+            <t t-call="web.basic_layout">
+                <div class="page">
+                    <!-- Company Header -->
+                    <table border="0" width="100%" height="100%" align="center">
+                        <tr align="center">
+                            <td style="padding:5px 0px 10px 0px;" width="15%">
+                                <!-- <img t-if="company.logo" t-att-src="image_data_uri(company.logo)"
+                                    height="120" width="120"/> -->
+                            </td>
+                            <td style="padding:10px" width="70%">
+                                <h4 style="text-align:center; font-family: Amiri;font-weight: bold;">
+                                    <!-- <span t-field="company.name"/> -->
+                                </h4>
+                                <h4 style="text-align:center; font-family: Amiri;font-weight: bold;">Khartoum Bank - Acc No 1914129 - 0</h4>
+                                <h4 style="text-align:center; font-family: Amiri;font-weight: bold;">Transaction List Sep - Nov 2024</h4>
+                            </td>
+                            <td style="padding:5px 0px 10px 0px;" width="15%">
+                                <!-- <img t-if="company.logo" t-att-src="image_data_uri(company.logo)"
+                                    height="120" width="120"/> -->
+                            </td>
+                        </tr>
+                    </table>
+
+                    <!-- Exchange Rate -->
+                    <div style="margin-top:20px; text-align:right;">
+                        <span>Exchange Rate</span>
+                        <span style="margin-left:20px">1 USD = <t t-esc="exchange_rate"/></span>
+                    </div>
+
+                    <!-- Table -->
+                    <table style="width:100%; margin-top:30px; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background-color:#dfdfdf; text-align:center;">
+                                <th style="border:1px solid black; padding:8px;">Transaction No</th>
+                                <th style="border:1px solid black; padding:8px;">Date</th>
+                                <th style="border:1px solid black; padding:8px;">Voucher No</th>
+                                <th style="border:1px solid black; padding:8px;">Payee Name</th>
+                                <th style="border:1px solid black; padding:8px;">Transaction Details</th>
+                                <th style="border:1px solid black; padding:8px;">Credit (+)</th>
+                                <th style="border:1px solid black; padding:8px;">Debit (-)</th>
+                                <th style="border:1px solid black; padding:8px;">Balance</th>
+                                <th style="border:1px solid black; padding:8px;">Amount USD</th>
+                                <th style="border:1px solid black; padding:8px;">Budget Code</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="report_data" t-as="line">
+                                <tr style="text-align:center;">
+                                    <td style="border:1px solid black; padding:8px;"><t t-esc="line['transaction_no']"/></td>
+                                    <td style="border:1px solid black; padding:8px;"><t t-esc="line['date']"/></td>
+                                    <td style="border:1px solid black; padding:8px;"><t t-esc="line['voucher_no']"/></td>
+                                    <td style="border:1px solid black; padding:8px;"><t t-esc="line['payee']"/></td>
+                                    <td style="border:1px solid black; padding:8px;"><t t-esc="line['transaction_details']"/></td>
+                                    <td style="border:1px solid black; padding:8px;"><t t-esc="line['credit_sdg']" t-options="{'widget':'float','precision':0}"/></td>
+                                    <td style="border:1px solid black; padding:8px;"><t t-esc="line['debit_sdg']" t-options="{'widget':'float','precision':0}"/></td>
+                                    <td style="border:1px solid black; padding:8px;"><t t-esc="line['balance_sdg']" t-options="{'widget':'float','precision':0}"/></td>
+                                    <td style="border:1px solid black; padding:8px;"><t t-esc="line['amount_usd']" t-options="{'widget':'float','precision':0}"/></td>
+                                    <td style="border:1px solid black; padding:8px;"><t t-esc="line['line_code']"/></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </template>
+
+        <record id="create_report_paper_format" model="report.paperformat">
+            <field name='name'>Custom A4</field>
+            <field name="default" eval="False"/>
+            <field name="disable_shrinking" eval="True"/>
+            <field name='format'>custom</field>
+            <field name='orientation'>Landscape</field>
+            <field name='page_height'>0</field>
+            <field name='page_width'>0</field>
+            <field name='margin_top'>3</field>
+            <field name='margin_bottom'>1</field>
+            <field name='margin_left'>0</field>
+            <field name='margin_right'>0</field>
+            <field name='header_spacing'>35</field>
+            <field name='dpi'>90</field>
+        </record>
+
+        <record id="action_report_views" model="ir.actions.report">
+            <field name="name">Budget Report</field>
+            <field name="model">crossovered.budget</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="paperformat_id" ref="accounting_report.create_report_paper_format"/>
+            <field name="report_name">accounting_report.create_report_view</field>
+            <field name="report_file">accounting_report.create_report_view</field>
+        </record>
+
+
+    </data>
+</odoo>

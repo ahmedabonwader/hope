@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="hr_leave_allocation_view_form_inherit" model="ir.ui.view">
+            <field name="name">hr.leave.allocation.view.form.inherit</field>
+            <field name="model">hr.leave.allocation</field>
+            <field name="inherit_id" ref="hr_holidays.hr_leave_allocation_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='employee_id']" position="before">
+                    <field name="allocation_mode" widget="radio" options="{'horizontal': True}"/>
+                    
+                    <field name="mode_company_id" 
+                        invisible="allocation_mode != 'company'" 
+                        required="allocation_mode == 'company'"/>
+                        
+                    <field name="mode_department_id" 
+                        invisible="allocation_mode != 'department'" 
+                        required="allocation_mode == 'department'"/>
+                        
+                    <field name="category_id" 
+                        invisible="allocation_mode != 'category'" 
+                        required="allocation_mode == 'category'"/>
+                </xpath>
+
+                <xpath expr="//field[@name='employee_id']" position="attributes">
+                    <attribute name="invisible">allocation_mode != 'employee'</attribute>
+                    <attribute name="required">allocation_mode == 'employee'</attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

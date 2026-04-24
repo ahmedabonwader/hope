@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="action_print_social_insurance_report_info">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-set="company" t-value="doc.company_id"/>
+                    <t t-if="company.logo">
+                        <img t-att-src="image_data_uri(company.logo)"
+                                style="position: absolute; top: 20px; left: 0; max-height: 80px; max-width: 120px;"
+                                alt="Company Logo"/>
+                    </t>
+                    <div style="text-align: center; font-family: KacstOne; color: #003366;">
+                        <h3 style="text-decoration: underline;">
+                            <span t-field="doc.company_id.name"/>
+                        </h3>
+                        <h3 style="text-decoration: underline;">HR And Admin Department</h3>
+                        <h3 style="text-decoration: underline;">Staff Monthly Social Insurance Report</h3>
+                    <t t-if="company.logo">
+                        <img t-att-src="image_data_uri(company.logo)"
+                                style="position: absolute; top: 20px; right: 0; max-height: 80px; max-width: 120px;"
+                                alt="Company Logo"/>
+                    </t>
+                    </div>
+                     <br/>
+                     <br/>
+                    <t t-if="doc.salary_type == 'by_project'">
+                        <div style="border: 1px solid #000; padding: 5px; background-color: #f0f0f0; margin-bottom: 10px;">
+                            <div style="text-align: left; font-weight: bold; margin-bottom: 5px;">
+                                Project Name :
+                            </div>
+                            <!-- use doc.project_id.name if you have a relation, or fallback to doc.project_name -->
+                            <h3 t-esc="(doc.project_id and doc.project_id.name) or doc.project_name or 'Project Name'"
+                                style="margin: 0; text-align: center; color: #000;"/>
+                        </div>
+                    </t>
+                    <div class="sec_hedar_data" style="text-align:right; width:100%;">
+                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px;" dir="ltr">
+                            <tr>
+                                <td style="padding: 3px; border: 1px solid #000; text-align:left;">
+                                    <strong>Duty Station :</strong>
+                                    <span t-esc="doc.state_id.name or ''"/>
+                                </td>
+                                <td style="padding: 3px; border: 1px solid #000; text-align:left;">
+                                    <strong>Insurance Payment For :</strong>
+                                    <span t-esc="doc.month and doc.month.capitalize() or ''"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+
+                    <!-- Table -->
+                    <table style="width:100%; margin-top:30px; font-size:14px; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background-color:#dfdfdf; text-align:center;">
+                                <th style="border:1px solid black; padding:8px;">NO</th>
+                                <th style="border:1px solid black; padding:8px;">Name</th>
+                                <th style="border:1px solid black; padding:8px;">Title</th>
+                                <th style="border:1px solid black; padding:8px;">Gross</th>
+                                <th style="border:1px solid black; padding:8px;">8%</th>
+                                <th style="border:1px solid black; padding:8px;">17%</th>
+                                <th style="border:1px solid black; padding:8px;">25%</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <!-- Counters & Totals -->
+                            <t t-set="counter" t-value="1"/>
+                            <t t-set="total_gross" t-value="0"/>
+                            <t t-set="total_8" t-value="0"/>
+                            <t t-set="total_17" t-value="0"/>
+                            <t t-set="total_25" t-value="0"/>
+
+                            <t t-foreach="docs.batches_line_ids.filtered(lambda l: l.insurance_usd and l.insurance_usd > 0)"
+                            t-as="order_line">
+
+                                <tr style="text-align:center; font-size:12px;">
+                                    <td style="border:1px solid black; padding:8px;">
+                                        <span t-esc="counter"/>
+                                    </td>
+                                    <td style="border:1px solid black; padding:8px; text-align:left;">
+                                        <span t-field="order_line.employee_id.name"/>
+                                    </td>
+                                    <td style="border:1px solid black; padding:8px; text-align:left;">
+                                        <span t-field="order_line.job_title"/>
+                                    </td>
+
+                                    <td style="border:1px solid black; padding:8px;">
+                                        <span t-esc="'{:,.2f}'.format((order_line.gross_salary_usd or 0) * (order_line.batches_id.rate or 0))"/>
+                                        <span t-if="order_line.batches_id.currency_id"
+                                            t-esc="order_line.batches_id.currency_id.symbol"/>
+                                    </td>
+
+                                    <td style="border:1px solid black; padding:8px;">
+                                        <span t-esc="'{:,.2f}'.format((order_line.gross_salary_usd or 0) * 0.08 * (order_line.batches_id.rate or 0))"/>
+                                        <span t-if="order_line.batches_id.currency_id"
+                                            t-esc="order_line.batches_id.currency_id.symbol"/>
+                                    </td>
+
+                                    <td style="border:1px solid black; padding:8px;">
+                                        <span t-esc="'{:,.2f}'.format((order_line.gross_salary_usd or 0) * 0.17 * (order_line.batches_id.rate or 0))"/>
+                                        <span t-if="order_line.batches_id.currency_id"
+                                            t-esc="order_line.batches_id.currency_id.symbol"/>
+                                    </td>
+
+                                    <td style="border:1px solid black; padding:8px;">
+                                        <span t-esc="'{:,.2f}'.format((order_line.gross_salary_usd or 0) * 0.25 * (order_line.batches_id.rate or 0))"/>
+                                        <span t-if="order_line.batches_id.currency_id"
+                                            t-esc="order_line.batches_id.currency_id.symbol"/>
+                                    </td>
+                                </tr>
+
+                                <!-- Accumulate totals -->
+                                <t t-set="total_gross"
+                                t-value="total_gross + ((order_line.gross_salary_usd or 0) * (order_line.batches_id.rate or 0))"/>
+                                <t t-set="total_8"
+                                t-value="total_8 + ((order_line.gross_salary_usd or 0) * 0.08 * (order_line.batches_id.rate or 0))"/>
+                                <t t-set="total_17"
+                                t-value="total_17 + ((order_line.gross_salary_usd or 0) * 0.17 * (order_line.batches_id.rate or 0))"/>
+                                <t t-set="total_25"
+                                t-value="total_25 + ((order_line.gross_salary_usd or 0) * 0.25 * (order_line.batches_id.rate or 0))"/>
+
+                                <t t-set="counter" t-value="counter + 1"/>
+                            </t>
+
+                            <!-- ===== TOTAL ROW (STICKS TO TABLE) ===== -->
+                            <tr style="background-color:#f1f1f1; font-weight:bold; text-align:center; font-size:12px; page-break-inside: avoid;">
+                                <td colspan="3" style="border:1px solid black; padding:8px;">
+                                    TOTAL
+                                </td>
+
+                                <td style="border:1px solid black; padding:8px;">
+                                    <span t-esc="docs.batches_line_ids[0].batches_id.currency_id.symbol"/>
+                                    <span t-esc="'{:,.2f}'.format(total_gross)"/>
+                                </td>
+
+                                <td style="border:1px solid black; padding:8px;">
+                                    <span t-esc="docs.batches_line_ids[0].batches_id.currency_id.symbol"/>
+                                    <span t-esc="'{:,.2f}'.format(total_8)"/>
+                                </td>
+
+                                <td style="border:1px solid black; padding:8px;">
+                                    <span t-esc="docs.batches_line_ids[0].batches_id.currency_id.symbol"/>
+                                    <span t-esc="'{:,.2f}'.format(total_17)"/>
+                                </td>
+
+                                <td style="border:1px solid black; padding:8px;">
+                                    <span t-esc="docs.batches_line_ids[0].batches_id.currency_id.symbol"/>
+                                    <span t-esc="'{:,.2f}'.format(total_25)"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                     <br/>
+                     <br/>
+                    <table class="o_has_total_table table o_main_table table-borderless mt-4">
+                        <thead style="border-bottom: 2px solid black;">
+                            <tr>
+                                <th class="text-start">
+                                    <strong>Position</strong>
+                                </th>
+                                <th class="text-start">
+                                    <strong>Name</strong>
+                                </th>
+                                <th class="text-start">
+                                    <strong>Signature</strong>
+                                </th>
+                                <th class="text-start">
+                                    <strong>Date</strong>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Prepared by</td>
+                                <td>
+                                    <span t-field="docs.signature_insuranse_tax_prepared.name"/>
+                                </td>
+                                <td>
+                                    <img t-if="docs.signature_insuranse_tax_prepared.digital_signature"
+                                        t-att-src="image_data_uri(docs.signature_insuranse_tax_prepared.digital_signature)"
+                                        style="max-height: 50px;" alt="signature"/>
+                                </td>
+                                <td>
+                                    <span t-field="docs.date_insuranse_tax_prepared"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Reviewed by</td>
+                                <td>
+                                    <span t-field="docs.signature_insuranse_tax_reviewed.name"/>
+                                </td>
+                                <td>
+                                    <img t-if="docs.signature_insuranse_tax_reviewed.digital_signature"
+                                        t-att-src="image_data_uri(docs.signature_insuranse_tax_reviewed.digital_signature)"
+                                        style="max-height: 50px;" alt="signature"/>
+                                </td>
+                                <td>
+                                    <span t-field="docs.date_insuranse_tax_review"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Approved by</td>
+                                <td>
+                                    <span t-field="docs.signature_insuranse_tax_approved.name"/>
+                                </td>
+                                <td>
+                                    <img t-if="docs.signature_insuranse_tax_approved.digital_signature"
+                                        t-att-src="image_data_uri(docs.signature_insuranse_tax_approved.digital_signature)"
+                                        style="max-height: 50px;" alt="signature"/>
+                                </td>
+                                <td>
+                                    <span t-field="docs.date_insuranse_tax_approve"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="create_social_insurance_paper_format" model="report.paperformat">
+        <field name="name">Advance Custom</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">25</field>
+        <field name="margin_left">3</field>
+        <field name="margin_right">3</field>
+        <field name="dpi">96</field>
+    </record>
+
+    <record id="action_print_social_insurance_report" model="ir.actions.report">
+        <field name="name">Social Insurance Report</field>
+        <field name="model">payslips.batches</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="paperformat_id" ref="hop_hr_payroll.create_social_insurance_paper_format"/>
+        <field name="report_name">hop_hr_payroll.action_print_social_insurance_report_info</field>
+        <field name="report_file">hop_hr_payroll.action_print_social_insurance_report_info</field>
+    </record>
+</odoo>

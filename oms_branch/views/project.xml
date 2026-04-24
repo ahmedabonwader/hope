@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_project_project_form_inherit" model="ir.ui.view">
+            <field name="name">project.project.form.inherit</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project.edit_project"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='date']" position="after">
+                    <field name="branch_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                </xpath>
+                <notebook position="inside">
+                    <page string="Authorizations">
+                        <field name="authorizations_line_ids">
+                            <list editable="bottom">
+                                <field name="emp_id"/>
+                                <field name="is_admin" widget="boolean_toggle"/>
+                                <field name="department"/>
+                                <field name="currency_id" column_invisible="0"/>
+                                <field name="amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            </list>
+                        </field>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+    </data>
+</odoo>

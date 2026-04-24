@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem
+            id="expense_menu_parent"
+            groups="group_oms_expense_administrator,group_expense_user,group_expense_finance_admin,group_expense_hr_admin"
+            name="Expense"/>
+    <menuitem
+            name="Expense"
+            id="hms_expense_menu"
+            parent="expense_menu_parent"
+            action="action_hms_expense_request"
+            groups="group_oms_expense_administrator,group_expense_user,group_expense_finance_admin,group_expense_hr_admin"
+            sequence="1"/>
+    <menuitem
+            name="Reports"
+            id="hms_report_menu"
+            parent="expense_menu_parent"
+            groups="group_oms_expense_administrator,group_expense_user,group_expense_finance_admin,group_expense_hr_admin"
+            sequence="5"/>
+    <menuitem
+            name="Report"
+            id="hms_report"
+            parent="hms_report_menu"
+            action="view_daily_report_action"
+            groups="group_oms_expense_administrator,group_expense_user,group_expense_finance_admin,group_expense_hr_admin"
+            sequence="10"/>
+    <menuitem
+            name="Custody Report"
+            id="expense_custody_report"
+            parent="hms_report_menu"
+            action="view_expense_custody_report_action"
+            groups="group_oms_expense_administrator,group_expense_user,group_expense_finance_admin"
+            sequence="20"/>
+
+    <menuitem
+            id="menu_configuration"
+            name="Configuration"
+            parent="expense_menu_parent"
+            sequence="7"
+            />
+    <menuitem
+            name="Loan / Advance Configuration"
+            id="oms_loan_avdance_conf_menu"
+            parent="menu_configuration"
+            action="action_oms_advance_loan_conf"
+            groups="group_oms_expense_administrator,group_expense_hr_admin"
+            sequence="1"
+            />
+    <menuitem
+            name="Operation Person Configuration"
+            id="oms_operation_person_conf_menu"
+            parent="menu_configuration"
+            action="action_oms_operation_person"
+            groups="group_oms_expense_administrator"
+            sequence="1"
+            />
+
+</odoo>
